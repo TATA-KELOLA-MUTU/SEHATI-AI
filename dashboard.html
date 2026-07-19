@@ -8,20 +8,39 @@
     <script>
         // Pengecekan Keamanan & Autentikasi
         (function() {
-            const currentDomain = window.location.hostname;
+            // --- 1. PENGAMAN DOMAIN (WHITELIST) ---
+            const allowedDomains = [
+                "tata-kelola-mutu.github.io",
+                "domain-kedua-anda.github.io" // Silakan ganti dengan repo kedua
+            ];
+            const currentDomain = window.location.hostname.toLowerCase();
             const isLocal = currentDomain === "localhost" || currentDomain === "127.0.0.1" || currentDomain === "";
             const isCanvasPreview = window.self !== window.top || currentDomain.includes("google") || currentDomain.includes("sandbox");
             
-            // MOCK LOGIN: Khusus untuk Pratinjau Iframe/Canvas Gemini agar bisa direview
+            if (!allowedDomains.includes(currentDomain) && !isLocal && !isCanvasPreview) {
+                // Jika domain tidak cocok, hentikan eksekusi dan timpa seluruh HTML
+                document.documentElement.innerHTML = `
+                    <div style="display:flex; justify-content:center; align-items:center; height:100vh; background-color:#fdfbf7; color:#ca5c30; font-family:sans-serif; text-align:center; padding:20px;">
+                        <div>
+                            <h1 style="font-size:1.8rem; margin-bottom:10px;">⚠️ AKSES DITOLAK</h1>
+                            <p style="color:#4a5568">Lisensi SEHATI tidak valid untuk domain ini.</p>
+                        </div>
+                    </div>`;
+                throw new Error("Unauthorized Access"); // Menghentikan sisa eksekusi JavaScript
+            }
+            // --------------------------------------
+
+            // --- 2. PENGECEKAN SESI LOGIN ---
+            // Simulasi Login khusus Pratinjau Gemini (Hanya aktif saat preview di Iframe Canvas)
             if (isCanvasPreview) {
                 sessionStorage.setItem('isLoggedIn', 'true');
                 sessionStorage.setItem('kategori', 'Dinkes'); 
-                sessionStorage.setItem('unitKerja', 'Dinas Kesehatan (Preview)');
+                sessionStorage.setItem('unitKerja', 'Dinas Kesehatan (Preview Mode)');
             }
 
             const isLoggedIn = sessionStorage.getItem('isLoggedIn');
             
-            // Redirect ke halaman login jika tidak ada sesi aktif (untuk Production)
+            // Redirect ke halaman login jika tidak ada sesi aktif (Sudah diaktifkan untuk Production)
             if (!isLoggedIn && !isLocal && !isCanvasPreview) {
                 try {
                     window.location.href = 'index.html'; 
