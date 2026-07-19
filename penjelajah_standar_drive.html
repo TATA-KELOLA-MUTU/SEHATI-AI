@@ -2,22 +2,32 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Penjelajah Standar | Integrasi Google Drive</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SEHATI Earthy Theme Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        heading: ['"Playfair Display"', 'serif']
+                    },
                     colors: {
-                        navy: '#0f172a',
-                        primary: '#0ea5e9',
-                        drive: '#1fa463'
+                        sehati: {
+                            bg: '#fdfbf7',       // Cream
+                            primary: '#ca5c30',  // Terracotta
+                            text: '#2d3748',     // Dark Gray
+                            border: '#e2d5c5',   // Soft earthy border
+                        }
+                    },
+                    boxShadow: {
+                        'card': '0 8px 30px rgba(0, 0, 0, 0.04), 0 4px 10px rgba(202, 92, 48, 0.03)'
                     }
                 }
             }
@@ -25,7 +35,7 @@
     </script>
 
     <style>
-        body { background-color: #f8fafc; }
+        body { background-color: #fdfbf7; }
         .accordion-content {
             max-height: 0;
             overflow: hidden;
@@ -36,96 +46,155 @@
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .spinner { animation: spin 1s linear infinite; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Earthy Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2d5c5; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ca5c30; }
         ul.list-circle { list-style-type: circle; }
+        
+        /* Hide scrollbar for clean modal look but allow scroll */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="text-slate-800 antialiased font-sans flex flex-col h-screen overflow-hidden">
+<body class="text-sehati-text antialiased font-sans flex flex-col h-[100dvh] overflow-hidden">
 
-    <header class="bg-white border-b border-slate-200 px-6 py-4 flex flex-col md:flex-row items-center justify-between z-30 shadow-sm flex-shrink-0 gap-4">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl shadow-inner border border-blue-100">
+    <!-- HEADER -->
+    <header class="bg-white border-b border-sehati-border px-5 py-4 flex flex-col md:flex-row items-center justify-between z-30 shadow-sm flex-shrink-0 gap-4">
+        <div class="flex items-center gap-4 w-full md:w-auto">
+            <div class="w-12 h-12 bg-sehati-bg text-sehati-primary rounded-[16px] flex items-center justify-center text-2xl shadow-inner border border-sehati-border shrink-0">
                 <i class="fa-brands fa-google-drive"></i>
             </div>
-            <div>
-                <h1 class="font-bold text-navy text-lg leading-tight">Penjelajah Dokumen Akreditasi</h1>
-                <p id="headerSubtitle" class="text-xs text-slate-500">Terintegrasi dengan Google Drive Folder Otomatis</p>
+            <div class="flex-1">
+                <h1 class="font-heading font-bold text-sehati-text text-lg md:text-xl leading-tight">Penjelajah Dokumen Akreditasi</h1>
+                <p id="headerSubtitle" class="text-[11px] md:text-xs text-slate-500 font-medium mt-0.5 truncate">Terintegrasi dengan Google Drive Folder Otomatis</p>
             </div>
         </div>
         
-        <button onclick="openSetupModal()" class="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition shadow-md">
+        <button onclick="openSetupModal()" class="w-full md:w-auto flex items-center justify-center gap-2 bg-sehati-primary text-white px-5 py-2.5 rounded-[16px] text-sm font-bold hover:bg-[#b34f28] transition shadow-md">
             <i class="fa-solid fa-gear"></i> Setup Google Drive
         </button>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-4 md:p-8">
-        <div class="max-w-5xl mx-auto">
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 pb-32 mb-24 relative">
+        <div class="max-w-4xl mx-auto">
             
-            <div class="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-xl mb-6 flex items-start gap-3 shadow-sm">
-                <i class="fa-solid fa-circle-info text-blue-600 mt-0.5"></i>
+            <!-- INFO BOX -->
+            <div class="bg-white border border-sehati-border text-sehati-text p-5 rounded-[24px] shadow-card mb-8 flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-sehati-bg flex items-center justify-center shrink-0 border border-sehati-border">
+                    <i class="fa-solid fa-lightbulb text-sehati-primary"></i>
+                </div>
                 <div class="text-sm">
-                    <p class="font-semibold mb-1">Informasi Penggunaan</p>
-                    <p>Pilih elemen penilaian di bawah ini. Jika Anda mengunggah file, sistem akan otomatis memberi prefix <b class="font-mono text-xs">(R/D/O)</b> pada nama file dan membuat folder di Google Drive Anda dengan format hierarki:<br>
-                    <b class="text-blue-900 bg-blue-100 px-2 py-0.5 rounded font-mono text-xs mt-1 inline-block">Bukti_Akreditasi / [Nama Bab] / [Nama Standar] / [Kode EP]</b></p>
+                    <p class="font-bold mb-1 font-heading text-lg">Informasi Penggunaan</p>
+                    <p class="leading-relaxed text-slate-600">Pilih elemen penilaian di bawah ini. Jika Anda mengunggah file, sistem akan otomatis memberi prefix <b class="font-mono text-xs text-sehati-primary bg-sehati-bg px-1.5 py-0.5 rounded border border-sehati-border">(R/D/O)</b> pada nama file dan membuat folder di Google Drive Anda dengan format hierarki:<br>
+                    <span class="text-sehati-primary bg-sehati-bg border border-sehati-border px-2 py-1 rounded-lg font-mono text-[11px] mt-2 inline-block font-semibold">Bukti_Akreditasi / [Nama Bab] / [Nama Standar] / [Kode EP]</span></p>
                 </div>
             </div>
 
-            <div id="explorer-content" class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-                <!-- Konten Akordion -->
+            <!-- FILTER BAB (FLOATING SELECT IMPLEMENTATION) -->
+            <div class="mb-6 relative z-20">
+                <label class="block text-xs font-bold text-sehati-text uppercase tracking-wider mb-2">Filter Bab Standar</label>
+                <div class="relative w-full md:w-1/2">
+                    <input type="text" id="filterBabInput" readonly value="Semua Bab" onclick="openFilterModal()"
+                        class="w-full px-5 py-3.5 bg-white border border-sehati-border rounded-[16px] cursor-pointer shadow-card text-sehati-text font-bold focus:outline-none focus:border-sehati-primary transition-all hover:bg-slate-50">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-5 pointer-events-none">
+                        <div class="w-8 h-8 rounded-full bg-sehati-bg flex items-center justify-center border border-sehati-border">
+                            <i class="fa-solid fa-sliders text-sehati-primary text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXPLORER CONTENT CONTAINER -->
+            <div id="explorer-content" class="space-y-6">
+                <!-- Konten Akordion Dirender oleh JS -->
             </div>
 
         </div>
     </main>
 
+    <!-- HIDDEN FILE INPUT -->
     <input type="file" id="hiddenFileInput" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.jpeg">
     
-    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl transform transition-all duration-300 translate-y-24 opacity-0 z-50 flex items-center gap-3 font-medium text-sm max-w-sm">
-        <i id="toastIcon" class="fa-solid fa-check-circle text-lg"></i>
-        <span id="toastMessage">Pesan Notifikasi</span>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-4 md:right-6 left-4 md:left-auto px-5 py-4 rounded-[20px] shadow-card transform transition-all duration-300 translate-y-32 opacity-0 z-[100] flex items-center gap-3 font-semibold text-sm max-w-md bg-white border border-sehati-border">
+        <i id="toastIcon" class="fa-solid fa-check-circle text-xl shrink-0"></i>
+        <span id="toastMessage" class="leading-snug">Pesan Notifikasi</span>
     </div>
 
-    <!-- Modal Setup Google Drive -->
-    <div id="setupModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300" id="setupModalContent">
-            <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50 rounded-t-2xl">
-                <h3 class="font-bold text-lg text-navy flex items-center gap-2">
-                    <i class="fa-brands fa-google-drive text-emerald-600"></i> Konfigurasi Google Drive
+    <!-- FILTER FLOATING MODAL -->
+    <div id="filterModal" class="fixed inset-0 bg-navy/40 backdrop-blur-sm hidden items-end md:items-center justify-center z-[60] p-0 md:p-4 opacity-0 transition-opacity duration-300">
+        <div id="filterModalContent" class="bg-white rounded-t-[32px] md:rounded-[24px] shadow-2xl w-full max-w-md transform translate-y-full md:translate-y-0 md:scale-95 transition-transform duration-300 overflow-hidden border border-sehati-border flex flex-col max-h-[85vh]">
+            <div class="p-5 border-b border-sehati-border flex justify-between items-center bg-sehati-bg shrink-0">
+                <h3 class="font-heading font-bold text-xl text-sehati-text">Pilih Bab Standar</h3>
+                <button onclick="closeFilterModal()" class="text-slate-400 hover:text-sehati-primary transition-colors w-8 h-8 flex justify-center items-center rounded-full hover:bg-white border border-transparent hover:border-sehati-border">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-4 flex-1 overflow-y-auto no-scrollbar space-y-2">
+                <button onclick="applyFilter('Semua Bab', 'ALL')" class="w-full flex items-center justify-between px-5 py-4 rounded-[16px] hover:bg-sehati-bg text-sehati-text font-bold transition-all border border-transparent hover:border-sehati-border group text-left">
+                    <span>Semua Bab</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-sehati-primary opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i>
+                </button>
+                <button onclick="applyFilter('BAB I: TATA KELOLA KLINIK', 'TKK')" class="w-full flex items-center justify-between px-5 py-4 rounded-[16px] hover:bg-sehati-bg text-sehati-text font-bold transition-all border border-transparent hover:border-sehati-border group text-left">
+                    <span class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-white border border-sehati-border flex items-center justify-center text-sm shadow-sm">🏛️</span> BAB I: TATA KELOLA KLINIK</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-sehati-primary opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i>
+                </button>
+                <button onclick="applyFilter('BAB II: PENINGKATAN MUTU', 'PMKP')" class="w-full flex items-center justify-between px-5 py-4 rounded-[16px] hover:bg-sehati-bg text-sehati-text font-bold transition-all border border-transparent hover:border-sehati-border group text-left">
+                    <span class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-white border border-sehati-border flex items-center justify-center text-sm shadow-sm">🛡️</span> BAB II: PMKP</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-sehati-primary opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i>
+                </button>
+                <button onclick="applyFilter('BAB III: KESEHATAN PERSEORANGAN', 'PKP')" class="w-full flex items-center justify-between px-5 py-4 rounded-[16px] hover:bg-sehati-bg text-sehati-text font-bold transition-all border border-transparent hover:border-sehati-border group text-left">
+                    <span class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-white border border-sehati-border flex items-center justify-center text-sm shadow-sm">🩺</span> BAB III: PKP</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-sehati-primary opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i>
+                </button>
+            </div>
+            <!-- Extra padding for mobile safe area -->
+            <div class="h-6 bg-white md:hidden"></div>
+        </div>
+    </div>
+
+    <!-- MODAL SETUP GOOGLE DRIVE -->
+    <div id="setupModal" class="fixed inset-0 bg-navy/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-[24px] shadow-card max-w-3xl w-full max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300 border border-sehati-border" id="setupModalContent">
+            <div class="p-6 border-b border-sehati-border flex justify-between items-center bg-sehati-bg rounded-t-[24px] shrink-0">
+                <h3 class="font-heading font-bold text-xl text-sehati-text flex items-center gap-3">
+                    <i class="fa-brands fa-google-drive text-sehati-primary"></i> Konfigurasi Google Drive
                 </h3>
-                <button onclick="closeSetupModal()" class="text-slate-400 hover:text-red-500 transition-colors w-8 h-8 flex justify-center items-center rounded-lg hover:bg-red-50">
+                <button onclick="closeSetupModal()" class="text-slate-400 hover:text-sehati-primary transition-colors w-8 h-8 flex justify-center items-center rounded-full hover:bg-white border border-transparent hover:border-sehati-border">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
             
-            <div class="p-6 overflow-y-auto text-sm text-slate-600 space-y-5">
+            <div class="p-6 overflow-y-auto text-sm text-sehati-text space-y-6 flex-1">
                 
-                <!-- Info Multi-Perangkat -->
-                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r text-amber-900 shadow-sm">
-                    <h4 class="font-bold mb-1 flex items-center gap-2"><i class="fa-solid fa-laptop-medical text-amber-600"></i> Buka di Komputer / HP Lain?</h4>
-                    <p class="text-xs">Jika Anda membuka aplikasi ini di perangkat lain, setelan ini <b>tidak terbawa otomatis</b>. Anda <b class="underline">TIDAK PERLU</b> membuat Script baru. Cukup tempel (paste) URL yang sudah Anda salin sebelumnya langsung ke kotak Hijau di bawah ini lalu Simpan.</p>
+                <div class="bg-sehati-bg border-l-4 border-sehati-primary p-4 rounded-r-[16px] shadow-sm">
+                    <h4 class="font-bold mb-1 font-heading flex items-center gap-2"><i class="fa-solid fa-laptop-medical text-sehati-primary"></i> Buka di Komputer / HP Lain?</h4>
+                    <p class="text-xs leading-relaxed">Jika Anda membuka aplikasi ini di perangkat lain, setelan ini <b>tidak terbawa otomatis</b>. Anda <b class="underline">TIDAK PERLU</b> membuat Script baru. Cukup tempel (paste) URL yang sudah Anda salin sebelumnya langsung ke kotak di bagian bawah lalu Simpan.</p>
                 </div>
 
-                <div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r text-blue-800 text-xs">
-                    <b>Catatan:</b> Jika ini pertama kalinya Anda menggunakan fitur ini di klinik, ikuti langkah 1 sampai 4 untuk membuat Folder Otomatis di Google Drive Anda.
+                <div class="bg-white border border-sehati-border p-4 rounded-[16px] text-xs shadow-sm">
+                    <b class="text-sehati-primary">Catatan:</b> Jika ini pertama kalinya Anda menggunakan fitur ini di klinik, ikuti langkah 1 sampai 4 untuk membuat Folder Otomatis di Google Drive Anda.
                 </div>
 
-                <!-- Langkah 1 & 2 -->
-                <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800 border-b pb-1">1. Buat Proyek & Salin Kode</h4>
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li>Buka web <a href="https://script.google.com/" target="_blank" class="text-blue-600 hover:underline font-semibold">script.google.com</a> (pastikan sudah login akun Google Drive klinik Anda), lalu klik <b>Proyek Baru</b>.</li>
+                <!-- Langkah-langkah Setup -->
+                <div class="space-y-3">
+                    <h4 class="font-heading font-bold text-lg border-b border-sehati-border pb-2">1. Buat Proyek & Salin Kode</h4>
+                    <ul class="list-disc pl-5 space-y-2 leading-relaxed">
+                        <li>Buka web <a href="https://script.google.com/" target="_blank" class="text-sehati-primary hover:underline font-bold">script.google.com</a> (pastikan sudah login akun Google Drive), lalu klik <b>Proyek Baru</b>.</li>
                         <li>Hapus seluruh kode bawaan yang ada di layar putih tersebut.</li>
                         <li>Klik <b>Copy Code</b> di bawah ini, lalu tempel (<i>paste</i>) ke layar tersebut.</li>
                     </ul>
                 </div>
                 
                 <div class="relative group mb-4">
-                    <button onclick="copyScriptCode()" class="absolute top-2 right-2 bg-slate-700 text-white text-xs px-3 py-1.5 rounded-md hover:bg-slate-600 transition opacity-0 group-hover:opacity-100 focus:opacity-100 shadow-md">
+                    <button onclick="copyScriptCode()" class="absolute top-3 right-3 bg-white text-sehati-text border border-sehati-border text-xs px-4 py-2 rounded-full hover:text-sehati-primary font-bold transition opacity-0 group-hover:opacity-100 focus:opacity-100 shadow-sm z-10">
                         <i class="fa-regular fa-copy"></i> Copy Code
                     </button>
-                    <pre id="gasScriptCode" class="bg-slate-800 text-green-400 p-4 rounded-xl overflow-x-auto text-xs font-mono border border-slate-700">
+                    <pre id="gasScriptCode" class="bg-[#1e1e1e] text-[#d4d4d4] p-5 rounded-[16px] overflow-x-auto text-xs font-mono border border-sehati-border shadow-inner">
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
@@ -179,67 +248,46 @@ function doOptions(e) {
 </pre>
                 </div>
 
-                <!-- Langkah 3 -->
-                <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800 border-b pb-1">2. Terapkan (Deploy) Script</h4>
-                    <ul class="list-disc pl-5 space-y-1">
+                <div class="space-y-3">
+                    <h4 class="font-heading font-bold text-lg border-b border-sehati-border pb-2">2. Terapkan (Deploy) Script</h4>
+                    <ul class="list-disc pl-5 space-y-2 leading-relaxed">
                         <li>Di sudut kanan atas, klik tombol biru <b>Terapkan (Deploy)</b> > pilih <b>Deployment baru</b>.</li>
                         <li>Klik ikon Roda Gigi ⚙️ (Pilih jenis) > pilih <b>Aplikasi Web (Web App)</b>.</li>
-                        <li>Atur pengaturan berikut:
-                            <ul class="list-circle pl-5 mt-1 text-slate-500">
-                                <li>Jalankan sebagai: <b class="text-slate-700">Saya (Me)</b></li>
-                                <li>Siapa yang memiliki akses: <b class="text-slate-700">Siapa saja (Anyone)</b></li>
-                            </ul>
-                        </li>
+                        <li>Atur pengaturan: Jalankan sebagai: <b class="text-sehati-text">Saya (Me)</b> | Akses: <b class="text-sehati-text">Siapa saja (Anyone)</b></li>
                         <li>Klik tombol <b>Terapkan</b>.</li>
                     </ul>
                 </div>
 
-                <!-- Langkah 4 -->
-                <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800 border-b pb-1">3. Otorisasi Izin Akses (Sangat Penting!)</h4>
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li>Google akan meminta izin untuk membuat folder. Klik <b>Otorisasi akses</b> dan pilih akun Anda.</li>
-                        <li>Jika muncul layar peringatan <i>"Google belum memverifikasi aplikasi ini"</i>, klik tulisan <b>Lanjutan (Advanced)</b> di bagian bawah.</li>
-                        <li>Scroll ke bawah dan klik tulisan <b>Buka proyek (tidak aman) / Go to project</b>.</li>
-                        <li>Klik tombol <b>Izinkan (Allow)</b>.</li>
+                <div class="space-y-3">
+                    <h4 class="font-heading font-bold text-lg border-b border-sehati-border pb-2">3. Otorisasi Izin Akses</h4>
+                    <ul class="list-disc pl-5 space-y-2 leading-relaxed">
+                        <li>Klik <b>Otorisasi akses</b> > pilih akun > klik <b>Lanjutan (Advanced)</b> > klik <b>Buka proyek (tidak aman)</b> > <b>Izinkan (Allow)</b>.</li>
                     </ul>
                 </div>
 
-                <!-- Langkah 5 -->
-                <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800 border-b pb-1">4. Simpan URL Web App</h4>
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li>Setelah berhasil, salin tulisan panjang di bawah <b>URL Aplikasi Web</b>.</li>
-                        <li>Tempelkan ke dalam kotak hijau di bawah ini dan klik Simpan. <b class="text-red-500">Simpan juga URL tersebut di catatan/Grup WA Klinik Anda</b> agar mudah disalin saat buka di komputer lain.</li>
-                    </ul>
-                </div>
-
-                <div class="mt-5 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-                    <label class="block text-xs font-bold text-emerald-800 uppercase mb-1">Tempel Web App URL Anda di sini:</label>
-                    <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full px-3 py-2 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-mono">
-                    <button onclick="saveGasUrl()" class="mt-3 w-full bg-emerald-600 text-white font-medium py-2 rounded-lg hover:bg-emerald-700 transition shadow-md">Simpan URL & Hubungkan</button>
+                <div class="mt-8 p-6 bg-sehati-bg rounded-[24px] border border-sehati-border shadow-sm">
+                    <label class="block text-xs font-bold text-sehati-text uppercase tracking-wider mb-2">Tempel Web App URL Anda di sini:</label>
+                    <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full px-4 py-3 border border-sehati-border rounded-[16px] focus:outline-none focus:border-sehati-primary text-sm font-mono shadow-inner bg-white">
+                    <button onclick="saveGasUrl()" class="mt-4 w-full bg-sehati-primary text-white font-bold py-3.5 rounded-full hover:bg-[#b34f28] transition shadow-card">Simpan URL & Hubungkan Sistem</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // IDENTIFIKASI USER LOGIN UNTUK MENGAMANKAN SESSION LOKAL URL GAS
+        // DATA & STATE
         const currentUnitKerja = sessionStorage.getItem('unitKerja') || 'Klinik_Default';
         const STORAGE_KEY_GAS = `SEHATI_GAS_URL_${currentUnitKerja.replace(/\s+/g, '_')}`;
+        let currentFilter = 'ALL';
+        let GAS_WEB_APP_URL = localStorage.getItem(STORAGE_KEY_GAS) || ''; 
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const subtitle = document.getElementById('headerSubtitle');
-            if(sessionStorage.getItem('unitKerja')) {
-                subtitle.innerHTML = `Terintegrasi dengan Google Drive Akun <b>${currentUnitKerja}</b>`;
-            }
-        });
+        const fileRegistry = {};
+        let currentUploadTarget = { babTitle: '', standardId: '', epId: '', rdowsType: '', buttonElement: null, slotId: '' };
 
-        // Data LENGKAP Standar Akreditasi Klinik (W dan S dihapus untuk fokus fasyankes/dokumen drive)
+        // Data Akreditasi (Tetap utuh dari aslinya)
         const accreditationData = {
             "TKK": {
-                "title": "BAB I: TATA KELOLA KLINIK", "icon": "🏛️", "color": "sky", "standards": [
+                "title": "BAB I: TATA KELOLA KLINIK", "icon": "🏛️", "standards": [
                     { "id": "TKK 1", "title": "Standar 1.1 Pengorganisasian Klinik", "elements": [
                         { "id": "1.1.1", "text": "Tersedia visi, misi, dan tujuan klinik yang ditetapkan pihak yang berwenang.", "rdows": [
                             {"type":"R", "detail":"Surat Keputusan (SK) dari pemilik atau pejabat berwenang tentang penetapan Visi, Misi, dan Tujuan Klinik."},
@@ -330,7 +378,7 @@ function doOptions(e) {
             },
             
             "PMKP": {
-                "title": "BAB II: PENINGKATAN MUTU & KESELAMATAN PASIEN", "icon": "🛡️", "color": "emerald", "standards": [
+                "title": "BAB II: PENINGKATAN MUTU & KESELAMATAN PASIEN", "icon": "🛡️", "standards": [
                     { "id": "PMKP 1", "title": "Standar 2.1 Upaya Peningkatan Mutu dan Keselamatan Pasien", "elements": [
                         {"id":"2.1.1", "text":"Penanggung Jawab klinik menetapkan penanggung jawab program mutu.", "rdows": [
                             {"type":"R", "detail":"SK Penetapan penanggung jawab/koordinator program Peningkatan Mutu dan Keselamatan Pasien (PMKP)."},
@@ -411,7 +459,7 @@ function doOptions(e) {
             },
             
             "PKP": {
-                "title": "BAB III: PENYELENGGARAAN KESEHATAN PERSEORANGAN", "icon": "🩺", "color": "rose", "standards": [
+                "title": "BAB III: PENYELENGGARAAN KESEHATAN PERSEORANGAN", "icon": "🩺", "standards": [
                     {"id": "PKP 1", "title": "Standar 3.1 Hak Pasien dan Keluarga", "elements": [
                         {"id": "3.1.1", "text": "Tersedia bukti klinik mensosialisasikan hak dan kewajiban pasien.", "rdows": [
                             {"type":"O", "detail":"Mengamati ketersediaan media sosialisasi seperti banner, poster, atau leaflet tentang hak dan kewajiban pasien di area pendaftaran, ruang tunggu, dan ruang pelayanan."},
@@ -638,71 +686,82 @@ function doOptions(e) {
             }
         };
 
-        let GAS_WEB_APP_URL = localStorage.getItem(STORAGE_KEY_GAS) || ''; 
-
-        const fileRegistry = {};
-        let currentUploadTarget = {
-            babTitle: '',
-            standardId: '',
-            epId: '',
-            rdowsType: '',
-            buttonElement: null,
-            slotId: ''
-        };
-
-        // Modal logic
-        const modal = document.getElementById('setupModal');
-        const modalContent = document.getElementById('setupModalContent');
-
+        // UI Helpers
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const icon = document.getElementById('toastIcon');
             const msg = document.getElementById('toastMessage');
 
             msg.textContent = message;
-
-            toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl transform transition-all duration-300 z-50 flex items-center gap-3 font-medium text-sm max-w-sm ${
-                type === 'success' ? 'bg-emerald-600 text-white' :
-                type === 'error' ? 'bg-red-500 text-white' :
-                'bg-blue-600 text-white'
+            toast.className = `fixed bottom-6 right-4 md:right-6 left-4 md:left-auto px-5 py-4 rounded-[20px] shadow-card transform transition-all duration-300 z-[100] flex items-center gap-3 font-semibold text-sm max-w-md border border-sehati-border ${
+                type === 'success' ? 'bg-white text-emerald-700 border-emerald-200' :
+                type === 'error' ? 'bg-white text-red-600 border-red-200' :
+                'bg-sehati-bg text-sehati-text border-sehati-primary/30'
             }`;
 
-            icon.className = `text-lg ${
-                type === 'success' ? 'fa-solid fa-check-circle' :
-                type === 'error' ? 'fa-solid fa-triangle-exclamation' :
-                'fa-solid fa-info-circle spinner'
+            icon.className = `text-xl shrink-0 ${
+                type === 'success' ? 'fa-solid fa-circle-check text-emerald-500' :
+                type === 'error' ? 'fa-solid fa-triangle-exclamation text-red-500' :
+                'fa-solid fa-circle-notch text-sehati-primary spinner'
             }`;
 
-            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.remove('translate-y-32', 'opacity-0');
 
             if (type !== 'loading') {
-                setTimeout(() => {
-                    toast.classList.add('translate-y-24', 'opacity-0');
-                }, 3500);
+                setTimeout(() => { toast.classList.add('translate-y-32', 'opacity-0'); }, 3500);
             }
         }
+        function hideToast() { document.getElementById('toast').classList.add('translate-y-32', 'opacity-0'); }
 
-        function hideToast() {
-            document.getElementById('toast').classList.add('translate-y-24', 'opacity-0');
-        }
+        // Modal Logic
+        const setupModal = document.getElementById('setupModal');
+        const setupModalContent = document.getElementById('setupModalContent');
+        const filterModal = document.getElementById('filterModal');
+        const filterModalContent = document.getElementById('filterModalContent');
+        const filterInput = document.getElementById('filterBabInput');
 
         function openSetupModal() {
             document.getElementById('gasUrlInput').value = GAS_WEB_APP_URL;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            setupModal.classList.remove('hidden');
+            setupModal.classList.add('flex');
             setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                modalContent.classList.remove('scale-95');
+                setupModal.classList.remove('opacity-0');
+                setupModalContent.classList.remove('scale-95');
             }, 10);
         }
 
         function closeSetupModal() {
-            modal.classList.add('opacity-0');
-            modalContent.classList.add('scale-95');
+            setupModal.classList.add('opacity-0');
+            setupModalContent.classList.add('scale-95');
             setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
+                setupModal.classList.add('hidden');
+                setupModal.classList.remove('flex');
             }, 300);
+        }
+        
+        function openFilterModal() {
+            filterModal.classList.remove('hidden');
+            filterModal.classList.add('flex');
+            setTimeout(() => {
+                filterModal.classList.remove('opacity-0');
+                filterModalContent.classList.remove('translate-y-full', 'md:scale-95');
+            }, 10);
+        }
+
+        function closeFilterModal() {
+            filterModal.classList.add('opacity-0');
+            filterModalContent.classList.add('translate-y-full', 'md:scale-95');
+            setTimeout(() => {
+                filterModal.classList.add('hidden');
+                filterModal.classList.remove('flex');
+            }, 300);
+        }
+
+        function applyFilter(label, val) {
+            filterInput.value = label;
+            currentFilter = val;
+            closeFilterModal();
+            renderExplorerContent();
         }
 
         function saveGasUrl() {
@@ -723,21 +782,18 @@ function doOptions(e) {
             tempTextArea.value = code;
             document.body.appendChild(tempTextArea);
             tempTextArea.select();
-
             try {
                 document.execCommand('copy');
                 showToast('Kode Script disalin ke clipboard');
-            } catch (err) {
-                showToast('Gagal menyalin kode', 'error');
-            }
+            } catch (err) { showToast('Gagal menyalin kode', 'error'); }
             document.body.removeChild(tempTextArea);
         }
 
         function getRdowsIcon(type) {
             switch(type) {
-                case 'R': return '<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold text-xs border border-blue-200">R</span>'; 
-                case 'D': return '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold text-xs border border-green-200">D</span>'; 
-                case 'O': return '<span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded font-bold text-xs border border-yellow-200">O</span>'; 
+                case 'R': return '<span class="bg-[#fcf0ec] text-[#ca5c30] px-2 py-0.5 rounded font-bold text-xs border border-[#ca5c30]/20">R</span>'; 
+                case 'D': return '<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold text-xs border border-emerald-200">D</span>'; 
+                case 'O': return '<span class="bg-[#fefce8] text-[#854d0e] px-2 py-0.5 rounded font-bold text-xs border border-[#fef08a]">O</span>'; 
                 default: return '';
             }
         }
@@ -747,54 +803,58 @@ function doOptions(e) {
             container.innerHTML = '';
             
             Object.entries(accreditationData).forEach(([babKey, babData]) => {
+                // Terapkan Filter
+                if(currentFilter !== 'ALL' && babKey !== currentFilter) return;
+
                 const babWrapper = document.createElement('div');
+                babWrapper.className = 'bg-white rounded-[24px] shadow-card border border-sehati-border overflow-hidden';
+                
                 const babHeader = document.createElement('div');
-                babHeader.className = `p-4 bg-${babData.color}-50 border-b border-slate-200 text-lg font-bold text-${babData.color}-800 flex items-center gap-2`;
-                babHeader.innerHTML = `<span>${babData.icon}</span> ${babData.title}`;
+                babHeader.className = `p-5 md:p-6 bg-sehati-bg border-b border-sehati-border text-lg font-bold font-heading text-sehati-text flex items-center gap-3`;
+                babHeader.innerHTML = `<span class="bg-white w-10 h-10 flex items-center justify-center rounded-full shadow-sm border border-sehati-border text-base">${babData.icon}</span> ${babData.title}`;
                 babWrapper.appendChild(babHeader);
 
                 const safeBabTitle = babData.title.replace(/:/g, ' -').replace(/[\/\\?*|<>"]/g, '');
 
                 babData.standards.forEach(standard => {
                     const stdAccordion = document.createElement('div');
-                    stdAccordion.className = 'border-b border-slate-200 last:border-b-0';
+                    stdAccordion.className = 'border-b border-sehati-border last:border-b-0';
 
                     const stdHeader = document.createElement('button');
-                    stdHeader.className = 'w-full flex justify-between items-center p-4 hover:bg-slate-50 transition-colors focus:outline-none group';
+                    stdHeader.className = 'w-full flex justify-between items-center p-5 hover:bg-sehati-bg transition-colors focus:outline-none group';
                     stdHeader.innerHTML = `
-                        <h3 class="font-semibold text-slate-700 text-left group-hover:text-blue-600 transition-colors">${standard.id}: ${standard.title}</h3>
-                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                        <h3 class="font-bold text-sehati-text text-left group-hover:text-sehati-primary transition-colors text-[15px] pr-4 leading-snug">${standard.id}: ${standard.title}</h3>
+                        <div class="w-8 h-8 rounded-full bg-white border border-sehati-border flex items-center justify-center shadow-sm group-hover:border-sehati-primary transition-colors shrink-0">
+                            <i class="fa-solid fa-chevron-down text-gray-400 group-hover:text-sehati-primary transition-transform duration-300"></i>
+                        </div>
                     `;
                     
                     const stdContent = document.createElement('div');
-                    stdContent.className = 'accordion-content bg-slate-50/50 px-4 pb-0';
+                    stdContent.className = 'accordion-content bg-[#faf8f4] px-5 pb-0';
 
                     standard.elements.forEach(element => {
-                        // Lewati bila EP tidak memiliki RDOWS setelah difilter (misal hanya W/S)
                         if(!element.rdows || element.rdows.length === 0) return;
 
                         const epCard = document.createElement('div');
-                        epCard.className = 'bg-white p-5 rounded-xl shadow-sm border border-slate-200 mb-4 ml-2 border-l-4 border-l-primary';
+                        epCard.className = 'bg-white p-5 rounded-[20px] shadow-sm border border-sehati-border mb-4 ml-1 md:ml-3 border-l-4 border-l-sehati-primary';
                         
                         let rdowsHtml = '';
                         element.rdows.forEach((r, index) => {
                             const slotId = `${standard.id.replace(/\s+/g, '')}_${element.id.replace(/\./g, '_')}_${r.type}_${index}`;
                             
                             rdowsHtml += `
-                                <div class="mt-4 pt-4 border-t border-slate-100">
+                                <div class="mt-4 pt-4 border-t border-sehati-border">
                                     <div class="flex items-start gap-3 mb-3">
                                         <div class="mt-0.5">${getRdowsIcon(r.type)}</div>
-                                        <p class="text-sm text-slate-600 leading-relaxed">${r.detail}</p>
+                                        <p class="text-sm text-sehati-text leading-relaxed font-medium">${r.detail}</p>
                                     </div>
                                     
-                                    <!-- Tempat daftar file yang diunggah secara berurutan -->
                                     <div id="fileList_${slotId}" class="flex flex-col gap-2 mb-3 pl-9 empty:hidden"></div>
 
-                                    <!-- Area Tombol Aksi Cloud -->
                                     <div class="flex flex-wrap items-center gap-2 pl-9">
                                         <button id="btnUpload_${slotId}" onclick="triggerUpload('${safeBabTitle}', '${standard.id}', '${element.id}', '${r.type}', this, '${slotId}')" 
-                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 text-slate-700 rounded-md text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition shadow-sm">
-                                            <i class="fa-solid fa-cloud-arrow-up text-blue-500"></i> <span class="btn-text">Unggah Bukti</span>
+                                            class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-sehati-border text-sehati-text rounded-full text-xs font-bold hover:bg-sehati-primary hover:text-white hover:border-sehati-primary transition shadow-sm group/btn">
+                                            <i class="fa-solid fa-cloud-arrow-up text-sehati-primary group-hover/btn:text-white transition-colors"></i> <span class="btn-text">Unggah Bukti</span>
                                         </button>
                                     </div>
                                 </div>
@@ -803,7 +863,7 @@ function doOptions(e) {
 
                         epCard.innerHTML = `
                             <div class="flex items-start justify-between gap-4">
-                                <p class="font-bold text-slate-800 text-sm leading-relaxed"><span class="text-blue-600">EP ${element.id}</span> — ${element.text}</p>
+                                <p class="font-bold text-sehati-text text-sm leading-relaxed"><span class="text-sehati-primary bg-sehati-bg border border-sehati-primary/20 px-1.5 py-0.5 rounded font-mono mr-1">EP ${element.id}</span> ${element.text}</p>
                             </div>
                             ${rdowsHtml}
                         `;
@@ -812,22 +872,29 @@ function doOptions(e) {
 
                     if(stdContent.lastChild) {
                         stdContent.lastChild.classList.add('mb-0');
-                        stdContent.style.paddingBottom = '1rem';
+                        stdContent.style.paddingBottom = '1.25rem';
                     }
 
-                    // Logika Buka/Tutup Accordion
+                    // Accordion Logic
                     stdHeader.addEventListener('click', () => {
                         const icon = stdHeader.querySelector('i');
+                        const iconWrapper = stdHeader.querySelector('div');
                         const isOpen = stdContent.classList.contains('open');
                         
                         if (!isOpen) {
                             stdContent.classList.add('open');
-                            stdContent.style.paddingTop = '1rem';
+                            stdContent.style.paddingTop = '1.25rem';
                             icon.style.transform = 'rotate(180deg)';
+                            iconWrapper.classList.add('bg-sehati-primary', 'border-sehati-primary');
+                            icon.classList.add('text-white');
+                            icon.classList.remove('text-gray-400', 'group-hover:text-sehati-primary');
                         } else {
                             stdContent.classList.remove('open');
                             stdContent.style.paddingTop = '0';
                             icon.style.transform = 'rotate(0deg)';
+                            iconWrapper.classList.remove('bg-sehati-primary', 'border-sehati-primary');
+                            icon.classList.remove('text-white');
+                            icon.classList.add('text-gray-400', 'group-hover:text-sehati-primary');
                         }
                     });
 
@@ -840,6 +907,7 @@ function doOptions(e) {
             });
         }
 
+        // --- UPLOAD LOGIC ---
         function triggerUpload(babTitle, standardId, epId, rdowsType, btnElement, slotId) {
             currentUploadTarget = { babTitle, standardId, epId, rdowsType, buttonElement: btnElement, slotId: slotId };
             document.getElementById('hiddenFileInput').click();
@@ -848,20 +916,19 @@ function doOptions(e) {
         document.getElementById('hiddenFileInput').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (!file) return;
-            event.target.value = ''; // Reset
+            event.target.value = ''; 
             processFileUpload(file);
         });
 
         function processFileUpload(file) {
             const target = currentUploadTarget;
-            const maxSize = 5 * 1024 * 1024; // Limit 5MB
+            const maxSize = 5 * 1024 * 1024; 
             
             if (file.size > maxSize) {
                 showToast('Ukuran file terlalu besar (Maks 5MB)', 'error');
                 return;
             }
 
-            // PENAMAAN OTOMATIS YANG CERDAS: Mencegah double prefix (misal: R - R - file.pdf)
             const prefix = `${target.rdowsType} - `;
             let formattedFileName = file.name;
             if (!formattedFileName.startsWith(prefix)) {
@@ -869,7 +936,7 @@ function doOptions(e) {
             }
 
             const originalBtnHtml = target.buttonElement.innerHTML;
-            target.buttonElement.innerHTML = '<i class="fa-solid fa-circle-notch spinner text-blue-500"></i> Mengunggah...';
+            target.buttonElement.innerHTML = '<i class="fa-solid fa-circle-notch spinner"></i> Mengunggah...';
             target.buttonElement.disabled = true;
             
             showToast('Sedang memproses dan mengunggah ke Drive...', 'loading');
@@ -886,7 +953,6 @@ function doOptions(e) {
                     folderPath: folderPath
                 };
 
-                // SIMULASI (Bila URL GAS Kosong)
                 if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.trim() === '') {
                     setTimeout(() => {
                         hideToast();
@@ -904,7 +970,6 @@ function doOptions(e) {
                     return;
                 }
 
-                // PRODUKSI: Kirim ke Google Apps Script
                 fetch(GAS_WEB_APP_URL, {
                     method: 'POST',
                     body: JSON.stringify(payload)
@@ -936,11 +1001,8 @@ function doOptions(e) {
             reader.readAsDataURL(file);
         }
 
-        // Update UI untuk Multi-File / Tambah Bukti
         function saveFileRegistry(slotId, fileObj) {
-            if (!fileRegistry[slotId]) {
-                fileRegistry[slotId] = []; 
-            }
+            if (!fileRegistry[slotId]) { fileRegistry[slotId] = []; }
             fileRegistry[slotId].push(fileObj); 
         }
 
@@ -949,24 +1011,22 @@ function doOptions(e) {
             const uploadBtn = document.getElementById(`btnUpload_${slotId}`);
             const btnText = uploadBtn.querySelector('.btn-text');
             
-            // Ubah teks tombol menjadi "Tambah Bukti" setelah upload pertama kali
-            if (btnText) {
-                btnText.textContent = "Tambah Bukti";
-            }
+            if (btnText) { btnText.textContent = "Tambah Bukti"; }
             
-            // Buat elemen visual file yang bisa diklik / didownload dengan nama yang benar
             const fileLink = document.createElement('a');
             fileLink.href = fileObj.url;
             fileLink.target = "_blank";
-            fileLink.download = fileObj.name; // MEMAKSA NAMA FILE SAAT UNDUH SIMULASI
-            fileLink.className = "inline-flex items-center justify-between gap-3 px-3 py-2 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-md text-xs hover:bg-emerald-100 transition shadow-sm w-fit max-w-full group";
+            fileLink.download = fileObj.name; 
+            fileLink.className = "inline-flex items-center justify-between gap-4 px-4 py-3 bg-white border border-sehati-border text-sehati-text rounded-[16px] text-sm font-bold hover:bg-sehati-bg hover:border-sehati-primary transition shadow-sm w-fit max-w-full group";
             
             fileLink.innerHTML = `
-                <div class="flex items-center gap-2 overflow-hidden">
-                    <i class="fa-brands fa-google-drive text-emerald-600 shrink-0"></i>
-                    <span class="truncate font-medium group-hover:underline" title="${fileObj.name}">${fileObj.name}</span>
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="w-8 h-8 rounded-full bg-sehati-bg border border-sehati-border flex items-center justify-center text-sehati-primary shrink-0 group-hover:bg-sehati-primary group-hover:text-white transition-colors">
+                        <i class="fa-brands fa-google-drive"></i>
+                    </div>
+                    <span class="truncate group-hover:text-sehati-primary transition-colors" title="${fileObj.name}">${fileObj.name}</span>
                 </div>
-                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70 shrink-0 group-hover:opacity-100"></i>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-400 group-hover:text-sehati-primary shrink-0"></i>
             `;
             
             fileListContainer.appendChild(fileLink);
