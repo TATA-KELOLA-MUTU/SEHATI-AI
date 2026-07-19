@@ -6,15 +6,22 @@
     <title>Dashboard SEHATI | Link Canvas</title>
     
     <script>
-        // Pengecekan Keamanan & Autentikasi (Sesuai dengan logika login index.html)
+        // Pengecekan Keamanan & Autentikasi
         (function() {
-            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
             const currentDomain = window.location.hostname;
-            
             const isLocal = currentDomain === "localhost" || currentDomain === "127.0.0.1" || currentDomain === "";
             const isCanvasPreview = window.self !== window.top || currentDomain.includes("google") || currentDomain.includes("sandbox");
             
-            // Redirect ke halaman login jika tidak ada sesi aktif (Sudah diaktifkan untuk Production)
+            // MOCK LOGIN: Khusus untuk Pratinjau Iframe/Canvas Gemini agar bisa direview
+            if (isCanvasPreview) {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('kategori', 'Dinkes'); 
+                sessionStorage.setItem('unitKerja', 'Dinas Kesehatan (Preview)');
+            }
+
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            
+            // Redirect ke halaman login jika tidak ada sesi aktif (untuk Production)
             if (!isLoggedIn && !isLocal && !isCanvasPreview) {
                 try {
                     window.location.href = 'index.html'; 
@@ -26,10 +33,9 @@
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SEHATI Earthy AI Theme Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
@@ -37,17 +43,22 @@
             theme: { 
                 extend: { 
                     colors: { 
-                        // Mapping existing classes to SEHATI Earthy Palette
-                        navy: '#2d3748',      // Dark Gray
-                        skyblue: '#ca5c30',   // Terracotta (Primary Accent)
-                        earthyBg: '#fdfbf7',  // Cream Background
+                        navy: '#111827',          // Dipergelap menjadi Gray-900 agar kontras maksimal
+                        terracotta: '#ca5c30',    // Terracotta (Primary Accent)
+                        earthyBg: '#fdfbf7',      // Cream (Background Utama)
+                        earthySide: '#f5f0e6',    // Warm Sand (Background Sidebar)
+                        earthyBorder: '#e8e0d5',  // Border halus
+                        earthyHover: '#ebe3d5',   // Hover state halus
+                        sage: '#6b8e73',          // Earthy Green
+                        warmAmber: '#b87a3d',     // Earthy Amber
+                        mutedRose: '#b56a6a',     // Earthy Rose
                     }, 
                     fontFamily: { 
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                         heading: ['"Playfair Display"', 'serif']
                     },
                     boxShadow: {
-                        'card': '0 8px 30px rgba(0,0,0,0.04)' // Soft shadow for cards
+                        'card': '0 8px 30px rgba(0,0,0,0.06)' // Sedikit ditebalkan bayangannya
                     }
                 } 
             } 
@@ -67,198 +78,219 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-earthyBg h-[100dvh] flex overflow-hidden text-[#2d3748]">
+<body class="bg-earthyBg h-[100dvh] flex overflow-hidden text-navy font-medium"> <!-- Font dasar dibuat medium agar lebih jelas -->
 
-    <aside id="sidebar" class="fixed md:relative w-72 bg-navy text-white h-full flex flex-col shadow-2xl z-40 flex-shrink-0">
+    <aside id="sidebar" class="fixed md:relative w-72 bg-earthySide border-r border-earthyBorder h-full flex flex-col shadow-xl md:shadow-none z-40 flex-shrink-0">
         
-        <div class="p-5 border-b border-slate-700 flex items-center justify-between">
+        <div class="p-5 border-b border-earthyBorder flex items-center justify-between bg-white/40">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-skyblue rounded-lg flex items-center justify-center font-bold text-white"><i class="fa-solid fa-leaf"></i></div>
-                <div>
-                    <h2 class="font-heading font-bold text-lg text-skyblue leading-tight">SEHATI Canvas</h2>
-                    <span id="roleIndicator" class="text-[9px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full font-bold uppercase border border-slate-600">Loading...</span>
+                <div class="w-8 h-8 bg-terracotta rounded-lg flex items-center justify-center font-bold text-white shadow-sm flex-shrink-0"><i class="fa-solid fa-leaf"></i></div>
+                <div class="flex flex-col">
+                    <h2 class="font-heading font-extrabold text-lg text-terracotta leading-tight">SEHATI - AI</h2>
+                    <p class="text-[9px] font-bold text-slate-500 leading-tight mb-1 mt-0.5">Sistem Administrasi TKM Terintegrasi</p>
+                    <div class="mt-0.5">
+                        <span id="roleIndicator" class="text-[9px] bg-white text-slate-600 px-2 py-0.5 rounded-full font-bold uppercase border border-earthyBorder shadow-sm inline-block">Loading...</span>
+                    </div>
                 </div>
             </div>
-            <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-terracotta"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
 
-        <nav class="flex-1 overflow-y-auto p-4 space-y-6 no-scrollbar">
+        <nav class="flex-1 overflow-y-auto p-4 space-y-7 no-scrollbar">
             
             <div id="menuPuskesmas" class="hidden">
-                <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mb-3 px-2 flex items-center gap-2 border-b border-slate-700 pb-2">
+                <p class="text-[11px] font-extrabold text-sage uppercase tracking-widest mb-4 px-2 flex items-center gap-2 border-b-2 border-sage/20 pb-2">
                     <i class="fa-solid fa-hospital-user text-sm"></i> PUSKESMAS
                 </p>
-                <div class="space-y-4 pl-1">
+                <div class="space-y-5 pl-1">
                     
+                    <!-- Modul Indikator Mutu -->
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-chart-pie w-5 text-center"></i> Indikator Mutu</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/69aa1d6495d3" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-chart-line w-4 text-center"></i> Profil IMP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-chart-pie text-terracotta"></i> Indikator Mutu
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/69aa1d6495d3" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-chart-line w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Profil IMP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/85488bbbc7ee" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-list-check w-4 text-center"></i> Audit Internal <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/85488bbbc7ee" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-list-check w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Audit Internal <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/6749cebbd3ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-boxes-stacked w-4 text-center"></i> Bundles HAIs <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/6749cebbd3ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-boxes-stacked w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Bundles HAIs <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/a827fc3574a8" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-pills w-4 text-center"></i> PPI - POR <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/a827fc3574a8" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-pills w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> PPI - POR <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                         </div>
                     </div>
 
+                    <!-- Modul Keselamatan -->
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-shield-heart w-5 text-center"></i> Keselamatan</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/0bd190736e51" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-magnifying-glass-chart w-4 text-center"></i> Investigasi IKP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-shield-heart text-terracotta"></i> Keselamatan
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/0bd190736e51" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-magnifying-glass-chart w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Investigasi IKP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/2edacbd99653" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-triangle-exclamation w-4 text-center"></i> Insiden K3 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/2edacbd99653" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-triangle-exclamation w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Insiden K3 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                         </div>
                     </div>
 
+                    <!-- Modul Manajemen Risiko -->
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-network-wired w-5 text-center"></i> Manajemen Risiko</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/1880d1d95c6a" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-viruses w-4 text-center"></i> Risiko PPI (ICRA-PCRA) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-network-wired text-terracotta"></i> Manajemen Risiko
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/1880d1d95c6a" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-viruses w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risiko PPI (ICRA-PCRA) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/a56f9ec8bc2e" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-helmet-safety w-4 text-center"></i> Risiko K3 (HIRADC) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/a56f9ec8bc2e" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-helmet-safety w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risiko K3 (HIRADC) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/875ef77108c4" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-building-circle-exclamation w-4 text-center"></i> Risk Faskes (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/875ef77108c4" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-building-circle-exclamation w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risk Faskes (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/be0dc3d9bb94" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-house-crack w-4 text-center"></i> HVA (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/be0dc3d9bb94" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-house-crack w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> HVA (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/22db3c822a00" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-sitemap w-4 text-center"></i> Risiko Program Terintegrasi <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/22db3c822a00" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-sitemap w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risk Program Terintegrasi <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                         </div>
                     </div>
 
+                    <!-- Modul Dokumen Pendukung -->
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-folder-open w-5 text-center"></i> Dokumen Pendukung</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/78f9471d2ed7" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-file-signature w-4 text-center"></i> SK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-folder-open text-terracotta"></i> Dokumen Pendukung
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/78f9471d2ed7" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-file-signature w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> SK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/89262a0451ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-file-invoice w-4 text-center"></i> SOP Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/89262a0451ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-file-invoice w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> SOP Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/930ec759ab16" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-file-lines w-4 text-center"></i> KAK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/930ec759ab16" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-file-lines w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> KAK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/8e74540655d2" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-clipboard-list w-4 text-center"></i> INSTRUMEN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/8e74540655d2" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-clipboard-list w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> INSTRUMEN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/af62e84a7271" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-book-medical w-4 text-center"></i> PANDUAN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/af62e84a7271" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-book-medical w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> PANDUAN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/cacb3fddfcb7" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-layer-group w-4 text-center"></i> HIRARKIE AKREDITASI <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/cacb3fddfcb7" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-layer-group w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> HIRARKIE AKREDITASI <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                             
-                            <a href="dokumen.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition-all group bg-slate-800/30 border border-slate-700/50 mt-1">
-                                <i class="fa-solid fa-folder-tree w-4 text-center text-emerald-400"></i> Inventarisasi Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <!-- Highlighted Tools -->
+                            <a href="dokumen.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-bold text-sage hover:bg-white transition-all group bg-white/50 border border-sage/20 mt-2 shadow-sm">
+                                <i class="fa-solid fa-folder-tree w-4 text-center"></i> Inventarisasi Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
                             </a>
-
-                            <a href="penjelajah_dokumen_puskesmas.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-orange-400 transition-all group bg-slate-800/30 border border-slate-700/50 mt-1">
-                                <i class="fa-brands fa-google-drive w-4 text-center text-orange-400"></i> Penjelajah Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="penjelajah_dokumen_puskesmas.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-bold text-terracotta hover:bg-white transition-all group bg-white/50 border border-terracotta/20 mt-1 shadow-sm">
+                                <i class="fa-brands fa-google-drive w-4 text-center"></i> Penjelajah Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
                             </a>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <div id="menuKlinik" class="hidden">
-                <p class="text-[10px] font-bold text-amber-400 uppercase tracking-widest mb-3 px-2 flex items-center gap-2 border-b border-slate-700 pb-2">
+                <p class="text-[11px] font-extrabold text-warmAmber uppercase tracking-widest mb-4 px-2 flex items-center gap-2 border-b-2 border-warmAmber/20 pb-2">
                     <i class="fa-solid fa-stethoscope text-sm"></i> KLINIK
                 </p>
-                <div class="space-y-4 pl-1">
+                <div class="space-y-5 pl-1">
                     
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-chart-pie w-5 text-center"></i> Indikator Mutu</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/8e6757463016" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-chart-line w-4 text-center"></i> Profil IMP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-chart-pie text-terracotta"></i> Indikator Mutu
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/8e6757463016" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-chart-line w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Profil IMP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/6749cebbd3ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-boxes-stacked w-4 text-center"></i> Bundles HAIs <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/6749cebbd3ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-boxes-stacked w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Bundles HAIs <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/a827fc3574a8" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-pills w-4 text-center"></i> PPI - POR <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-shield-heart w-5 text-center"></i> Keselamatan</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/0bd190736e51" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-magnifying-glass-chart w-4 text-center"></i> Investigasi IKP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
-                            </a>
-                            <a href="https://gemini.google.com/share/2edacbd99653" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-triangle-exclamation w-4 text-center"></i> Insiden K3 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/a827fc3574a8" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-pills w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> PPI - POR <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                         </div>
                     </div>
 
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-network-wired w-5 text-center"></i> Manajemen Risiko</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/1880d1d95c6a" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-viruses w-4 text-center"></i> Risiko PPI (ICRA-PCRA) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-shield-heart text-terracotta"></i> Keselamatan
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/0bd190736e51" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-magnifying-glass-chart w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Investigasi IKP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/a56f9ec8bc2e" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-helmet-safety w-4 text-center"></i> Risiko K3 (HIRADC) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/2edacbd99653" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-triangle-exclamation w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Insiden K3 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/875ef77108c4" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-building-circle-exclamation w-4 text-center"></i> Risk Faskes (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-network-wired text-terracotta"></i> Manajemen Risiko
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/1880d1d95c6a" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-viruses w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risiko PPI (ICRA-PCRA) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/be0dc3d9bb94" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-house-crack w-4 text-center"></i> HVA (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/a56f9ec8bc2e" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-helmet-safety w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risiko K3 (HIRADC) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/22db3c822a00" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-sitemap w-4 text-center"></i> Risiko Program Terintegrasi <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/875ef77108c4" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-building-circle-exclamation w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risk Faskes (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
+                            </a>
+                            <a href="https://gemini.google.com/share/be0dc3d9bb94" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-house-crack w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> HVA (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
+                            </a>
+                            <a href="https://gemini.google.com/share/22db3c822a00" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-sitemap w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risk Program Terintegrasi <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                         </div>
                     </div>
 
                     <!-- Pendukung -->
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-folder-open w-5 text-center"></i> Dokumen Pendukung</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/78f9471d2ed7" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-file-signature w-4 text-center"></i> SK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-folder-open text-terracotta"></i> Dokumen Pendukung
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/78f9471d2ed7" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-file-signature w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> SK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/89262a0451ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-file-invoice w-4 text-center"></i> SOP Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/89262a0451ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-file-invoice w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> SOP Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/930ec759ab16" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-file-lines w-4 text-center"></i> KAK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/930ec759ab16" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-file-lines w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> KAK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/8e74540655d2" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-clipboard-list w-4 text-center"></i> INSTRUMEN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/8e74540655d2" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-clipboard-list w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> INSTRUMEN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/af62e84a7271" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-book-medical w-4 text-center"></i> PANDUAN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/af62e84a7271" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-book-medical w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> PANDUAN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/c2fef14d78f4" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-layer-group w-4 text-center"></i> HIRARKIE AKREDITASI <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/c2fef14d78f4" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-layer-group w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> HIRARKIE AKREDITASI <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                             
-                            <a href="dokumen.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-amber-400 transition-all group bg-slate-800/30 border border-slate-700/50 mt-1">
-                                <i class="fa-solid fa-folder-tree w-4 text-center text-amber-400"></i> Inventarisasi Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="dokumen.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-bold text-warmAmber hover:bg-white transition-all group bg-white/50 border border-warmAmber/20 mt-2 shadow-sm">
+                                <i class="fa-solid fa-folder-tree w-4 text-center"></i> Inventarisasi Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
                             </a>
-
-                            <a href="penjelajah_standar_drive.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-orange-400 transition-all group bg-slate-800/30 border border-slate-700/50 mt-1">
-                                <i class="fa-brands fa-google-drive w-4 text-center text-orange-400"></i> Penjelajah Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="penjelajah_standar_drive.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-bold text-terracotta hover:bg-white transition-all group bg-white/50 border border-terracotta/20 mt-1 shadow-sm">
+                                <i class="fa-brands fa-google-drive w-4 text-center"></i> Penjelajah Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
                             </a>
                         </div>
                     </div>
@@ -267,87 +299,95 @@
             </div>
 
             <div id="menuRS" class="hidden">
-                <p class="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-3 px-2 flex items-center gap-2 border-b border-slate-700 pb-2">
+                <p class="text-[11px] font-extrabold text-mutedRose uppercase tracking-widest mb-4 px-2 flex items-center gap-2 border-b-2 border-mutedRose/20 pb-2">
                     <i class="fa-solid fa-hospital text-sm"></i> RUMAH SAKIT
                 </p>
-                <div class="space-y-4 pl-1">
+                <div class="space-y-5 pl-1">
                     
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-chart-pie w-5 text-center"></i> Indikator Mutu</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/848edba1a16f" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-chart-line w-4 text-center"></i> Profil IMP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-chart-pie text-terracotta"></i> Indikator Mutu
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/848edba1a16f" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-chart-line w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Profil IMP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/201126b1158d" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-clipboard-check w-4 text-center"></i> IPCAF (PPI) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/201126b1158d" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-clipboard-check w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> IPCAF (PPI) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/6749cebbd3ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-boxes-stacked w-4 text-center"></i> Bundles HAIs <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/6749cebbd3ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-boxes-stacked w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Bundles HAIs <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/011e193ac6f0" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-capsules w-4 text-center"></i> PPRA (PPI) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-shield-heart w-5 text-center"></i> Keselamatan</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/0bd190736e51" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-magnifying-glass-chart w-4 text-center"></i> Investigasi IKP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
-                            </a>
-                            <a href="https://gemini.google.com/share/2edacbd99653" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-triangle-exclamation w-4 text-center"></i> Insiden K3 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/011e193ac6f0" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-capsules w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> PPRA (PPI) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                         </div>
                     </div>
 
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-network-wired w-5 text-center"></i> Manajemen Risiko</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/1880d1d95c6a" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-viruses w-4 text-center"></i> Risiko PPI (ICRA-PCRA) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-shield-heart text-terracotta"></i> Keselamatan
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/0bd190736e51" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-magnifying-glass-chart w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Investigasi IKP <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/a56f9ec8bc2e" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-helmet-safety w-4 text-center"></i> Risiko K3 (HIRADC) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/2edacbd99653" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-triangle-exclamation w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Insiden K3 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/875ef77108c4" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-building-circle-exclamation w-4 text-center"></i> Risk Faskes (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-network-wired text-terracotta"></i> Manajemen Risiko
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/1880d1d95c6a" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-viruses w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risiko PPI (ICRA-PCRA) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/be0dc3d9bb94" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-house-crack w-4 text-center"></i> HVA (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/a56f9ec8bc2e" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-helmet-safety w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risiko K3 (HIRADC) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/22db3c822a00" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-sitemap w-4 text-center"></i> Risiko Program Terintegrasi <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/875ef77108c4" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-building-circle-exclamation w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risk Faskes (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
+                            </a>
+                            <a href="https://gemini.google.com/share/be0dc3d9bb94" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-house-crack w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> HVA (MFK) <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
+                            </a>
+                            <a href="https://gemini.google.com/share/22db3c822a00" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-sitemap w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> Risk Program Terintegrasi <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                         </div>
                     </div>
 
                     <!-- Pendukung -->
                     <div>
-                        <p class="text-xs font-semibold text-slate-400 mb-2"><i class="fa-solid fa-folder-open w-5 text-center"></i> Dokumen Pendukung</p>
-                        <div class="space-y-1 pl-3 ml-2 border-l border-slate-700">
-                            <a href="https://gemini.google.com/share/78f9471d2ed7" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-file-signature w-4 text-center"></i> SK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                        <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-folder-open text-terracotta"></i> Dokumen Pendukung
+                        </h3>
+                        <div class="space-y-1 pl-2 ml-3.5 border-l-2 border-earthyBorder">
+                            <a href="https://gemini.google.com/share/78f9471d2ed7" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-file-signature w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> SK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/89262a0451ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-file-invoice w-4 text-center"></i> SOP Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/89262a0451ec" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-file-invoice w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> SOP Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/930ec759ab16" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-file-lines w-4 text-center"></i> KAK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/930ec759ab16" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-file-lines w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> KAK Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/8e74540655d2" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-clipboard-list w-4 text-center"></i> INSTRUMEN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/8e74540655d2" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-clipboard-list w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> INSTRUMEN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/af62e84a7271" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-book-medical w-4 text-center"></i> PANDUAN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/af62e84a7271" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-book-medical w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> PANDUAN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/ea747659cb73" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-skyblue transition-all group">
-                                <i class="fa-solid fa-layer-group w-4 text-center"></i> HIRARKIE AKREDITASI <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="https://gemini.google.com/share/ea747659cb73" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-layer-group w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> HIRARKIE AKREDITASI <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
                             
-                            <a href="dokumen.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-300 hover:bg-slate-800 hover:text-rose-400 transition-all group bg-slate-800/30 border border-slate-700/50 mt-1">
-                                <i class="fa-solid fa-folder-tree w-4 text-center text-rose-400"></i> Inventarisasi Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
+                            <a href="dokumen.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-bold text-mutedRose hover:bg-white transition-all group bg-white/50 border border-mutedRose/20 mt-2 shadow-sm">
+                                <i class="fa-solid fa-folder-tree w-4 text-center"></i> Inventarisasi Dokumen <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100"></i>
                             </a>
                         </div>
                     </div>
@@ -357,8 +397,8 @@
 
         </nav>
 
-        <div class="p-4 border-t border-slate-700">
-            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500/10 text-red-400 rounded-xl hover:bg-red-500/20 transition-all text-xs font-bold uppercase tracking-wider">
+        <div class="p-4 border-t border-earthyBorder bg-earthySide">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white text-red-500 rounded-xl hover:bg-red-50 hover:border-red-200 transition-all text-xs font-bold uppercase tracking-wider border border-earthyBorder shadow-sm">
                 <i class="fa-solid fa-power-off"></i> Keluar Portal
             </button>
         </div>
@@ -366,67 +406,66 @@
 
     <main class="flex-1 flex flex-col min-w-0 h-full relative">
         
-        <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between z-30 shadow-sm flex-shrink-0">
+        <header class="bg-white border-b border-earthyBorder px-4 py-3 flex items-center justify-between z-30 shadow-sm flex-shrink-0">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="p-2 text-slate-600 hover:text-navy hover:bg-earthyBg rounded-lg transition-colors focus:outline-none">
+                <button onclick="toggleSidebar()" class="p-2 text-slate-500 hover:text-navy hover:bg-earthyBg rounded-lg transition-colors focus:outline-none">
                     <i class="fa-solid fa-bars text-lg"></i>
                 </button>
-                <span class="font-bold text-navy text-sm hidden md:block tracking-wide">Portal Canvas SEHATI</span>
+                <span class="font-bold text-navy text-sm hidden md:block tracking-wide">Portal SEHATI - AI</span>
                 <span class="font-bold text-navy text-sm md:hidden tracking-wide">SEHATI - AI</span>
             </div>
             
-            <div class="text-[9px] bg-emerald-500/10 text-emerald-600 px-3 py-1.5 rounded-full font-bold uppercase border border-emerald-200 shadow-sm flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> SYSTEM ONLINE
+            <div class="text-[9px] bg-sage/10 text-sage px-3 py-1.5 rounded-full font-bold uppercase border border-sage/30 shadow-sm flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-sage animate-pulse"></span> SYSTEM ONLINE
             </div>
         </header>
 
         <div class="flex-1 relative overflow-y-auto bg-earthyBg flex items-start md:items-center justify-center p-4 md:p-6">
-            <!-- Updated Card Class -->
-            <div class="max-w-3xl w-full bg-white rounded-[24px] shadow-card border border-slate-200/50 p-6 md:p-8 text-center transform transition-all hover:scale-[1.01] my-auto">
+            <div class="max-w-3xl w-full bg-white rounded-[24px] shadow-card border border-earthyBorder/60 p-6 md:p-8 text-center transform transition-all hover:scale-[1.01] my-auto">
                 
-                <div class="w-20 h-20 bg-earthyBg rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner border border-slate-100">
-                    <i class="fa-solid fa-link text-3xl text-skyblue"></i>
+                <div class="w-20 h-20 bg-earthyBg rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner border border-earthyBorder">
+                    <i class="fa-solid fa-link text-3xl text-terracotta"></i>
                 </div>
                 
-                <h2 class="font-heading text-2xl font-bold text-navy tracking-tight mb-2">Selamat Datang di SEHATI</h2>
-                <p class="text-slate-500 text-sm mb-8 leading-relaxed max-w-lg mx-auto">
-                    Menu di sidebar sebelah kiri <b class="text-navy">telah difilter otomatis</b> berdasarkan akses akun Anda. Klik tautan dokumen yang Anda butuhkan.
+                <h2 class="font-heading text-2xl font-extrabold text-navy tracking-tight mb-3">Selamat Datang di SEHATI</h2>
+                <p class="text-slate-600 text-[14px] mb-8 leading-relaxed max-w-lg mx-auto font-medium">
+                    Menu di sidebar sebelah kiri <b class="text-navy font-bold">telah difilter otomatis</b> berdasarkan akses akun Anda. Klik tautan dokumen yang Anda butuhkan.
                 </p>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
                     <!-- Kotak Petunjuk Penggunaan -->
-                    <div class="bg-blue-50/50 border border-blue-100 rounded-[20px] p-5 shadow-sm flex flex-col">
-                        <h4 class="font-heading text-xs font-bold text-blue-800 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <div class="bg-blue-50/40 border border-blue-100 rounded-[20px] p-6 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+                        <h4 class="font-heading text-xs font-extrabold text-blue-800 uppercase tracking-wider mb-4 flex items-center gap-2">
                             <i class="fa-solid fa-circle-info text-blue-600 text-base"></i> Petunjuk Penggunaan
                         </h4>
-                        <ul class="text-[13px] text-blue-700 space-y-2.5 list-disc pl-4 flex-1">
-                            <li>Pastikan Anda sudah <b>login ke akun Google</b> di browser Anda.</li>
+                        <ul class="text-[13px] text-blue-800/80 space-y-3 list-disc pl-4 flex-1 font-medium">
+                            <li>Pastikan Anda sudah <b class="text-blue-900">login ke akun Google</b> di browser Anda.</li>
                             <li>Menu di sidebar akan membuka tab baru langsung menuju halaman interaktif Gemini.</li>
-                            <li>Klik tombol <b class="text-blue-900 bg-blue-100 px-1.5 py-0.5 rounded">"Continue this chat"</b> (Lanjutkan percakapan) pada halaman Gemini jika diminta.</li>
+                            <li>Klik tombol <b class="text-blue-900 bg-blue-100 px-2 py-0.5 rounded shadow-sm border border-blue-200">"Continue this chat"</b> (Lanjutkan percakapan) pada halaman Gemini jika diminta.</li>
                         </ul>
                     </div>
 
                     <!-- Kotak Keamanan Data Baru -->
-                    <div class="bg-amber-50/50 border border-amber-200 rounded-[20px] p-5 shadow-sm flex flex-col">
-                        <h4 class="font-heading text-xs font-bold text-amber-800 uppercase tracking-wider mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-shield-halved text-amber-600 text-base"></i> Keamanan Data
+                    <div class="bg-[#fcf8f3] border border-[#eedcca] rounded-[20px] p-6 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+                        <h4 class="font-heading text-xs font-extrabold text-warmAmber uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-warmAmber text-base"></i> Keamanan Data
                         </h4>
-                        <div class="space-y-3.5 flex-1 flex flex-col justify-center">
+                        <div class="space-y-4 flex-1 flex flex-col justify-center">
                             
                             <div>
-                                <p class="text-[13px] font-bold text-amber-900 mb-1">1. Mematikan Aktivitas</p>
-                                <p class="text-xs text-amber-800 mb-1">Buka Pusat Aktivitas Gemini:</p>
-                                <a href="https://myactivity.google.com/product/gemini" target="_blank" class="text-xs text-blue-600 hover:text-blue-800 hover:underline break-all block mb-1">https://myactivity.google.com/product/gemini</a>
-                                <p class="text-xs text-amber-800"><b>Langkah:</b> Klik tombol Aktif (On) di bagian atas, lalu pilih Matikan (Turn Off) atau Matikan.</p>
+                                <p class="text-[13px] font-bold text-amber-950 mb-1">1. Mematikan Aktivitas</p>
+                                <p class="text-[12px] text-amber-900/70 mb-1.5 font-medium">Buka Pusat Aktivitas Gemini:</p>
+                                <a href="https://myactivity.google.com/product/gemini" target="_blank" class="text-[12px] font-semibold text-terracotta hover:text-navy hover:underline break-all block mb-1.5">https://myactivity.google.com/product/gemini</a>
+                                <p class="text-[12px] text-amber-900/70 font-medium"><b class="text-amber-950">Langkah:</b> Klik tombol Aktif (On) di bagian atas, lalu pilih Matikan (Turn Off) atau Matikan.</p>
                             </div>
                             
-                            <hr class="border-amber-200/60">
+                            <hr class="border-[#eedcca]">
                             
                             <div>
-                                <p class="text-[13px] font-bold text-amber-900 mb-1.5">2. Cara Aman Input Data</p>
-                                <ul class="text-xs text-amber-800 space-y-1.5 list-disc pl-4">
-                                    <li><b>Gunakan Anonim:</b> Ganti nama asli pasien (Contoh: "Pasien wanita, 30 tahun...").</li>
-                                    <li><b>Samarkan Identitas Sensitif:</b> Hindari memasukkan NIK, nomor HP, atau nama fasyankes asli. Gunakan kode anonim.</li>
+                                <p class="text-[13px] font-bold text-amber-950 mb-2">2. Cara Aman Input Data</p>
+                                <ul class="text-[12px] text-amber-900/70 space-y-2 list-disc pl-4 font-medium">
+                                    <li><b class="text-amber-950">Gunakan Anonim:</b> Ganti nama asli pasien (Contoh: "Pasien wanita, 30 tahun...").</li>
+                                    <li><b class="text-amber-950">Samarkan Identitas Sensitif:</b> Hindari memasukkan NIK, nomor HP, atau nama fasyankes asli. Gunakan kode anonim.</li>
                                 </ul>
                             </div>
 
@@ -440,36 +479,32 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            // 1. Ambil data sesi NYATA dari hasil login (index.html)
             const kategoriFasyankes = sessionStorage.getItem('kategori'); 
             const unitKerja = sessionStorage.getItem('unitKerja');
             const isLoggedIn = sessionStorage.getItem('isLoggedIn');
 
-            // 2. Jika tidak ada sesi login, arahkan kembali ke halaman login (index.html)
             if (!isLoggedIn || !kategoriFasyankes) {
                 try {
                     window.location.href = 'index.html';
                 } catch(e) {
-                    document.body.innerHTML = '<div class="flex h-screen items-center justify-center bg-earthyBg w-full"><div class="bg-white p-8 rounded-[24px] shadow-card text-center max-w-md border border-slate-200/50"><div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fa-solid fa-lock text-3xl text-red-400"></i></div><h2 class="font-heading text-xl font-bold text-navy mb-2">Akses Ditolak</h2><p class="text-slate-500 text-sm">Anda belum login atau sesi telah habis.<br><br><i>(Aplikasi sudah siap dideploy. Peringatan ini muncul karena pratinjau Canvas tidak memiliki halaman login awal)</i></p></div></div>';
+                    document.body.innerHTML = '<div class="flex h-screen items-center justify-center bg-earthyBg w-full"><div class="bg-white p-8 rounded-[24px] shadow-card text-center max-w-md border border-earthyBorder"><div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-100"><i class="fa-solid fa-lock text-3xl text-red-400"></i></div><h2 class="font-heading text-xl font-extrabold text-navy mb-2">Akses Ditolak</h2><p class="text-slate-600 text-sm font-medium">Anda belum login atau sesi telah habis.<br><br><i>(Aplikasi sudah siap dideploy. Peringatan ini muncul karena pratinjau Canvas tidak memiliki halaman login awal)</i></p></div></div>';
                 }
-                return; // Stop eksekusi
+                return; 
             }
 
-            // 3. Setel indikator peran sesuai login
             const roleIndicator = document.getElementById('roleIndicator');
             roleIndicator.innerText = unitKerja;
             
             if (kategoriFasyankes === 'Dinkes') {
-                roleIndicator.className = "text-[9px] bg-amber-500/20 text-amber-600 px-2 py-0.5 rounded-full font-bold uppercase border border-amber-500/30";
+                roleIndicator.className = "text-[9px] bg-[#fcf8f3] text-warmAmber px-2 py-0.5 rounded-full font-bold uppercase border border-[#eedcca]";
             } else if (kategoriFasyankes === 'Puskesmas') {
-                roleIndicator.className = "text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold uppercase border border-emerald-500/30";
+                roleIndicator.className = "text-[9px] bg-sage/10 text-sage px-2 py-0.5 rounded-full font-bold uppercase border border-sage/20";
             } else if (kategoriFasyankes === 'Rumah Sakit') {
-                roleIndicator.className = "text-[9px] bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded-full font-bold uppercase border border-rose-500/30";
+                roleIndicator.className = "text-[9px] bg-mutedRose/10 text-mutedRose px-2 py-0.5 rounded-full font-bold uppercase border border-mutedRose/20";
             } else if (kategoriFasyankes === 'Klinik') {
-                roleIndicator.className = "text-[9px] bg-sky-500/20 text-sky-400 px-2 py-0.5 rounded-full font-bold uppercase border border-sky-500/30";
+                roleIndicator.className = "text-[9px] bg-terracotta/10 text-terracotta px-2 py-0.5 rounded-full font-bold uppercase border border-terracotta/20";
             }
 
-            // 4. Lakukan pemfilteran menu ketat
             setMenuVisibility(kategoriFasyankes);
         });
 
@@ -482,14 +517,11 @@
             const menuRS = document.getElementById('menuRS');
             const menuKlinik = document.getElementById('menuKlinik');
 
-            // Sembunyikan semua secara default
             menuPuskesmas.classList.add('hidden');
             menuRS.classList.add('hidden');
             menuKlinik.classList.add('hidden');
 
-            // Tampilkan hanya yang sesuai hak akses dari sesi
             if (kategori === 'Dinkes') {
-                // Dinkes (Admin) bisa melihat semua menu
                 menuPuskesmas.classList.remove('hidden');
                 menuRS.classList.remove('hidden');
                 menuKlinik.classList.remove('hidden');
