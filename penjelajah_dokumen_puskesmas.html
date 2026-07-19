@@ -6,7 +6,7 @@
     <title>Penjelajah Dokumen Puskesmas | Integrasi Google Drive</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
@@ -36,11 +36,24 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'] 
+                    },
                     colors: {
-                        navy: '#0f172a',
-                        primary: '#0f766e', 
-                        drive: '#1fa463'
+                        sehati: {
+                            bg: '#fdfbf7', // Cream
+                            primary: '#ca5c30', // Terracotta
+                            primaryLight: '#e0764c',
+                            primaryDark: '#a34722',
+                            text: '#2d3748', // Dark Gray
+                            border: '#e2e8f0',
+                            card: '#ffffff',
+                        }
+                    },
+                    boxShadow: {
+                        'card': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'floating': '0 10px 40px -10px rgba(0, 0, 0, 0.15)',
                     }
                 }
             }
@@ -48,7 +61,11 @@
     </script>
 
     <style>
-        body { background-color: #f8fafc; }
+        body { 
+            background-color: #fdfbf7; /* Cream SEHATI Background */
+            color: #2d3748; /* Dark Gray SEHATI Text */
+        }
+        
         .accordion-content {
             max-height: 0;
             overflow: hidden;
@@ -57,34 +74,36 @@
         .accordion-content.open {
             max-height: 15000px; 
         }
+        
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .spinner { animation: spin 1s linear infinite; }
+        
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-track { background: #fdfbf7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #ca5c30; border-radius: 4px; opacity: 0.5; }
+        ::-webkit-scrollbar-thumb:hover { background: #a34722; }
         ul.list-circle { list-style-type: circle; }
     </style>
 </head>
-<body class="text-slate-800 antialiased font-sans flex flex-col h-screen overflow-hidden">
+<body class="antialiased flex flex-col h-screen overflow-hidden font-sans">
 
-    <header class="bg-white border-b border-slate-200 px-6 py-4 flex flex-col md:flex-row items-center justify-between z-30 shadow-sm flex-shrink-0 gap-4">
+    <header class="bg-sehati-card border-b border-sehati-border px-6 py-4 flex flex-col md:flex-row items-center justify-between z-30 shadow-sm flex-shrink-0 gap-4 rounded-b-[24px]">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-teal-50 text-teal-600 rounded-xl flex items-center justify-center text-xl shadow-inner border border-teal-100">
+            <div class="w-10 h-10 bg-sehati-primary/10 text-sehati-primary rounded-xl flex items-center justify-center text-xl shadow-inner border border-sehati-primary/20">
                 <i class="fa-solid fa-hospital"></i>
             </div>
             <div>
-                <h1 class="font-bold text-navy text-lg leading-tight">Manajemen Dokumen Akreditasi Puskesmas</h1>
-                <p id="headerSubtitle" class="text-xs text-slate-500">Terintegrasi dengan Google Drive Secara Permanen</p>
+                <h1 class="font-serif font-bold text-sehati-text text-xl leading-tight">Manajemen Dokumen Akreditasi Puskesmas</h1>
+                <p id="headerSubtitle" class="text-xs text-sehati-text/70 font-sans">Terintegrasi dengan Google Drive Secara Permanen</p>
             </div>
         </div>
         
         <div class="flex items-center gap-3">
-            <!-- Tombol Kembali yang sudah diperbaiki logic-nya -->
-            <button onclick="backToDashboard(event)" class="flex items-center gap-2 bg-slate-100 text-slate-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-200 transition focus:outline-none focus:ring-2 focus:ring-slate-300">
+            <button onclick="backToDashboard(event)" class="flex items-center gap-2 bg-sehati-bg border border-sehati-border text-sehati-text px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition focus:outline-none focus:ring-2 focus:ring-sehati-primary/50 shadow-sm">
                 <i class="fa-solid fa-arrow-left"></i> Kembali
             </button>
-            <button onclick="openSetupModal()" class="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition shadow-md focus:outline-none focus:ring-2 focus:ring-slate-500">
+            <button onclick="openSetupModal()" class="flex items-center gap-2 bg-sehati-primary text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-sehati-primaryDark transition shadow-md focus:outline-none focus:ring-2 focus:ring-sehati-primary/50">
                 <i class="fa-solid fa-gear"></i> Setup Drive
             </button>
         </div>
@@ -92,17 +111,18 @@
 
     <main class="flex-1 overflow-y-auto p-4 md:p-8">
         <div class="max-w-6xl mx-auto">
-            
-            <div class="bg-teal-50 border border-teal-200 text-teal-800 p-4 rounded-xl mb-6 flex items-start gap-3 shadow-sm">
-                <i class="fa-solid fa-circle-info text-teal-600 mt-0.5"></i>
-                <div class="text-sm">
-                    <p class="font-semibold mb-1">Fokus Peran & Penamaan Cerdas Otomatis</p>
-                    <p id="infoTextRole">Menginisialisasi pengaturan akses berdasarkan peran...</p>
+            <div class="bg-white border border-sehati-primary/20 text-sehati-text p-4 rounded-[24px] mb-6 flex items-start gap-3 shadow-card">
+                <div class="bg-sehati-primary/10 p-2 rounded-full mt-0.5">
+                    <i class="fa-solid fa-circle-info text-sehati-primary"></i>
+                </div>
+                <div class="text-sm pt-1">
+                    <p class="font-bold font-serif mb-1 text-sehati-primaryDark">Fokus Peran & Penamaan Cerdas Otomatis</p>
+                    <p id="infoTextRole" class="font-sans text-sehati-text/80">Menginisialisasi pengaturan akses berdasarkan peran...</p>
                 </div>
             </div>
 
             <!-- Tempat Akordion Render -->
-            <div id="explorer-content" class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden mb-10">
+            <div id="explorer-content" class="bg-white rounded-[24px] shadow-card border border-sehati-border overflow-hidden mb-10">
                 <!-- Konten akan dirender oleh JavaScript -->
             </div>
 
@@ -111,44 +131,44 @@
 
     <input type="file" id="hiddenFileInput" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.jpeg,.mp4">
     
-    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl transform transition-all duration-300 translate-y-24 opacity-0 z-50 flex items-center gap-3 font-medium text-sm max-w-sm">
+    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 rounded-[16px] shadow-floating transform transition-all duration-300 translate-y-24 opacity-0 z-50 flex items-center gap-3 font-medium text-sm max-w-sm">
         <i id="toastIcon" class="fa-solid fa-check-circle text-lg"></i>
-        <span id="toastMessage">Pesan Notifikasi</span>
+        <span id="toastMessage" class="font-sans">Pesan Notifikasi</span>
     </div>
 
-    <div id="setupModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300" id="setupModalContent">
-            <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50 rounded-t-2xl">
-                <h3 class="font-bold text-lg text-navy flex items-center gap-2">
-                    <i class="fa-brands fa-google-drive text-emerald-600"></i> Konfigurasi Google Drive
+    <div id="setupModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-[24px] shadow-floating max-w-3xl w-full max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300 border border-sehati-border" id="setupModalContent">
+            <div class="p-5 border-b border-sehati-border flex justify-between items-center bg-sehati-bg rounded-t-[24px]">
+                <h3 class="font-serif font-bold text-xl text-sehati-primaryDark flex items-center gap-2">
+                    <i class="fa-brands fa-google-drive text-sehati-primary"></i> Konfigurasi Google Drive
                 </h3>
-                <button onclick="closeSetupModal()" class="text-slate-400 hover:text-red-500 transition-colors w-8 h-8 flex justify-center items-center rounded-lg hover:bg-red-50">
+                <button onclick="closeSetupModal()" class="text-sehati-text/50 hover:text-sehati-primary transition-colors w-8 h-8 flex justify-center items-center rounded-lg hover:bg-sehati-primary/10">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
             
-            <div class="p-6 overflow-y-auto text-sm text-slate-600 space-y-5">
+            <div class="p-6 overflow-y-auto text-sm text-sehati-text space-y-5 font-sans">
                 
-                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r text-amber-900 shadow-sm">
-                    <h4 class="font-bold mb-1 flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up text-amber-600"></i> Disimpan Permanen di Akun Anda</h4>
-                    <p class="text-xs">URL Script yang Anda masukkan di bawah ini akan <b>disimpan permanen ke dalam database akun Anda</b>. Jika Anda login di Komputer / HP lain dengan akun email yang sama, Anda <b>TIDAK PERLU</b> melakukan setup ulang. Sistem akan menarik URL tersebut secara otomatis.</p>
+                <div class="bg-sehati-bg border-l-4 border-sehati-primary p-4 rounded-r-xl shadow-sm">
+                    <h4 class="font-bold mb-1 flex items-center gap-2 text-sehati-primaryDark"><i class="fa-solid fa-cloud-arrow-up text-sehati-primary"></i> Disimpan Permanen di Akun Anda</h4>
+                    <p class="text-xs text-sehati-text/80">URL Script yang Anda masukkan di bawah ini akan <b>disimpan permanen ke dalam database akun Anda</b>. Jika Anda login di Komputer / HP lain dengan akun email yang sama, Anda <b>TIDAK PERLU</b> melakukan setup ulang. Sistem akan menarik URL tersebut secara otomatis.</p>
                 </div>
 
                 <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800 border-b pb-1">1. Buat Proyek & Salin Kode</h4>
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li>Buka web <a href="https://script.google.com/" target="_blank" class="text-blue-600 hover:underline font-semibold">script.google.com</a> (pastikan sudah login akun Google Drive puskesmas Anda), lalu klik <b>Proyek Baru</b>.</li>
+                    <h4 class="font-bold font-serif text-sehati-text border-b border-sehati-border pb-1">1. Buat Proyek & Salin Kode</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sehati-text/80">
+                        <li>Buka web <a href="https://script.google.com/" target="_blank" class="text-sehati-primary hover:underline font-semibold">script.google.com</a> (pastikan sudah login akun Google Drive puskesmas Anda), lalu klik <b>Proyek Baru</b>.</li>
                         <li>Hapus seluruh kode bawaan yang ada di layar putih tersebut.</li>
                         <li>Klik <b>Copy Code</b> di bawah ini, lalu tempel (<i>paste</i>) ke layar tersebut.</li>
                     </ul>
                 </div>
                 
                 <div class="relative group mb-4">
-                    <button onclick="copyScriptCode()" class="absolute top-2 right-2 bg-slate-700 text-white text-xs px-3 py-1.5 rounded-md hover:bg-slate-600 transition opacity-0 group-hover:opacity-100 focus:opacity-100 shadow-md">
+                    <button onclick="copyScriptCode()" class="absolute top-2 right-2 bg-sehati-text text-white text-xs px-3 py-1.5 rounded-xl hover:bg-slate-700 transition opacity-0 group-hover:opacity-100 focus:opacity-100 shadow-md">
                         <i class="fa-regular fa-copy"></i> Copy Code
                     </button>
                     <!-- KODE GOOGLE DRIVE ANTI-CRASH -->
-                    <pre id="gasScriptCode" class="bg-slate-800 text-green-400 p-4 rounded-xl overflow-x-auto text-xs font-mono border border-slate-700">
+                    <pre id="gasScriptCode" class="bg-slate-800 text-green-400 p-4 rounded-[16px] overflow-x-auto text-xs font-mono border border-slate-700 shadow-inner">
 function doPost(e) {
   var headers = {
     "Access-Control-Allow-Origin": "*",
@@ -219,14 +239,14 @@ function doOptions(e) {
                 </div>
 
                 <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800 border-b pb-1">2. Terapkan (Deploy) Script</h4>
-                    <ul class="list-disc pl-5 space-y-1">
+                    <h4 class="font-bold font-serif text-sehati-text border-b border-sehati-border pb-1">2. Terapkan (Deploy) Script</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sehati-text/80">
                         <li>Di sudut kanan atas, klik tombol biru <b>Terapkan (Deploy)</b> > pilih <b>Deployment baru</b>.</li>
                         <li>Klik ikon Roda Gigi ⚙️ (Pilih jenis) > pilih <b>Aplikasi Web (Web App)</b>.</li>
                         <li>Atur pengaturan berikut:
-                            <ul class="list-circle pl-5 mt-1 text-slate-500">
-                                <li>Jalankan sebagai: <b class="text-slate-700">Saya (Me)</b></li>
-                                <li>Siapa yang memiliki akses: <b class="text-slate-700">Siapa saja (Anyone)</b></li>
+                            <ul class="list-circle pl-5 mt-1 text-sehati-text/70">
+                                <li>Jalankan sebagai: <b class="text-sehati-text">Saya (Me)</b></li>
+                                <li>Siapa yang memiliki akses: <b class="text-sehati-text">Siapa saja (Anyone)</b></li>
                             </ul>
                         </li>
                         <li>Klik tombol <b>Terapkan</b>.</li>
@@ -234,8 +254,8 @@ function doOptions(e) {
                 </div>
 
                 <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800 border-b pb-1">3. Otorisasi Izin Akses (Sangat Penting!)</h4>
-                    <ul class="list-disc pl-5 space-y-1">
+                    <h4 class="font-bold font-serif text-sehati-text border-b border-sehati-border pb-1">3. Otorisasi Izin Akses (Sangat Penting!)</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sehati-text/80">
                         <li>Google akan meminta izin untuk membuat folder. Klik <b>Otorisasi akses</b> dan pilih akun Anda.</li>
                         <li>Jika muncul layar peringatan <i>"Google belum memverifikasi aplikasi ini"</i>, klik tulisan <b>Lanjutan (Advanced)</b> di bagian bawah.</li>
                         <li>Scroll ke bawah dan klik tulisan <b>Buka proyek (tidak aman) / Go to project</b>.</li>
@@ -244,18 +264,18 @@ function doOptions(e) {
                 </div>
 
                 <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800 border-b pb-1">4. Simpan URL Web App</h4>
-                    <ul class="list-disc pl-5 space-y-1">
+                    <h4 class="font-bold font-serif text-sehati-text border-b border-sehati-border pb-1">4. Simpan URL Web App</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sehati-text/80">
                         <li>Setelah berhasil, salin tulisan panjang di bawah <b>URL Aplikasi Web</b>.</li>
-                        <li>Tempelkan ke dalam kotak hijau di bawah ini dan klik Simpan.</li>
+                        <li>Tempelkan ke dalam kotak di bawah ini dan klik Simpan.</li>
                     </ul>
                 </div>
 
                 <!-- FORM INPUT URL DRIVE -->
-                <div class="mt-5 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-                    <label class="block text-xs font-bold text-emerald-800 uppercase mb-1">Tempel Web App URL Anda di sini:</label>
-                    <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full px-3 py-2 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-mono">
-                    <button id="btnSaveGas" onclick="saveGasUrl(event)" class="mt-3 w-full bg-emerald-600 text-white font-medium py-2 rounded-lg hover:bg-emerald-700 transition shadow-md">
+                <div class="mt-5 p-5 bg-white rounded-[24px] border border-sehati-border shadow-sm">
+                    <label class="block text-xs font-bold text-sehati-text uppercase mb-2">Tempel Web App URL Anda di sini:</label>
+                    <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full px-4 py-3 border border-sehati-border rounded-xl focus:outline-none focus:ring-2 focus:ring-sehati-primary/50 text-sm font-mono bg-sehati-bg text-sehati-text">
+                    <button id="btnSaveGas" onclick="saveGasUrl(event)" class="mt-4 w-full bg-sehati-primary text-white font-medium py-3 rounded-xl hover:bg-sehati-primaryDark transition shadow-md">
                         Simpan Permanen ke Database Akun
                     </button>
                 </div>
@@ -292,7 +312,7 @@ function doOptions(e) {
             }, 1000);
         }
         
-        // API Database Pusat (URL TELAH DIPERBARUI)
+        // API Database Pusat (URL TELAH DIPERBARUI - SESUAI SUMBER ASLI)
         const CENTRAL_GAS_URL = "https://script.google.com/macros/s/AKfycbyz0WCr1nW8aH_ExPZnFvbxvUZt65PpDAf8L7pdb4j2KE8eKkV3cOAZcePbuboMK31T/exec";
 
         // Identitas User
@@ -306,7 +326,7 @@ function doOptions(e) {
         window.addEventListener('DOMContentLoaded', () => {
             const subtitle = document.getElementById('headerSubtitle');
             if(sessionStorage.getItem('unitKerja')) {
-                subtitle.innerHTML = `Area Kerja: <b>${currentUnitKerja}</b> | Akun Terotorisasi: <span class="text-teal-600 font-semibold">${currentUserEmail}</span>`;
+                subtitle.innerHTML = `Area Kerja: <b>${currentUnitKerja}</b> | Akun Terotorisasi: <span class="text-sehati-primary font-semibold">${currentUserEmail}</span>`;
             }
             renderExplorerContent();
 
@@ -921,13 +941,13 @@ function doOptions(e) {
 
         function getRdowsBadge(type) {
             const styles = {
-                'R': 'bg-blue-100 text-blue-700 border-blue-200',
-                'D': 'bg-green-100 text-green-700 border-green-200',
-                'O': 'bg-amber-100 text-amber-700 border-amber-200',
-                'W': 'bg-purple-100 text-purple-700 border-purple-200',
-                'S': 'bg-pink-100 text-pink-700 border-pink-200'
+                'R': 'bg-blue-50 text-blue-700 border-blue-200',
+                'D': 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                'O': 'bg-amber-50 text-amber-700 border-amber-200',
+                'W': 'bg-purple-50 text-purple-700 border-purple-200',
+                'S': 'bg-rose-50 text-rose-700 border-rose-200'
             };
-            return `<span class="${styles[type] || 'bg-slate-100'} px-2 py-0.5 rounded font-bold text-xs border inline-block min-w-[24px] text-center">${type}</span>`;
+            return `<span class="${styles[type] || 'bg-slate-100'} px-2.5 py-0.5 rounded-md font-bold text-xs border inline-block min-w-[28px] text-center shadow-sm">${type}</span>`;
         }
 
         function renderExplorerContent() {
@@ -939,43 +959,43 @@ function doOptions(e) {
             
             if(infoBox) {
                 if(isDinkes) {
-                    infoBox.innerHTML = `Anda masuk sebagai <b>Dinas Kesehatan (Pendamping)</b>. Anda dapat mengunggah catatan evaluasi untuk seluruh elemen <b>(R, D, O, W, S)</b>. Apapun nama asli file Anda, sistem akan membuangnya dan menamai ulang otomatis menjadi:<br><b class="text-teal-900 bg-teal-100/50 px-2 py-0.5 rounded font-mono text-xs mt-1 inline-block border border-teal-200">EP [Kode] - R/D/O/W/S (Kategori) - Konsep Judul Baku.pdf</b>`;
+                    infoBox.innerHTML = `Anda masuk sebagai <b>Dinas Kesehatan (Pendamping)</b>. Anda dapat mengunggah catatan evaluasi untuk seluruh elemen <b>(R, D, O, W, S)</b>. Apapun nama asli file Anda, sistem akan membuangnya dan menamai ulang otomatis menjadi:<br><b class="text-sehati-primaryDark bg-sehati-primary/10 px-2 py-0.5 rounded-md font-mono text-xs mt-1.5 inline-block border border-sehati-primary/20">EP [Kode] - R/D/O/W/S (Kategori) - Konsep Judul Baku.pdf</b>`;
                 } else {
-                    infoBox.innerHTML = `Sistem difilter untuk fasyankes: mengunggah dokumen bukti <b>(R, D, O)</b>. Wawancara (W) dan Simulasi (S) tidak memerlukan dokumen fasyankes. Apapun nama asli file Anda, sistem akan membuangnya dan menamai ulang secara otomatis menjadi judul baku:<br><b class="text-teal-900 bg-teal-100/50 px-2 py-0.5 rounded font-mono text-xs mt-1 inline-block border border-teal-200">EP [Kode] - R/D/O (Jenis Bukti) - Konsep Judul Baku.pdf</b>`;
+                    infoBox.innerHTML = `Sistem difilter untuk fasyankes: mengunggah dokumen bukti <b>(R, D, O)</b>. Wawancara (W) dan Simulasi (S) tidak memerlukan dokumen fasyankes. Apapun nama asli file Anda, sistem akan membuangnya dan menamai ulang secara otomatis menjadi judul baku:<br><b class="text-sehati-primaryDark bg-sehati-primary/10 px-2 py-0.5 rounded-md font-mono text-xs mt-1.5 inline-block border border-sehati-primary/20">EP [Kode] - R/D/O (Jenis Bukti) - Konsep Judul Baku.pdf</b>`;
                 }
             }
             
             Object.entries(rawData).forEach(([babKey, babData]) => {
                 const babWrapper = document.createElement('div');
                 const babHeader = document.createElement('div');
-                babHeader.className = `p-4 bg-${babData.color}-50 border-b border-slate-200 text-lg font-bold text-${babData.color}-800 flex items-center gap-2`;
-                babHeader.innerHTML = `<span>${babData.icon}</span> ${babData.title}`;
+                babHeader.className = `p-5 bg-sehati-bg border-b border-sehati-border text-lg font-bold font-serif text-sehati-primaryDark flex items-center gap-3`;
+                babHeader.innerHTML = `<span class="text-2xl bg-white p-2 rounded-xl shadow-sm border border-sehati-border/50">${babData.icon}</span> ${babData.title}`;
                 babWrapper.appendChild(babHeader);
 
                 const safeBabTitle = babData.title.replace(/:/g, ' -').replace(/[\/\\?*|<>"]/g, '');
 
                 babData.standarList.forEach(standard => {
                     const stdAccordion = document.createElement('div');
-                    stdAccordion.className = 'border-b border-slate-200 last:border-b-0 bg-white';
+                    stdAccordion.className = 'border-b border-sehati-border last:border-b-0 bg-white';
                     
                     const stdHeader = document.createElement('button');
-                    stdHeader.className = 'w-full flex justify-between items-center p-4 hover:bg-slate-50 transition-colors focus:outline-none group';
-                    stdHeader.innerHTML = `<h3 class="font-semibold text-slate-800 text-left group-hover:text-teal-600 transition-colors">${standard.id}: ${standard.title}</h3><i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>`;
+                    stdHeader.className = 'w-full flex justify-between items-center p-5 hover:bg-slate-50 transition-colors focus:outline-none group';
+                    stdHeader.innerHTML = `<h3 class="font-bold text-sehati-text text-left group-hover:text-sehati-primary transition-colors pr-4">${standard.id}: ${standard.title}</h3><div class="bg-sehati-bg p-2 rounded-full border border-sehati-border shrink-0"><i class="fa-solid fa-chevron-down text-sehati-text/50 transition-transform duration-300"></i></div>`;
                     
                     const stdContent = document.createElement('div');
-                    stdContent.className = 'accordion-content bg-slate-50/50 px-4 pb-0';
+                    stdContent.className = 'accordion-content bg-sehati-bg px-5 pb-0';
 
                     standard.kriteriaList.forEach(kriteria => {
                         const kritCard = document.createElement('div');
-                        kritCard.className = 'bg-white rounded-xl shadow-sm border border-slate-200 mb-6 overflow-hidden';
+                        kritCard.className = 'bg-white rounded-[20px] shadow-sm border border-sehati-border mb-6 overflow-hidden';
                         
                         const kritHeader = document.createElement('div');
-                        kritHeader.className = `bg-${babData.color}-100/50 p-3 border-b border-slate-200`;
-                        kritHeader.innerHTML = `<h4 class="font-bold text-slate-700 text-sm">${kriteria.id}: ${kriteria.title}</h4>`;
+                        kritHeader.className = `bg-slate-50 p-4 border-b border-sehati-border`;
+                        kritHeader.innerHTML = `<h4 class="font-bold font-serif text-sehati-text text-sm">${kriteria.id}: ${kriteria.title}</h4>`;
                         kritCard.appendChild(kritHeader);
 
                         const kritBody = document.createElement('div');
-                        kritBody.className = 'p-4 space-y-4';
+                        kritBody.className = 'p-5 space-y-5';
 
                         kriteria.eps.forEach(epStr => {
                             const matchId = epStr.match(/^([a-z])\)\s*(.*)/);
@@ -1002,13 +1022,13 @@ function doOptions(e) {
                             const safeCleanText = cleanText.replace(/['"\\]/g, ''); 
 
                             const epBlock = document.createElement('div');
-                            epBlock.className = 'border-l-4 border-l-teal-500 pl-4 py-1';
+                            epBlock.className = 'border-l-4 border-l-sehati-primary pl-4 py-1';
                             
                             if(rdowsTypes.length === 0) {
-                                epBlock.classList.replace('border-l-teal-500', 'border-l-slate-300');
+                                epBlock.classList.replace('border-l-sehati-primary', 'border-l-slate-300');
                                 epBlock.innerHTML = `
-                                    <p class="font-medium text-slate-600 text-sm leading-relaxed"><span class="text-slate-500 font-bold bg-slate-100 px-1.5 py-0.5 rounded mr-1">EP ${epId})</span> ${cleanText}</p>
-                                    <p class="text-xs text-amber-600 font-medium italic mt-2.5 bg-amber-50 inline-block px-2 py-1 rounded border border-amber-100"><i class="fa-solid fa-circle-info"></i> EP ini hanya dinilai melalui Wawancara/Simulasi (Tidak memerlukan unggahan dokumen fasyankes).</p>
+                                    <p class="font-medium text-sehati-text text-sm leading-relaxed font-sans"><span class="text-sehati-text/60 font-bold bg-slate-100 px-2 py-1 rounded-md mr-2 border border-slate-200">EP ${epId})</span> ${cleanText}</p>
+                                    <p class="text-xs text-amber-700 font-medium italic mt-3 bg-amber-50 inline-block px-3 py-1.5 rounded-lg border border-amber-200 shadow-sm"><i class="fa-solid fa-circle-info"></i> EP ini hanya dinilai melalui Wawancara/Simulasi (Tidak memerlukan unggahan dokumen fasyankes).</p>
                                 `;
                             } else {
                                 let rdowsHtml = '';
@@ -1016,23 +1036,23 @@ function doOptions(e) {
                                     const slotId = `${standard.id.replace(/\s+/g, '')}_${kriteria.id.replace(/\s+/g, '').replace(/\./g, '_')}_EP${epId}_${type}_${index}`;
                                     
                                     rdowsHtml += `
-                                        <div class="mt-3 pt-3 border-t border-slate-100/60">
-                                            <div class="flex items-start gap-3 mb-3">
+                                        <div class="mt-4 pt-4 border-t border-slate-100">
+                                            <div class="flex items-start gap-3 mb-4">
                                                 <div class="mt-0.5">${getRdowsBadge(type)}</div>
-                                                <p class="text-sm text-slate-600 leading-relaxed">${rdowsDetailMap[type]}</p>
+                                                <p class="text-sm text-sehati-text/80 leading-relaxed font-sans">${rdowsDetailMap[type]}</p>
                                             </div>
-                                            <div id="fileList_${slotId}" class="flex flex-col gap-2 mb-3 pl-9 empty:hidden"></div>
-                                            <div class="flex flex-wrap items-center gap-2 pl-9">
+                                            <div id="fileList_${slotId}" class="flex flex-col gap-2 mb-4 pl-10 empty:hidden"></div>
+                                            <div class="flex flex-wrap items-center gap-3 pl-10">
                                                 <button id="btnUpload_${slotId}" onclick="triggerUpload('${safeBabTitle}', '${standard.id}', '${kriteria.id}', '${epId}', '${type}', this, '${slotId}', '${safeCleanText}')" 
-                                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 text-slate-700 rounded-md text-xs font-semibold hover:bg-slate-50 hover:text-teal-600 transition shadow-sm">
-                                                    <i class="fa-solid fa-cloud-arrow-up text-teal-500"></i> <span class="btn-text">Unggah Bukti</span>
+                                                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-sehati-border text-sehati-text rounded-xl text-sm font-semibold hover:bg-slate-50 hover:text-sehati-primary transition shadow-sm focus:outline-none focus:ring-2 focus:ring-sehati-primary/30">
+                                                    <i class="fa-solid fa-cloud-arrow-up text-sehati-primary"></i> <span class="btn-text">Unggah Bukti</span>
                                                 </button>
                                             </div>
                                         </div>
                                     `;
                                 });
     
-                                epBlock.innerHTML = `<p class="font-medium text-slate-800 text-sm leading-relaxed"><span class="text-teal-700 font-bold bg-teal-50 px-1.5 py-0.5 rounded mr-1">EP ${epId})</span> ${cleanText}</p>${rdowsHtml}`;
+                                epBlock.innerHTML = `<p class="font-medium text-sehati-text text-sm leading-relaxed font-sans"><span class="text-sehati-primaryDark font-bold bg-sehati-primary/10 px-2 py-1 rounded-md mr-2 border border-sehati-primary/20">EP ${epId})</span> ${cleanText}</p>${rdowsHtml}`;
                             }
 
                             kritBody.appendChild(epBlock);
@@ -1043,8 +1063,8 @@ function doOptions(e) {
                     });
 
                     if(stdContent.lastChild) {
-                        stdContent.style.paddingBottom = '1rem';
-                        stdContent.firstElementChild.style.marginTop = '1rem';
+                        stdContent.style.paddingBottom = '1.25rem';
+                        stdContent.firstElementChild.style.marginTop = '1.25rem';
                     }
 
                     stdHeader.addEventListener('click', () => {
@@ -1078,7 +1098,7 @@ function doOptions(e) {
             const msg = document.getElementById('toastMessage');
 
             msg.textContent = message;
-            toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl transform transition-all duration-300 z-50 flex items-center gap-3 font-medium text-sm max-w-sm text-white ${type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-red-500' : 'bg-blue-600'}`;
+            toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-[16px] shadow-floating transform transition-all duration-300 z-50 flex items-center gap-3 font-medium text-sm max-w-sm text-white ${type === 'success' ? 'bg-[#10b981]' : type === 'error' ? 'bg-[#ef4444]' : 'bg-[#ca5c30]'}`;
             icon.className = `text-lg ${type === 'success' ? 'fa-solid fa-check-circle' : type === 'error' ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-info-circle spinner'}`;
             toast.classList.remove('translate-y-24', 'opacity-0');
 
@@ -1241,7 +1261,7 @@ function doOptions(e) {
             const formattedFileName = `EP ${epId} - ${type} ${category} - ${epConcept}${ext}`;
 
             const originalBtnHtml = target.buttonElement.innerHTML;
-            target.buttonElement.innerHTML = '<i class="fa-solid fa-circle-notch spinner text-teal-500"></i> Mengunggah...';
+            target.buttonElement.innerHTML = '<i class="fa-solid fa-circle-notch spinner text-sehati-primary"></i> Mengunggah...';
             target.buttonElement.disabled = true;
             showToast('Sedang memproses dan mengunggah ke Drive Pribadi Anda...', 'loading');
 
@@ -1316,8 +1336,8 @@ function doOptions(e) {
             
             const fileLink = document.createElement('a');
             fileLink.href = fileObj.url; fileLink.target = "_blank"; fileLink.download = fileObj.name;
-            fileLink.className = "inline-flex items-center justify-between gap-3 px-3 py-2 bg-teal-50 border border-teal-200 text-teal-700 rounded-md text-xs hover:bg-teal-100 transition shadow-sm w-fit max-w-full group";
-            fileLink.innerHTML = `<div class="flex items-center gap-2 overflow-hidden"><i class="fa-brands fa-google-drive text-teal-600 shrink-0"></i><span class="truncate font-medium group-hover:underline" title="${fileObj.name}">${fileObj.name}</span></div><i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70 shrink-0 group-hover:opacity-100"></i>`;
+            fileLink.className = "inline-flex items-center justify-between gap-3 px-4 py-2 bg-sehati-bg border border-sehati-border text-sehati-text rounded-xl text-sm font-sans hover:bg-slate-50 transition shadow-sm w-fit max-w-full group";
+            fileLink.innerHTML = `<div class="flex items-center gap-2 overflow-hidden"><i class="fa-brands fa-google-drive text-sehati-primary shrink-0"></i><span class="truncate font-medium group-hover:underline" title="${fileObj.name}">${fileObj.name}</span></div><i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70 shrink-0 group-hover:opacity-100 group-hover:text-sehati-primary transition-colors"></i>`;
             fileListContainer.appendChild(fileLink);
         }
     </script>
