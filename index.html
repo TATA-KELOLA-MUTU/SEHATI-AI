@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEHATI-AI | Portal Fasyankes</title>
+    
+    <script>
+        (function() {
+            const allowedDomains = [
+                "tata-kelola-mutu.github.io",
+                "domain-kedua-anda.github.io" // Silakan ganti dengan repo kedua
+            ];
+            const currentDomain = window.location.hostname.toLowerCase();
+            const isLocal = currentDomain === "localhost" || currentDomain === "127.0.0.1" || currentDomain === "";
+            const isCanvasPreview = window.self !== window.top || currentDomain.includes("google") || currentDomain.includes("sandbox");
+            
+            if (!allowedDomains.includes(currentDomain) && !isLocal && !isCanvasPreview) {
+                document.documentElement.innerHTML = `
+                    <div style="display:flex; justify-content:center; align-items:center; height:100vh; background-color:#fdfbf7; color:#ca5c30; font-family:sans-serif; text-align:center; padding:20px;">
+                        <div>
+                            <h1 style="font-size:1.8rem; margin-bottom:10px;">⚠️ AKSES DITOLAK</h1>
+                            <p style="color:#4a5568">Lisensi SEHATI tidak valid untuk domain ini.</p>
+                        </div>
+                    </div>`;
+                throw new Error("Unauthorized Access");
+            }
+        })();
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 
+                        brand: {
+                            cream: '#fdfbf7',   // Background utama 
+                            surface: '#f6f2eb', // Latar aksen lembut
+                            terra: '#ca5c30',   // Warna utama (Terracotta/Bata)
+                            terradark: '#a84a24',
+                            text: '#2d3748',    // Abu-abu gelap untuk teks
+                            muted: '#718096'
+                        }
+                    },
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'] 
+                    },
+                    boxShadow: {
+                        'card': '0 20px 40px -10px rgba(0,0,0,0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { 
+            background-color: #fdfbf7; /* Cream base theme */
+            color: #2d3748;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Input form modern dengan border bawah saat fokus */
+        .input-sehati {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+        .input-sehati:focus {
+            border-color: #ca5c30;
+            box-shadow: 0 0 0 3px rgba(202, 92, 48, 0.1);
+            outline: none;
+        }
+
+        /* Transisi Form (Fade) */
+        .form-fade-enter { opacity: 0; position: absolute; width: 100%; pointer-events: none; }
+        .form-fade-enter-active { opacity: 1; transition: opacity 400ms ease; position: relative; pointer-events: auto; }
+        .form-fade-exit { opacity: 1; position: relative; width: 100%; }
+        .form-fade-exit-active { opacity: 0; transition: opacity 300ms ease; position: absolute; pointer-events: none; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+
+<body class="selection:bg-brand-terra selection:text-white relative flex items-center justify-center">
+
+    <!-- Elemen Background: Gelombang bawah & Jaringan AI (Nodes) -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <!-- Gelombang warna terracotta di pojok kiri bawah -->
+        <svg class="absolute bottom-0 left-0 w-[80vw] md:w-[50vw] text-brand-terra opacity-80" viewBox="0 0 800 400" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 400V150C100 120 200 180 300 160C400 140 450 80 550 90C650 100 750 180 800 200V400H0Z" opacity="0.3"/>
+            <path d="M0 400V250C150 220 250 300 400 280C550 260 650 200 800 220V400H0Z"/>
+        </svg>
+
+        <!-- Jaringan AI Halus (Network Nodes) di tengah-kanan layar -->
+        <svg class="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] text-brand-terra/10 animate-[pulse_6s_ease-in-out_infinite]" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.5">
+            <circle cx="50" cy="50" r="2" fill="currentColor"/><circle cx="150" cy="70" r="2" fill="currentColor"/><circle cx="100" cy="130" r="2" fill="currentColor"/><circle cx="180" cy="160" r="2" fill="currentColor"/><circle cx="20" cy="150" r="2" fill="currentColor"/>
+            <path d="M50 50L150 70M150 70L100 130M50 50L100 130M100 130L180 160M150 70L180 160M50 50L20 150M20 150L100 130"/>
+        </svg>
+    </div>
+
+    <div class="w-full max-w-[1200px] mx-auto px-4 py-8 md:py-12 flex flex-col lg:flex-row items-center gap-12 lg:gap-8 z-10">
+        
+        <!-- BAGIAN KIRI: Branding & Teks -->
+        <div class="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left pt-10 lg:pt-0">
+            <!-- Logo area -->
+            <div class="flex items-center gap-3 justify-center lg:justify-start mb-10">
+                <div class="relative flex items-center justify-center w-12 h-12">
+                    <i class="fa-solid fa-circle-nodes text-brand-terra text-3xl"></i>
+                </div>
+                <div class="text-center lg:text-left">
+                    <h1 class="text-xl font-bold text-brand-text tracking-tight flex items-center gap-2 justify-center lg:justify-start">
+                        SEHATI-AI
+                        <span class="flex h-2 w-2 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-terra opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-terra"></span>
+                        </span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Teks Utama -->
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-brand-text leading-[1.3] mb-4">
+                Sistem Edukasi & Harmonisasi <br class="hidden xl:block">
+                Administrasi Tata Kelola Mutu Integratif <br class="hidden xl:block">
+                <span class="text-brand-terra">Berbasis Artificial Intelegensi</span>
+            </h2>
+            
+            <div class="w-16 h-1 bg-brand-terra/40 mb-6 mx-auto lg:mx-0 rounded-full"></div>
+            
+            <!-- Deskripsi -->
+            <p class="text-brand-muted text-sm md:text-base leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0">
+                <span class="font-bold text-brand-text">Satu platform untuk administrasi kesehatan berbasis AI.</span> Kelola mutu layanan, risiko, keselamatan pasien, PPI, dan dokumentasi layanan kesehatan secara terintegrasi, akurat, dan cerdas disesuaikan dengan standar akreditasi fasyankes.
+            </p>
+
+            <!-- Fitur-fitur -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-xl mx-auto lg:mx-0">
+                <div class="text-center lg:text-left">
+                    <div class="w-10 h-10 rounded-full bg-brand-terra/10 flex items-center justify-center mb-3 mx-auto lg:mx-0 text-brand-terra">
+                        <i class="fa-solid fa-chart-pie text-lg"></i>
+                    </div>
+                    <h4 class="text-xs font-bold text-brand-text mb-1">Indikator Mutu</h4>
+                    <p class="text-[10px] text-brand-muted leading-relaxed">Pantau indikator & capaian faskes.</p>
+                </div>
+                <div class="text-center lg:text-left">
+                    <div class="w-10 h-10 rounded-full bg-brand-terra/10 flex items-center justify-center mb-3 mx-auto lg:mx-0 text-brand-terra">
+                        <i class="fa-solid fa-shield-heart text-lg"></i>
+                    </div>
+                    <h4 class="text-xs font-bold text-brand-text mb-1">Keselamatan</h4>
+                    <p class="text-[10px] text-brand-muted leading-relaxed">Investigasi IKP & insiden faskes.</p>
+                </div>
+                <div class="text-center lg:text-left">
+                    <div class="w-10 h-10 rounded-full bg-brand-terra/10 flex items-center justify-center mb-3 mx-auto lg:mx-0 text-brand-terra">
+                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    </div>
+                    <h4 class="text-xs font-bold text-brand-text mb-1">Manajemen Risiko</h4>
+                    <p class="text-[10px] text-brand-muted leading-relaxed">Identifikasi & mitigasi risiko.</p>
+                </div>
+                <div class="text-center lg:text-left">
+                    <div class="w-10 h-10 rounded-full bg-brand-terra/10 flex items-center justify-center mb-3 mx-auto lg:mx-0 text-brand-terra">
+                        <i class="fa-solid fa-folder-open text-lg"></i>
+                    </div>
+                    <h4 class="text-xs font-bold text-brand-text mb-1">Dok. Manajemen</h4>
+                    <p class="text-[10px] text-brand-muted leading-relaxed">Generator instrumen & dokumen.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- BAGIAN KANAN: Form Card -->
+        <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
+            <div class="w-full max-w-[460px] bg-white rounded-[24px] shadow-card p-6 sm:p-10 relative border border-brand-surface overflow-hidden">
+                
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-serif font-bold text-brand-text mb-1">Selamat Datang</h3>
+                    <p class="text-brand-muted text-sm">di <span class="font-bold text-brand-terra">SEHATI-AI</span></p>
+                    <div class="w-10 h-0.5 bg-brand-terra mx-auto mt-3"></div>
+                </div>
+
+                <p class="text-center text-xs text-brand-muted mb-6">Silakan masuk atau daftar untuk melanjutkan</p>
+
+                <!-- Custom Tab Navigation -->
+                <div class="flex border-b border-gray-200 mb-6 relative">
+                    <button type="button" onclick="switchTab('login')" id="btnTabLogin" class="flex-1 pb-3 text-sm font-bold text-brand-text transition-colors relative z-10 focus:outline-none">Masuk</button>
+                    <button type="button" onclick="switchTab('register')" id="btnTabReg" class="flex-1 pb-3 text-sm font-medium text-brand-muted transition-colors relative z-10 focus:outline-none">Registrasi</button>
+                    <!-- Indikator Garis Bawah -->
+                    <div id="tabIndicator" class="absolute bottom-0 left-0 w-1/2 h-[2px] bg-brand-terra transition-transform duration-300 ease-in-out"></div>
+                </div>
+
+                <!-- Alert Message -->
+                <div id="alertMessage" class="hidden w-full text-xs p-3 rounded-lg flex items-start gap-2.5 transition-all mb-5 border">
+                    <i id="alertIcon" class="fa-solid mt-0.5"></i>
+                    <span id="alertText" class="leading-relaxed font-medium"></span>
+                </div>
+
+                <div class="relative min-h-[300px]">
+                    
+                    <!-- ============================ -->
+                    <!-- VIEW 1: FORM LOGIN           -->
+                    <!-- ============================ -->
+                    <div id="loginView" class="form-fade-enter-active">
+                        <form onsubmit="handleLogin(event)" class="space-y-4">
+                            
+                            <div>
+                                <!-- Konsep Melayang: Input teks readonly yang memanggil modal saat diklik (NON-SELECT HTML) -->
+                                <div class="relative cursor-pointer" onclick="openFasyankesModal('login')">
+                                    <i class="fa-solid fa-hospital absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm z-10 pointer-events-none"></i>
+                                    <input type="hidden" id="loginFasyankes" required>
+                                    <input type="text" id="loginFasyankesDisplay" readonly required class="w-full input-sehati rounded-xl pl-10 pr-4 py-3.5 text-sm text-brand-text bg-white cursor-pointer" placeholder="Pilih Kategori Layanan">
+                                    <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="relative">
+                                    <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                    <input type="email" id="loginEmail" required class="w-full input-sehati rounded-xl pl-10 pr-4 py-3.5 text-sm text-brand-text" placeholder="Email Terdaftar">
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="relative">
+                                    <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                    <input type="password" id="loginPassword" required class="w-full input-sehati rounded-xl pl-10 pr-12 py-3.5 text-sm text-brand-text" placeholder="Password">
+                                    <button type="button" onclick="togglePassword('loginPassword', 'eyeIconLogin')" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-brand-terra transition-colors outline-none rounded-lg focus:outline-none">
+                                        <i id="eyeIconLogin" class="fa-solid fa-eye-slash text-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-brand-terra hover:bg-brand-terradark text-white font-bold py-3.5 rounded-xl mt-2 transition-all text-sm flex justify-center items-center gap-2 active:scale-[0.98]">
+                                Masuk <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- ============================ -->
+                    <!-- VIEW 2: FORM REGISTRASI      -->
+                    <!-- ============================ -->
+                    <div id="registerView" class="hidden form-fade-exit">
+                        <form onsubmit="handleRegister(event)" class="space-y-4">
+                            
+                            <div>
+                                <!-- Konsep Melayang: Input teks readonly yang memanggil modal saat diklik -->
+                                <div class="relative cursor-pointer" onclick="openFasyankesModal('register')">
+                                    <i class="fa-solid fa-hospital absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm z-10 pointer-events-none"></i>
+                                    <input type="hidden" id="regFasyankes" required>
+                                    <input type="text" id="regFasyankesDisplay" readonly required class="w-full input-sehati rounded-xl pl-10 pr-4 py-3 text-sm text-brand-text bg-white cursor-pointer" placeholder="Pilih Kategori Layanan">
+                                    <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="relative">
+                                    <i class="fa-regular fa-building absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                    <input type="text" id="regUnitKerja" required class="w-full input-sehati rounded-xl pl-10 pr-4 py-3 text-sm text-brand-text" placeholder="Nama Unit Kerja (Misal: Puskesmas A)">
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="relative">
+                                    <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                    <input type="email" id="regEmail" required class="w-full input-sehati rounded-xl pl-10 pr-4 py-3 text-sm text-brand-text" placeholder="Email Fasyankes">
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="relative">
+                                    <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                    <input type="password" id="regPassword" required class="w-full input-sehati rounded-xl pl-10 pr-12 py-3 text-sm text-brand-text" placeholder="Buat Password">
+                                    <button type="button" onclick="togglePassword('regPassword', 'eyeIconReg')" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-brand-terra transition-colors outline-none rounded-lg focus:outline-none">
+                                        <i id="eyeIconReg" class="fa-solid fa-eye-slash text-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-brand-terra hover:bg-brand-terradark text-white font-bold py-3.5 rounded-xl mt-2 transition-all text-sm flex justify-center items-center gap-2 active:scale-[0.98]">
+                                Registrasi <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+                <!-- Keamanan Terjamin Badge -->
+                <div class="mt-6 bg-brand-surface rounded-xl p-4 flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full border border-brand-terra/30 flex items-center justify-center text-brand-terra shrink-0">
+                        <i class="fa-solid fa-shield-halved text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-brand-text">Keamanan Terjamin</h4>
+                        <p class="text-[10px] text-brand-muted mt-0.5 leading-tight">Data instansi dilindungi standar keamanan tersertifikasi dengan enkripsi menyeluruh.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-4 text-center w-full z-10 text-[10px] text-brand-muted opacity-70">
+        &copy; 2026 SEHATI-AI. All rights reserved.
+    </div>
+
+    <!-- Modal Kategori Layanan Melayang (Pengganti tag <select>) -->
+    <div id="fasyankesModal" class="hidden fixed inset-0 z-[60] bg-brand-text/40 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div id="fasyankesModalBox" class="bg-white rounded-[20px] w-full max-w-[340px] shadow-2xl p-6 transform scale-95 transition-transform duration-300 border border-brand-cream">
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-brand-text font-bold text-base font-serif">Pilih Layanan</h3>
+                <button type="button" onclick="closeFasyankesModal()" class="text-gray-400 hover:text-brand-terra transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <button type="button" onclick="selectFasyankes('Dinkes', 'Dinas Kesehatan (Admin)')" class="w-full p-3.5 rounded-xl border border-brand-surface bg-brand-cream hover:border-brand-terra hover:bg-brand-terra/5 text-left text-sm font-semibold text-brand-text transition-all group flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:text-brand-terra shadow-sm"><i class="fa-solid fa-building-user text-xs"></i></div>
+                    Dinas Kesehatan (Admin)
+                </button>
+                <button type="button" onclick="selectFasyankes('Puskesmas', 'Puskesmas')" class="w-full p-3.5 rounded-xl border border-brand-surface bg-brand-cream hover:border-brand-terra hover:bg-brand-terra/5 text-left text-sm font-semibold text-brand-text transition-all group flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:text-brand-terra shadow-sm"><i class="fa-solid fa-house-medical text-xs"></i></div>
+                    Puskesmas
+                </button>
+                <button type="button" onclick="selectFasyankes('Klinik', 'Klinik / Praktik Mandiri')" class="w-full p-3.5 rounded-xl border border-brand-surface bg-brand-cream hover:border-brand-terra hover:bg-brand-terra/5 text-left text-sm font-semibold text-brand-text transition-all group flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:text-brand-terra shadow-sm"><i class="fa-solid fa-stethoscope text-xs"></i></div>
+                    Klinik / Praktik Mandiri
+                </button>
+                <button type="button" onclick="selectFasyankes('Rumah Sakit', 'Rumah Sakit')" class="w-full p-3.5 rounded-xl border border-brand-surface bg-brand-cream hover:border-brand-terra hover:bg-brand-terra/5 text-left text-sm font-semibold text-brand-text transition-all group flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:text-brand-terra shadow-sm"><i class="fa-solid fa-hospital text-xs"></i></div>
+                    Rumah Sakit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div id="loader" class="hidden fixed inset-0 z-[70] bg-white/80 backdrop-blur-sm flex flex-col justify-center items-center transition-all duration-300">
+        <div class="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center border border-gray-100">
+            <div class="w-12 h-12 border-4 border-brand-cream border-t-brand-terra rounded-full animate-spin"></div>
+            <p id="loaderText" class="text-brand-text font-bold text-xs mt-4 uppercase tracking-widest">Memproses...</p>
+        </div>
+    </div>
+
+    <script>
+        // URL API Google Apps Script - URL Anda tidak diubah sesuai instruksi
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxSY00llFZ1ggKvIGGpaHB9hcPhurvm4Kc1bf2P8WQgeM4E5ooRQRtk_6twpzXveZVu/exec";
+
+        // Kontrol Modal Fasyankes (Floating Select)
+        let activeFasyankesTarget = '';
+
+        function openFasyankesModal(target) {
+            activeFasyankesTarget = target;
+            const modal = document.getElementById('fasyankesModal');
+            const box = document.getElementById('fasyankesModalBox');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                box.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeFasyankesModal() {
+            const modal = document.getElementById('fasyankesModal');
+            const box = document.getElementById('fasyankesModalBox');
+            
+            modal.classList.add('opacity-0');
+            box.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function selectFasyankes(value, text) {
+            if (activeFasyankesTarget === 'login') {
+                document.getElementById('loginFasyankes').value = value;
+                document.getElementById('loginFasyankesDisplay').value = text;
+            } else if (activeFasyankesTarget === 'register') {
+                document.getElementById('regFasyankes').value = value;
+                document.getElementById('regFasyankesDisplay').value = text;
+            }
+            closeFasyankesModal();
+        }
+
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            } else {
+                input.type = "password";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            }
+        }
+
+        function switchTab(target) {
+            const loginView = document.getElementById('loginView');
+            const registerView = document.getElementById('registerView');
+            const indicator = document.getElementById('tabIndicator');
+            const btnLogin = document.getElementById('btnTabLogin');
+            const btnReg = document.getElementById('btnTabReg');
+            const alertBox = document.getElementById('alertMessage');
+            
+            alertBox.classList.add('hidden'); // Reset alert
+
+            if (target === 'register') {
+                // Geser garis bawah ke kanan
+                indicator.style.transform = 'translateX(100%)';
+                
+                // Ubah gaya teks tab
+                btnReg.classList.replace('text-brand-muted', 'text-brand-text');
+                btnReg.classList.replace('font-medium', 'font-bold');
+                btnLogin.classList.replace('text-brand-text', 'text-brand-muted');
+                btnLogin.classList.replace('font-bold', 'font-medium');
+                
+                // Animasi Form
+                loginView.className = 'form-fade-exit-active';
+                setTimeout(() => {
+                    loginView.classList.add('hidden');
+                    registerView.classList.remove('hidden');
+                    registerView.className = 'form-fade-enter';
+                    void registerView.offsetWidth; // Reflow
+                    registerView.className = 'form-fade-enter-active';
+                }, 300);
+
+            } else {
+                // Geser garis bawah ke kiri
+                indicator.style.transform = 'translateX(0)';
+                
+                // Ubah gaya teks tab
+                btnLogin.classList.replace('text-brand-muted', 'text-brand-text');
+                btnLogin.classList.replace('font-medium', 'font-bold');
+                btnReg.classList.replace('text-brand-text', 'text-brand-muted');
+                btnReg.classList.replace('font-bold', 'font-medium');
+                
+                // Animasi Form
+                registerView.className = 'form-fade-exit-active';
+                setTimeout(() => {
+                    registerView.classList.add('hidden');
+                    loginView.classList.remove('hidden');
+                    loginView.className = 'form-fade-enter';
+                    void loginView.offsetWidth; // Reflow
+                    loginView.className = 'form-fade-enter-active';
+                }, 300);
+            }
+        }
+
+        function showAlert(message, type = 'error') {
+            const alertBox = document.getElementById('alertMessage');
+            const alertIcon = document.getElementById('alertIcon');
+            const alertText = document.getElementById('alertText');
+            
+            alertBox.classList.remove('bg-red-50', 'border-red-200', 'text-red-700', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-700');
+            alertIcon.className = "fa-solid mt-0.5";
+            
+            if (type === 'success') {
+                alertBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-700');
+                alertIcon.classList.add('fa-circle-check');
+            } else {
+                alertBox.classList.add('bg-red-50', 'border-red-200', 'text-red-700');
+                alertIcon.classList.add('fa-circle-exclamation');
+            }
+
+            alertText.innerText = message;
+            alertBox.classList.remove('hidden');
+            
+            setTimeout(() => { alertBox.classList.add('hidden'); }, 6000);
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            document.getElementById('loader').classList.remove('hidden');
+            document.getElementById('loaderText').innerText = "Autentikasi...";
+            document.getElementById('alertMessage').classList.add('hidden');
+            
+            const payload = {
+                action: 'login',
+                fasyankes: document.getElementById('loginFasyankes').value,
+                email: document.getElementById('loginEmail').value,
+                pass: document.getElementById('loginPassword').value
+            };
+
+            try {
+                const response = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    const cleanEmail = payload.email.trim();
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('unitKerja', result.unitKerja);
+                    sessionStorage.setItem('kategori', payload.fasyankes);
+                    sessionStorage.setItem('userEmail', cleanEmail);
+                    localStorage.setItem('userEmail', cleanEmail); 
+
+                    if (result.driveUrl && result.driveUrl !== "") {
+                        sessionStorage.setItem('gasUrl', result.driveUrl);
+                    } else {
+                        sessionStorage.removeItem('gasUrl'); 
+                    }
+                    
+                    window.location.href = 'dashboard.html';
+                } else {
+                    showAlert("Akses Ditolak: " + result.message, 'error');
+                }
+            } catch (err) {
+                showAlert("Kesalahan koneksi ke server. Silakan coba lagi.", 'error');
+                console.error(err);
+            } finally {
+                document.getElementById('loader').classList.add('hidden');
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            document.getElementById('loader').classList.remove('hidden');
+            document.getElementById('loaderText').innerText = "Inisialisasi...";
+            document.getElementById('alertMessage').classList.add('hidden');
+
+            const payload = {
+                action: 'register',
+                fasyankes: document.getElementById('regFasyankes').value,
+                unitKerja: document.getElementById('regUnitKerja').value,
+                email: document.getElementById('regEmail').value,
+                pass: document.getElementById('regPassword').value
+            };
+
+            try {
+                const response = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    document.getElementById('loginEmail').value = payload.email;
+                    document.getElementById('loginFasyankes').value = payload.fasyankes;
+                    document.getElementById('loginFasyankesDisplay').value = document.getElementById('regFasyankesDisplay').value;
+                    
+                    e.target.reset(); 
+                    document.getElementById('regFasyankesDisplay').value = '';
+                    
+                    switchTab('login');
+                    showAlert("Registrasi Berhasil! Silakan masuk.", 'success');
+                } else {
+                    showAlert("Registrasi Gagal: " + (result.message || "Data invalid."), 'error');
+                }
+            } catch (err) {
+                showAlert("Koneksi gagal ke server pusat.", 'error');
+                console.error(err);
+            } finally {
+                document.getElementById('loader').classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
