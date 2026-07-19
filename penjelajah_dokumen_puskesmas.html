@@ -61,20 +61,15 @@
     </script>
 
     <style>
-        body { 
-            background-color: #fdfbf7; /* Cream SEHATI Background */
-            color: #2d3748; /* Dark Gray SEHATI Text */
-        }
-        
+        body { background-color: #f8fafc; }
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-out, padding 0.4s ease;
+            transition: max-height 0.5s ease-out, padding 0.5s ease;
         }
         .accordion-content.open {
-            max-height: 15000px; 
+            max-height: 99999px; /* Diperbesar secara ekstrem agar tidak terpotong di layar HP */
         }
-        
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .spinner { animation: spin 1s linear infinite; }
         
