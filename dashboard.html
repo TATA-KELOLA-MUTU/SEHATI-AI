@@ -62,22 +62,22 @@
             theme: { 
                 extend: { 
                     colors: { 
-                        navy: '#111827',          // Dipergelap menjadi Gray-900 agar kontras maksimal
-                        terracotta: '#ca5c30',    // Terracotta (Primary Accent)
-                        earthyBg: '#fdfbf7',      // Cream (Background Utama)
-                        earthySide: '#f5f0e6',    // Warm Sand (Background Sidebar)
-                        earthyBorder: '#e8e0d5',  // Border halus
-                        earthyHover: '#ebe3d5',   // Hover state halus
-                        sage: '#6b8e73',          // Earthy Green
-                        warmAmber: '#b87a3d',     // Earthy Amber
-                        mutedRose: '#b56a6a',     // Earthy Rose
+                        navy: '#111827',          
+                        terracotta: '#ca5c30',    
+                        earthyBg: '#fdfbf7',      
+                        earthySide: '#f5f0e6',    
+                        earthyBorder: '#e8e0d5',  
+                        earthyHover: '#ebe3d5',   
+                        sage: '#6b8e73',          
+                        warmAmber: '#b87a3d',     
+                        mutedRose: '#b56a6a',     
                     }, 
                     fontFamily: { 
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                         heading: ['"Playfair Display"', 'serif']
                     },
                     boxShadow: {
-                        'card': '0 8px 30px rgba(0,0,0,0.06)' // Sedikit ditebalkan bayangannya
+                        'card': '0 8px 30px rgba(0,0,0,0.06)' 
                     }
                 } 
             } 
@@ -97,7 +97,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-earthyBg h-[100dvh] flex overflow-hidden text-navy font-medium"> <!-- Font dasar dibuat medium agar lebih jelas -->
+<body class="bg-earthyBg h-[100dvh] flex overflow-hidden text-navy font-medium"> 
 
     <aside id="sidebar" class="fixed md:relative w-72 bg-earthySide border-r border-earthyBorder h-full flex flex-col shadow-xl md:shadow-none z-40 flex-shrink-0">
         
@@ -183,7 +183,7 @@
                         </div>
                     </div>
 
-                    <!-- Modul Dokumen Pendukung -->
+                    <!-- Modul Dokumen Pendukung Puskesmas -->
                     <div>
                         <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
                             <i class="fa-solid fa-folder-open text-terracotta"></i> Dokumen Pendukung
@@ -204,8 +204,10 @@
                             <a href="https://gemini.google.com/share/af62e84a7271" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
                                 <i class="fa-solid fa-book-medical w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> PANDUAN Generator <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
                             </a>
-                            <a href="https://gemini.google.com/share/cacb3fddfcb7" target="_blank" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
-                                <i class="fa-solid fa-layer-group w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> HIRARKIE AKREDITASI <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-terracotta"></i>
+                            
+                            <!-- Perbaikan Tautan Hirarki Akreditasi Puskesmas -->
+                            <a href="SIAP_hirarki_ILP.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold text-slate-700 hover:bg-white hover:text-navy hover:shadow-sm transition-all group">
+                                <i class="fa-solid fa-layer-group w-4 text-center text-slate-400 group-hover:text-terracotta transition-colors"></i> HIRARKIE AKREDITASI <i class="fa-solid fa-chevron-right text-[10px] ml-auto opacity-0 group-hover:opacity-100 text-slate-400 group-hover:text-terracotta transition-colors"></i>
                             </a>
                             
                             <!-- Highlighted Tools -->
@@ -280,7 +282,7 @@
                         </div>
                     </div>
 
-                    <!-- Pendukung -->
+                    <!-- Pendukung Klinik -->
                     <div>
                         <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
                             <i class="fa-solid fa-folder-open text-terracotta"></i> Dokumen Pendukung
@@ -380,7 +382,7 @@
                         </div>
                     </div>
 
-                    <!-- Pendukung -->
+                    <!-- Pendukung RS -->
                     <div>
                         <h3 class="text-[11px] font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-2 bg-white/70 border border-earthyBorder px-2.5 py-1.5 rounded-lg shadow-sm">
                             <i class="fa-solid fa-folder-open text-terracotta"></i> Dokumen Pendukung
