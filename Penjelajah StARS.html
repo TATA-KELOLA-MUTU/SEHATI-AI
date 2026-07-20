@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Dokumen Akreditasi RS | Integrasi Google Drive</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        // Pengecekan Keamanan (Bypass untuk Canvas/Localhost)
+        (function() {
+            let isCanvasPreview = false;
+            try {
+                isCanvasPreview = window.self !== window.top || window.location.hostname.includes("google") || window.location.hostname.includes("sandbox");
+            } catch(e) {
+                isCanvasPreview = true;
+            }
+
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.hostname === "";
+            
+            // BYPASS KHUSUS PREVIEW CANVAS
+            if (!isLoggedIn) {
+                if (isCanvasPreview || isLocal) {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userEmail', 'demo@rumahsakit.id'); 
+                    sessionStorage.setItem('unitKerja', 'RS Demo Canvas');
+                    sessionStorage.setItem('kategori', 'Rumah Sakit');
+                }
+            }
+        })();
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'] 
+                    },
+                    colors: {
+                        sehati: {
+                            bg: '#fdfbf7', // Cream
+                            primary: '#ca5c30', // Terracotta
+                            primaryLight: '#e0764c',
+                            primaryDark: '#a34722',
+                            text: '#2d3748', // Dark Gray
+                            border: '#e2e8f0',
+                            card: '#ffffff',
+                        }
+                    },
+                    boxShadow: {
+                        'card': '0 10px 40px rgba(0, 0, 0, 0.04)',
+                        'card-hover': '0 15px 50px rgba(202, 92, 48, 0.08)',
+                        'floating': '0 10px 40px -10px rgba(0, 0, 0, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            background-color: #fdfbf7; 
+            color: #2d3748;
+        }
+        
+        .accordion-content {
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        
+        .accordion-content.open {
+            max-height: 100000px; /* Sangat besar untuk menampung seluruh grup */
+            opacity: 1;
+        }
+        
+        .accordion-arrow {
+            transition: transform 0.3s ease;
+        }
+        
+        .open > button .accordion-arrow {
+            transform: rotate(90deg);
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .spinner { animation: spin 1s linear infinite; }
+        
+        /* Custom Scrollbar for better aesthetics */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fdfbf7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #ca5c30; border-radius: 4px; opacity: 0.5; }
+        ::-webkit-scrollbar-thumb:hover { background: #a34722; }
+        ul.list-circle { list-style-type: circle; }
+    </style>
+</head>
+<body class="antialiased flex flex-col h-screen overflow-hidden font-sans selection:bg-sehati-primary selection:text-white">
+
+    <header class="bg-white border-b border-sehati-border px-6 py-4 flex flex-col md:flex-row items-center justify-between z-30 shadow-sm flex-shrink-0 gap-4 rounded-b-[24px]">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-sehati-primary/10 text-sehati-primary rounded-xl flex items-center justify-center text-2xl shadow-inner border border-sehati-primary/20">
+                <i class="fa-solid fa-hospital"></i>
+            </div>
+            <div>
+                <h1 class="font-serif font-bold text-sehati-text text-xl md:text-2xl leading-tight">Manajemen Dokumen Akreditasi RS</h1>
+                <p id="headerSubtitle" class="text-xs text-sehati-text/70 font-sans mt-0.5">Terintegrasi dengan Google Drive Secara Permanen</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <button onclick="backToDashboard(event)" class="flex items-center gap-2 bg-sehati-bg border border-sehati-border text-sehati-text px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 transition focus:outline-none focus:ring-2 focus:ring-sehati-primary/50 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </button>
+            <button onclick="openSetupModal()" class="flex items-center gap-2 bg-sehati-primary text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-sehati-primaryDark transition shadow-md focus:outline-none focus:ring-2 focus:ring-sehati-primary/50">
+                <i class="fa-solid fa-gear"></i> Setup Drive
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+        <div class="max-w-6xl mx-auto">
+            
+            <div class="bg-white border border-sehati-primary/20 text-sehati-text p-5 rounded-[24px] mb-8 flex items-start gap-4 shadow-card">
+                <div class="bg-sehati-primary/10 p-3 rounded-full mt-0.5 shadow-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles text-sehati-primary text-lg"></i>
+                </div>
+                <div class="text-sm pt-1 w-full">
+                    <p class="font-bold font-serif mb-1 text-sehati-primaryDark text-base">Sistem Penamaan Cerdas Otomatis Teraktifkan</p>
+                    <p id="infoTextRole" class="font-sans text-sehati-text/80 leading-relaxed">
+                        Anda dapat langsung mengunggah file. Apapun nama asli file yang Anda pilih, sistem akan secara otomatis membuangnya dan melakukan <span class="font-semibold text-sehati-primary">Rename Otomatis</span> menjadi format baku saat tersimpan di Drive Anda:<br>
+                        <b class="text-sehati-primaryDark bg-sehati-primary/10 px-3 py-1 rounded-md font-mono text-xs mt-2 inline-block border border-sehati-primary/20 shadow-sm">EP [Kode] - [Jenis R/D/O/W/S] - [Ekstraksi Judul].pdf</b>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Kontainer Akordion Hierarki RS -->
+            <div id="checklist-container" class="space-y-8 pb-20">
+                <!-- Data hierarki akan dimuat di sini secara dinamis -->
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Input File Tersembunyi -->
+    <input type="file" id="hiddenFileInput" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.jpeg,.mp4">
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 rounded-[16px] shadow-floating transform transition-all duration-300 translate-y-24 opacity-0 z-50 flex items-center gap-3 font-medium text-sm max-w-sm">
+        <i id="toastIcon" class="fa-solid fa-check-circle text-lg"></i>
+        <span id="toastMessage" class="font-sans">Pesan Notifikasi</span>
+    </div>
+
+    <!-- Setup Modal (Sama dengan versi Puskesmas) -->
+    <div id="setupModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-[24px] shadow-floating max-w-3xl w-full max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300 border border-sehati-border" id="setupModalContent">
+            <div class="p-5 border-b border-sehati-border flex justify-between items-center bg-sehati-bg rounded-t-[24px]">
+                <h3 class="font-serif font-bold text-xl text-sehati-primaryDark flex items-center gap-2">
+                    <i class="fa-brands fa-google-drive text-sehati-primary"></i> Konfigurasi Google Drive
+                </h3>
+                <button onclick="closeSetupModal()" class="text-sehati-text/50 hover:text-sehati-primary transition-colors w-8 h-8 flex justify-center items-center rounded-lg hover:bg-sehati-primary/10">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto text-sm text-sehati-text space-y-5 font-sans">
+                
+                <div class="bg-sehati-bg border-l-4 border-sehati-primary p-4 rounded-r-xl shadow-sm">
+                    <h4 class="font-bold mb-1 flex items-center gap-2 text-sehati-primaryDark"><i class="fa-solid fa-cloud-arrow-up text-sehati-primary"></i> Disimpan Permanen di Akun Anda</h4>
+                    <p class="text-xs text-sehati-text/80">URL Script yang Anda masukkan di bawah ini akan <b>disimpan permanen ke dalam database akun Anda</b>. Jika Anda login di Komputer / HP lain dengan akun email yang sama, Anda <b>TIDAK PERLU</b> melakukan setup ulang. Sistem akan menarik URL tersebut secara otomatis.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold font-serif text-sehati-text border-b border-sehati-border pb-1">1. Buat Proyek & Salin Kode</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sehati-text/80">
+                        <li>Buka web <a href="https://script.google.com/" target="_blank" class="text-sehati-primary hover:underline font-semibold">script.google.com</a> (pastikan sudah login akun Google Drive RS Anda), lalu klik <b>Proyek Baru</b>.</li>
+                        <li>Hapus seluruh kode bawaan yang ada di layar putih tersebut.</li>
+                        <li>Klik <b>Copy Code</b> di bawah ini, lalu tempel (<i>paste</i>) ke layar tersebut.</li>
+                    </ul>
+                </div>
+                
+                <div class="relative group mb-4">
+                    <button onclick="copyScriptCode()" class="absolute top-2 right-2 bg-sehati-text text-white text-xs px-3 py-1.5 rounded-xl hover:bg-slate-700 transition opacity-0 group-hover:opacity-100 focus:opacity-100 shadow-md">
+                        <i class="fa-regular fa-copy"></i> Copy Code
+                    </button>
+                    <!-- KODE GOOGLE DRIVE ANTI-CRASH -->
+                    <pre id="gasScriptCode" class="bg-slate-800 text-green-400 p-4 rounded-[16px] overflow-x-auto text-xs font-mono border border-slate-700 shadow-inner">
+function doPost(e) {
+  var headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
+  };
+
+  try {
+    if (!e || !e.postData || !e.postData.contents) {
+      return ContentService.createTextOutput(JSON.stringify({ success: false, error: "Data file tidak diterima server." }))
+        .setMimeType(ContentService.MimeType.JSON).setHeaders(headers);
+    }
+
+    var data = JSON.parse(e.postData.contents);
+    if (!data.fileBase64) {
+       return ContentService.createTextOutput(JSON.stringify({ success: false, error: "File Base64 kosong atau gagal diproses." }))
+        .setMimeType(ContentService.MimeType.JSON).setHeaders(headers);
+    }
+
+    var fileData = data.fileBase64;
+    var fileName = data.fileName || "Dokumen_Tanpa_Nama.pdf";
+    var mimeType = data.mimeType || "application/pdf";
+    var folderPath = data.folderPath || "SEHATI_Uploads";
+
+    var decodedFile = Utilities.base64Decode(fileData.split(',')[1]);
+    var blob = Utilities.newBlob(decodedFile, mimeType, fileName);
+
+    var rootFolder = DriveApp.getRootFolder();
+    var folders = folderPath.split('/');
+    var currentFolder = rootFolder;
+    
+    for (var i = 0; i < folders.length; i++) {
+      if(folders[i] === "") continue;
+      var folderIterator = currentFolder.getFoldersByName(folders[i]);
+      if (folderIterator.hasNext()) {
+        currentFolder = folderIterator.next();
+      } else {
+        currentFolder = currentFolder.createFolder(folders[i]);
+      }
+    }
+
+    var file = currentFolder.createFile(blob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+    return ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      url: file.getUrl(),
+      fileName: file.getName()
+    })).setMimeType(ContentService.MimeType.JSON).setHeaders(headers);
+
+  } catch(error) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: "CRASH SCRIPT DRIVE: " + error.toString()
+    })).setMimeType(ContentService.MimeType.JSON).setHeaders(headers);
+  }
+}
+
+function doOptions(e) {
+  return ContentService.createTextOutput("")
+    .setHeaders({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type"
+    });
+}
+</pre>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold font-serif text-sehati-text border-b border-sehati-border pb-1">2. Terapkan (Deploy) Script</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sehati-text/80">
+                        <li>Di sudut kanan atas, klik tombol biru <b>Terapkan (Deploy)</b> > pilih <b>Deployment baru</b>.</li>
+                        <li>Klik ikon Roda Gigi ⚙️ (Pilih jenis) > pilih <b>Aplikasi Web (Web App)</b>.</li>
+                        <li>Atur pengaturan berikut:
+                            <ul class="list-circle pl-5 mt-1 text-sehati-text/70">
+                                <li>Jalankan sebagai: <b class="text-sehati-text">Saya (Me)</b></li>
+                                <li>Siapa yang memiliki akses: <b class="text-sehati-text">Siapa saja (Anyone)</b></li>
+                            </ul>
+                        </li>
+                        <li>Klik tombol <b>Terapkan</b>.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold font-serif text-sehati-text border-b border-sehati-border pb-1">3. Otorisasi Izin Akses (Sangat Penting!)</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sehati-text/80">
+                        <li>Google akan meminta izin untuk membuat folder. Klik <b>Otorisasi akses</b> dan pilih akun Anda.</li>
+                        <li>Jika muncul layar peringatan <i>"Google belum memverifikasi aplikasi ini"</i>, klik tulisan <b>Lanjutan (Advanced)</b> di bagian bawah.</li>
+                        <li>Scroll ke bawah dan klik tulisan <b>Buka proyek (tidak aman) / Go to project</b>.</li>
+                        <li>Klik tombol <b>Izinkan (Allow)</b>.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold font-serif text-sehati-text border-b border-sehati-border pb-1">4. Simpan URL Web App</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sehati-text/80">
+                        <li>Setelah berhasil, salin tulisan panjang di bawah <b>URL Aplikasi Web</b>.</li>
+                        <li>Tempelkan ke dalam kotak di bawah ini dan klik Simpan.</li>
+                    </ul>
+                </div>
+
+                <!-- FORM INPUT URL DRIVE -->
+                <div class="mt-5 p-5 bg-white rounded-[24px] border border-sehati-border shadow-sm">
+                    <label class="block text-xs font-bold text-sehati-text uppercase mb-2">Tempel Web App URL Anda di sini:</label>
+                    <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full px-4 py-3 border border-sehati-border rounded-xl focus:outline-none focus:ring-2 focus:ring-sehati-primary/50 text-sm font-mono bg-sehati-bg text-sehati-text">
+                    <button id="btnSaveGas" onclick="saveGasUrl(event)" class="mt-4 w-full bg-sehati-primary text-white font-medium py-3 rounded-xl hover:bg-sehati-primaryDark transition shadow-md">
+                        Simpan Permanen ke Database Akun
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // FUNGSI KEMBALI KE DASHBOARD
+        function backToDashboard(event) {
+            showToast('Mengarahkan ke Dashboard Utama...', 'loading');
+            const btn = event.currentTarget;
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            setTimeout(() => {
+                try {
+                    if (document.referrer !== "" && document.referrer.indexOf(window.location.hostname) !== -1) {
+                        window.location.href = document.referrer;
+                    } else if (window.history.length > 1) {
+                        window.history.back();
+                    } else {
+                        showToast('Simulasi: Anda sudah kembali ke Dashboard Utama.', 'success');
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                } catch (e) {
+                    showToast('Simulasi (Iframe): Kembali ke Dashboard dipicu.', 'success');
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }, 1000);
+        }
+        
+        // API Database Pusat
+        const CENTRAL_GAS_URL = "https://script.google.com/macros/s/AKfycbyz0WCr1nW8aH_ExPZnFvbxvUZt65PpDAf8L7pdb4j2KE8eKkV3cOAZcePbuboMK31T/exec";
+
+        // Identitas User
+        const currentUnitKerja = sessionStorage.getItem('unitKerja') || 'RS_Default';
+        const currentUserEmail = sessionStorage.getItem('userEmail') || 'user_default';
+        const currentKategori = sessionStorage.getItem('kategori') || 'Rumah Sakit'; 
+        
+        // URL ditarik dari hasil login server
+        let GAS_WEB_APP_URL = sessionStorage.getItem('gasUrl') || ''; 
+
+        // Data Checklist RS (Hierarki Lengkap)
+        const checklistData = {
+            "A. Kelompok Manajemen Rumah Sakit": {
+                "BAB I. TATA KELOLA RUMAH SAKIT (TKRS)": {
+                    "Standar TKRS 1: Organisasi dan Tanggung Jawab Pemilik atau Representasi Pemilik": {
+                        "Elemen Penilaian 1: Rumah sakit memiliki Representasi Pemilik/Dewan Pengawas yang dipilih dan ditetapkan oleh Pemilik.": {
+                            "R (Regulasi)": "Surat Keputusan (SK) atau Dokumen Penetapan Representasi Pemilik/Dewan Pengawas oleh entitas Pemilik Rumah Sakit sesuai dengan bentuk badan hukumnya.",
+                            "D (Dokumen)": "Dokumen kualifikasi, profil, dan rekam jejak anggota Representasi Pemilik/Dewan Pengawas yang membuktikan kompetensi mereka.",
+                            "W (Wawancara)": "Wawancara dengan Pemilik atau Representasi Pemilik mengenai proses pemilihan dan penetapan."
+                        },
+                        "Elemen Penilaian 2: Tanggung jawab dan wewenang Representasi Pemilik ditetapkan dalam regulasi rumah sakit.": {
+                            "R (Regulasi)": "Dokumen Hospital Bylaws / Peraturan Internal Rumah Sakit atau dokumen lain yang secara eksplisit merinci kewenangan, tanggung jawab, dan kewajiban Representasi Pemilik.",
+                            "D (Dokumen)": "Bukti pelaksanaan tanggung jawab tersebut, seperti notulen rapat Dewan Pengawas terkait penyusunan kebijakan, evaluasi, dan pengawasan.",
+                            "W (Wawancara)": "Wawancara dengan anggota Representasi Pemilik terkait pemahaman mereka atas tanggung jawab dan wewenangnya."
+                        },
+                        "Elemen Penilaian 3: Representasi Pemilik/Dewan Pengawas melakukan evaluasi kinerja Direktur Rumah Sakit secara berkala paling sedikit satu tahun sekali.": {
+                            "R (Regulasi)": "Regulasi/SPO tentang mekanisme, frekuensi, dan kriteria penilaian kinerja Direktur RS oleh Dewan Pengawas.",
+                            "D (Dokumen)": "Laporan hasil evaluasi kinerja tahunan Direktur RS, bukti umpan balik tertulis, dan rencana tindak lanjut.",
+                            "W (Wawancara)": "Wawancara dengan Dewan Pengawas dan Direktur RS terkait proses dan hasil evaluasi kinerja tahunan."
+                        }
+                    },
+                    "Standar TKRS 2: Direktur Rumah Sakit": {
+                        "Elemen Penilaian 1: Direktur RS ditetapkan oleh Pemilik atau Representasi Pemilik sesuai dengan ketentuan peraturan perundang-undangan.": {
+                            "R (Regulasi)": "Surat Keputusan (SK) Pengangkatan Direktur RS yang dikeluarkan oleh Pemilik atau Representasi Pemilik.",
+                            "D (Dokumen)": "File kepegawaian Direktur RS yang berisi Ijazah (tenaga medis/kesehatan), STR, SIP (jika melayani pasien), dan sertifikat pelatihan manajemen rumah sakit.",
+                            "W (Wawancara)": "Wawancara dengan Direktur RS terkait proses pengangkatannya dan kualifikasinya."
+                        },
+                        "Elemen Penilaian 2: Direktur RS menetapkan struktur organisasi dan pimpinan tingkat manajerial lainnya di rumah sakit.": {
+                            "R (Regulasi)": "SK Direktur tentang Penetapan Struktur Organisasi dan Tata Kerja (SOTK) Rumah Sakit.",
+                            "D (Dokumen)": "Dokumen penetapan para pimpinan/kepala divisi/bidang beserta uraian tugas, wewenang, dan tanggung jawab masing-masing (SK Pengangkatan).",
+                            "W (Wawancara)": "Wawancara dengan jajaran manajerial mengenai uraian tugas yang mereka terima."
+                        },
+                        "Elemen Penilaian 3: Direktur RS menyusun Rencana Strategis (Renstra) dan Rencana Kerja dan Anggaran (RKA) tahunan yang disetujui oleh Representasi Pemilik.": {
+                            "R (Regulasi)": "Dokumen Rencana Strategis (Renstra) RS (misal 5 tahunan) dan Rencana Kerja dan Anggaran (RKA) Tahunan.",
+                            "D (Dokumen)": "Bukti pengesahan/persetujuan dari Representasi Pemilik (tanda tangan persetujuan, notulen rapat pengesahan RKA/Renstra).",
+                            "W (Wawancara)": "Wawancara dengan Direktur dan Representasi Pemilik mengenai proses perancangan, pembahasan, dan persetujuan anggaran."
+                        }
+                    },
+                    "Standar TKRS 3: Kepala Bidang / Divisi / Unit Pelayanan": {
+                        "Elemen Penilaian 1: Direktur menetapkan Kepala Bidang/Divisi/Unit untuk setiap instalasi atau unit pelayanan di RS.": {
+                            "R (Regulasi)": "SK Penetapan Kepala Unit Pelayanan Klinis dan Non-Klinis beserta kualifikasinya.",
+                            "D (Dokumen)": "Dokumen profil, ijazah, dan sertifikat kompetensi tiap kepala unit yang sesuai dengan persyaratan jabatan."
+                        },
+                        "Elemen Penilaian 2: Kepala Unit Pelayanan menyusun program kerja tahunan unit dan mengusulkan anggaran operasional.": {
+                            "D (Dokumen)": "Program Kerja Tahunan untuk masing-masing unit pelayanan dan draf usulan anggaran (RAB) dari unit yang diajukan ke manajemen.",
+                            "W (Wawancara)": "Wawancara dengan Kepala Unit tentang penyusunan program kerja berbasis kebutuhan unit."
+                        },
+                        "Elemen Penilaian 3: Kepala Unit Pelayanan mengidentifikasi dan mengusulkan kebutuhan sumber daya manusia (SDM) dan fasilitas di unitnya.": {
+                            "D (Dokumen)": "Dokumen analisis beban kerja (ABK) unit, bukti pengajuan kebutuhan SDM, dan usulan penambahan/perbaikan fasilitas kesehatan di unit tersebut.",
+                            "W (Wawancara)": "Wawancara dengan Kepala Unit tentang bagaimana mereka menganalisis kekurangan staf atau alat medis."
+                        }
+                    },
+                    "Standar TKRS 4: Etika Rumah Sakit": {
+                        "Elemen Penilaian 1: Pimpinan rumah sakit menetapkan regulasi tentang tata kelola etika rumah sakit, termasuk komite etik.": {
+                            "R (Regulasi)": "SK Penetapan Pedoman Etik RS (Code of Conduct) dan SK Pembentukan Komite Etik RS beserta uraian tugasnya.",
+                            "D (Dokumen)": "Dokumen pedoman tata kelola etika, kode etik profesi, dan kode etik pegawai RS."
+                        },
+                        "Elemen Penilaian 2: Rumah sakit memiliki sistem pelaporan pelanggaran etik yang aman dan rahasia (whistleblowing system).": {
+                            "R (Regulasi)": "SPO Pelaporan pelanggaran etik dan perlindungan pelapor (Whistleblowing System).",
+                            "D (Dokumen)": "Bukti tersedianya kanal pelaporan (kotak saran, email khusus, formulir online), serta log/catatan pelaporan jika ada.",
+                            "W (Wawancara)": "Wawancara dengan staf mengenai pengetahuan mereka tentang cara melaporkan isu etika dengan aman."
+                        },
+                        "Elemen Penilaian 3: Komite etik menangani setiap dilema etik klinis maupun bisnis dan mendokumentasikan resolusinya.": {
+                            "D (Dokumen)": "Dokumen/laporan penanganan dilema etik (notulen rapat komite etik, rekomendasi komite, dan keputusan akhir).",
+                            "W (Wawancara)": "Wawancara dengan ketua Komite Etik terkait contoh kasus dilema etik (klinis/manajerial) yang pernah ditangani."
+                        }
+                    },
+                    "Standar TKRS 5: Tanggung Jawab Mutu dan Keselamatan Pasien": {
+                        "Elemen Penilaian 1: Representasi Pemilik dan Direktur menyetujui dan mendukung program Peningkatan Mutu dan Keselamatan Pasien (PMKP) secara menyeluruh.": {
+                            "R (Regulasi)": "Kebijakan/Pedoman PMKP tingkat Rumah Sakit.",
+                            "D (Dokumen)": "Bukti alokasi anggaran, penyediaan teknologi (software pelaporan), dan SDM (Komite Mutu) yang disetujui Pemilik/Direktur.",
+                            "W (Wawancara)": "Wawancara dengan Direktur mengenai bentuk dukungan riil terhadap program PMKP."
+                        },
+                        "Elemen Penilaian 2: Direktur memantau laporan capaian indikator mutu rumah sakit dan melaporkannya kepada Representasi Pemilik berkala.": {
+                            "D (Dokumen)": "Laporan Triwulan/Semester capaian Indikator Nasional Mutu (INM) dan Indikator Prioritas RS yang ditandatangani Direktur dan bukti serah terima/presentasi ke Dewan Pengawas.",
+                            "W (Wawancara)": "Wawancara dengan Komite Mutu dan Direktur mengenai mekanisme pelaporan."
+                        }
+                    },
+                    "Standar TKRS 6: Manajemen Kontrak dan Perjanjian Kerja Sama": {
+                        "Elemen Penilaian 1: Direktur RS menetapkan regulasi dan prosedur penandatanganan, monitoring, dan evaluasi perjanjian kerja sama (kontrak) klinis maupun manajerial.": {
+                            "R (Regulasi)": "Pedoman/SPO penyusunan kontrak dan Perjanjian Kerja Sama (PKS), termasuk kriteria seleksi vendor/mitra.",
+                            "D (Dokumen)": "Daftar seluruh kontrak/PKS aktif (KSO alat, cleaning service, lab rujukan, dll)."
+                        },
+                        "Elemen Penilaian 2: Pimpinan unit kerja mengawasi mutu layanan yang dikontrakkan dan memberikan laporan evaluasi kinerja mitra kerja sama.": {
+                            "D (Dokumen)": "Dokumen/Ceklist monitoring evaluasi (Monev) mutu layanan pihak ketiga yang diisi oleh Kepala Unit terkait (misalnya Kepala IPSRS mengevaluasi vendor pemeliharaan AC).",
+                            "W (Wawancara)": "Wawancara dengan kepala unit mengenai indikator mutu yang harus dipenuhi oleh mitra kerja sama."
+                        },
+                        "Elemen Penilaian 3: Ada bukti pemutusan kontrak atau teguran apabila vendor/pihak ketiga tidak memenuhi standar mutu dan keselamatan yang disepakati.": {
+                            "D (Dokumen)": "Surat teguran/peringatan kepada vendor, atau dokumen evaluasi yang menyarankan pemutusan/tidak perpanjangan kontrak jika mutu di bawah standar.",
+                            "O (Observasi)": "Observasi langsung terhadap kinerja vendor di lapangan (misal kebersihan oleh cleaning service outsoucing)."
+                        }
+                    },
+                    "Standar TKRS 7: Pengelolaan Rantai Pasok (Supply Chain Management)": {
+                        "Elemen Penilaian 1: RS menetapkan regulasi pengelolaan rantai pasok untuk obat, bahan medis habis pakai (BMHP), dan peralatan untuk mencegah kekosongan dan menjamin keaslian.": {
+                            "R (Regulasi)": "Kebijakan/SPO Manajemen Rantai Pasok, termasuk proses pengadaan dari distributor resmi.",
+                            "D (Dokumen)": "Dokumen pakta integritas distributor, surat jaminan keaslian produk, dan dokumen sertifikasi distributor (CDOB, CDAKB)."
+                        },
+                        "Elemen Penilaian 2: Direktur dan Kepala Instalasi Farmasi memastikan identifikasi risiko pada rantai pasokan dan mitigasi terhadap kelangkaan barang.": {
+                            "D (Dokumen)": "Buku daftar risiko (Risk Register) rantai pasok farmasi dan logistik, serta dokumen rencana darurat jika terjadi kelangkaan obat esensial.",
+                            "W (Wawancara)": "Wawancara dengan Kepala Farmasi dan Logistik mengenai tindakan yang dilakukan saat obat/barang kosong di pasaran."
+                        }
+                    },
+                    "Standar TKRS 8: Organisasi Medis dan Keperawatan": {
+                        "Elemen Penilaian 1: Pimpinan RS menetapkan struktur organisasi Komite Medik dan Komite Keperawatan untuk mengawal profesionalisme staf klinis.": {
+                            "R (Regulasi)": "SK Penetapan Struktur, Ketua, dan Anggota Komite Medik dan Komite Keperawatan beserta Hospital/Medical/Nursing Bylaws.",
+                            "D (Dokumen)": "Dokumen uraian tugas dan bukti pelaksanaan rapat koordinasi komite."
+                        },
+                        "Elemen Penilaian 2: Komite Medik dan Keperawatan secara proaktif memantau kepatuhan staf klinis terhadap Panduan Praktik Klinis (PPK) dan Clinical Pathway.": {
+                            "D (Dokumen)": "Hasil audit medis, audit keperawatan, laporan kepatuhan Clinical Pathway, dan tindak lanjut perbaikan.",
+                            "W (Wawancara)": "Wawancara dengan Ketua Komite Medik dan Keperawatan terkait pelaksanaan audit klinis."
+                        }
+                    },
+                    "Standar TKRS 9: Budaya Keselamatan Pasien": {
+                        "Elemen Penilaian 1: Pimpinan rumah sakit menerapkan, mengevaluasi, dan menumbuhkan budaya keselamatan (just culture / no-blame culture).": {
+                            "R (Regulasi)": "Pedoman pelaksanaan dan pengukuran Budaya Keselamatan RS.",
+                            "D (Dokumen)": "Bukti pelaksanaan survei budaya keselamatan (contoh AHRQ survey), hasil analisis, dan program perbaikannya.",
+                            "W (Wawancara)": "Wawancara dengan staf di berbagai unit untuk memastikan mereka merasa aman melaporkan insiden tanpa takut dihukum (kecuali pelanggaran berat/sengaja)."
+                        },
+                        "Elemen Penilaian 2: Direktur dan pimpinan RS secara rutin melakukan ronde keselamatan (safety walk rounds) ke unit pelayanan.": {
+                            "D (Dokumen)": "Jadwal dan bukti pelaksanaan *Safety Walk Rounds* (notulen, daftar hadir, dokumentasi foto, dan rekapitulasi temuan risiko di lapangan).",
+                            "O (Observasi)": "Observasi tindak lanjut perbaikan fisik/sistem di lapangan hasil temuan ronde keselamatan.",
+                            "W (Wawancara)": "Wawancara dengan staf di unit tentang kunjungan pimpinan RS."
+                        }
+                    }
+                },
+                "BAB II. KUALIFIKASI DAN PENDIDIKAN STAF (KPS)": {
+                    "Standar KPS 1: Perencanaan Kebutuhan SDM": {
+                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi tentang perencanaan kebutuhan sumber daya manusia (SDM) yang mengacu pada rencana strategis (Renstra) RS.": {
+                            "R (Regulasi)": "Pedoman/Kebijakan Perencanaan dan Pemenuhan Kebutuhan SDM Rumah Sakit.",
+                            "D (Dokumen)": "Dokumen perencanaan SDM tahunan dan dokumen Renstra RS yang memuat proyeksi kebutuhan SDM.",
+                            "W (Wawancara)": "Wawancara dengan Bagian SDM/HRD dan Direktur mengenai dasar penyusunan perencanaan SDM."
+                        },
+                        "Elemen Penilaian 2: Rumah sakit memiliki dokumen analisis beban kerja (ABK) untuk menetapkan jumlah dan kualifikasi staf di setiap unit.": {
+                            "D (Dokumen)": "Dokumen Perhitungan/Analisis Beban Kerja (ABK) menggunakan metode yang diakui (misal WISN) di semua unit pelayanan dan unit kerja pendukung.",
+                            "W (Wawancara)": "Wawancara dengan Kepala Unit tentang cara mereka menghitung kebutuhan staf di unit masing-masing."
+                        },
+                        "Elemen Penilaian 3: Penempatan dan pemindahan staf (mutasi) dilakukan sesuai dengan kebutuhan dan kualifikasi yang ditetapkan.": {
+                            "R (Regulasi)": "SPO Penempatan, Rotasi, dan Mutasi Staf.",
+                            "D (Dokumen)": "SK Mutasi/Penempatan staf, bukti kesesuaian antara kualifikasi staf dengan jabatan barunya.",
+                            "W (Wawancara)": "Wawancara dengan staf yang baru dimutasi mengenai proses dan orientasi perpindahannya."
+                        }
+                    },
+                    "Standar KPS 2: Uraian Tugas Staf": {
+                        "Elemen Penilaian 1: Setiap staf rumah sakit memiliki uraian tugas, tanggung jawab, dan wewenang (Job Description) yang terkini.": {
+                            "R (Regulasi)": "Kebijakan penyusunan dan format uraian tugas untuk seluruh staf.",
+                            "D (Dokumen)": "Dokumen uraian tugas individual yang ditandatangani oleh staf bersangkutan dan atasannya, tersimpan di file kepegawaian.",
+                            "W (Wawancara)": "Wawancara dengan staf secara acak untuk memastikan mereka memahami fungsi, tugas, dan batasan tanggung jawabnya."
+                        },
+                        "Elemen Penilaian 2: Staf yang merangkap jabatan administratif dan klinis memiliki uraian tugas untuk kedua jabatan tersebut.": {
+                            "D (Dokumen)": "Dokumen uraian tugas ganda (misalnya seorang dokter spesialis yang juga menjabat sebagai Kepala Instalasi atau Direktur Medik)."
+                        }
+                    },
+                    "Standar KPS 3: Rekrutmen, Seleksi, dan Evaluasi File Kepegawaian": {
+                        "Elemen Penilaian 1: Rumah sakit menetapkan proses terpusat dan seragam untuk rekrutmen, seleksi, dan pengangkatan staf.": {
+                            "R (Regulasi)": "SPO Rekrutmen dan Seleksi Pegawai.",
+                            "D (Dokumen)": "Bukti pelaksanaan tahapan seleksi: pengumuman rekrutmen, hasil ujian tulis, wawancara, tes kesehatan, dan SK Pengangkatan."
+                        },
+                        "Elemen Penilaian 2: Rumah sakit memelihara file kepegawaian setiap staf yang diperbarui secara berkala dan dijaga kerahasiaannya.": {
+                            "R (Regulasi)": "SPO Pengelolaan dan Penyimpanan File Kepegawaian, termasuk ketentuan kerahasiaan data.",
+                            "D (Dokumen)": "File kepegawaian staf (fisik/elektronik) yang berisi: Kualifikasi (ijazah), STR, SIP/SIK, uraian tugas, riwayat pekerjaan, catatan diklat, dan hasil evaluasi kinerja tahunan.",
+                            "O (Observasi)": "Observasi tempat penyimpanan file kepegawaian (lemari terkunci, kontrol akses)."
+                        }
+                    },
+                    "Standar KPS 4: Orientasi Staf": {
+                        "Elemen Penilaian 1: Rumah sakit melaksanakan program orientasi umum bagi seluruh staf baru, staf kontrak, pegawai magang, dan peserta didik.": {
+                            "R (Regulasi)": "Pedoman Pelaksanaan Orientasi Umum RS.",
+                            "D (Dokumen)": "Jadwal, materi (meliputi Visi Misi, Mutu, Keselamatan Pasien, PPI, K3RS), absensi, dan bukti evaluasi pasca-orientasi umum.",
+                            "W (Wawancara)": "Wawancara dengan staf baru terkait pemahaman mereka atas materi orientasi umum."
+                        },
+                        "Elemen Penilaian 2: Terdapat pelaksanaan program orientasi khusus di unit kerja bagi staf baru sesuai dengan uraian tugasnya.": {
+                            "R (Regulasi)": "SPO/Kerangka Acuan Orientasi Khusus di masing-masing unit kerja.",
+                            "D (Dokumen)": "Buku/Logbook orientasi khusus (pengenalan alat, tata ruang unit, prosedur khusus unit) yang diisi oleh mentor/kepala unit dan ditandatangani staf baru.",
+                            "W (Wawancara)": "Wawancara dengan Kepala Unit dan staf baru terkait pelaksanaan orientasi khusus di lapangan."
+                        }
+                    },
+                    "Standar KPS 5: Pendidikan dan Pelatihan": {
+                        "Elemen Penilaian 1: Rumah sakit menyusun program pendidikan dan pelatihan (Diklat) untuk seluruh staf berdasarkan analisis kebutuhan pendidikan (Training Need Analysis/TNA).": {
+                            "R (Regulasi)": "Program Kerja Tahunan Diklat RS yang didasarkan pada TNA.",
+                            "D (Dokumen)": "Dokumen TNA yang dikumpulkan dari usulan setiap unit, dan rekapitulasi prioritas pelatihan (misalnya pelatihan PPI, BHD, atau mutu).",
+                            "W (Wawancara)": "Wawancara dengan Bagian Diklat/SDM mengenai proses penyusunan kebutuhan pelatihan."
+                        },
+                        "Elemen Penilaian 2: Staf diinformasikan mengenai peluang pendidikan/pelatihan dan rumah sakit memfasilitasi pelaksanaannya sesuai anggaran.": {
+                            "D (Dokumen)": "Surat tugas mengikuti pelatihan eksternal/internal, sertifikat inhouse training, dan bukti pencatatan jam pelatihan (CPD) staf di file kepegawaian."
+                        }
+                    },
+                    "Standar KPS 6: Pelatihan Bantuan Hidup Dasar (BHD)": {
+                        "Elemen Penilaian 1: Seluruh staf (klinis dan non-klinis) diberikan pelatihan Bantuan Hidup Dasar (BHD) atau Basic Life Support (BLS).": {
+                            "R (Regulasi)": "Kebijakan yang mewajibkan pelatihan BHD untuk semua pegawai RS, termasuk tenaga outsourcing seperti security dan cleaning service.",
+                            "D (Dokumen)": "Daftar hadir, dokumentasi, dan sertifikat pelatihan BHD bagi seluruh pegawai RS.",
+                            "S (Simulasi)": "Meminta staf (termasuk staf non-klinis) untuk melakukan simulasi BHD dengan pantom (boneka peraga) atau menjelaskan langkah-langkah dasar jika menemukan orang henti jantung."
+                        },
+                        "Elemen Penilaian 2: Terdapat tim reaksi cepat (Code Blue Team) yang dilatih secara khusus untuk penanganan bantuan hidup lanjut darurat medik.": {
+                            "R (Regulasi)": "SK Penetapan Tim Code Blue RS.",
+                            "D (Dokumen)": "Sertifikat ACLS (Advanced Cardiovascular Life Support) atau setara untuk tenaga medis/perawat yang masuk dalam Tim Code Blue.",
+                            "S (Simulasi)": "Simulasi aktivasi Code Blue di salah satu ruangan rawat inap/jalan."
+                        }
+                    }
+                }
+            },
+            "B. Kelompok Pelayanan Berfokus Pada Pasien": {
+                "BAB VIII. AKSES DAN KESINAMBUNGAN PELAYANAN (AKP)": {
+                    "Standar AKP 1: Skrining Pasien": {
+                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi tentang proses skrining baik di dalam maupun di luar rumah sakit.": {
+                            "R (Regulasi)": "Kebijakan/Pedoman Skrining Pasien (visual, medis, triase, prioritas) yang bertujuan menentukan apakah kebutuhan pasien sesuai dengan misi dan sumber daya RS."
+                        },
+                        "Elemen Penilaian 2: Terdapat bukti pelaksanaan proses skrining untuk mengidentifikasi kebutuhan pasien (kuratif, preventif, paliatif, atau rehabilitatif).": {
+                            "D (Dokumen)": "Dokumen rekam medis yang menunjukkan hasil skrining pada kontak pertama (contoh: form skrining visual di pendaftaran, skrining via telepon, atau form rujukan).",
+                            "W (Wawancara)": "Wawancara dengan petugas pendaftaran, perawat, atau security (skrining visual) mengenai kriteria penerimaan pasien."
+                        },
+                        "Elemen Penilaian 3: Pemeriksaan penunjang untuk proses skrining (laboratorium/radiologi) dilakukan sesuai standar yang ditetapkan.": {
+                            "D (Dokumen)": "Hasil pemeriksaan laboratorium/radiologi yang dijadikan dasar untuk menentukan pasien dirawat inap, masuk ICU, atau dirujuk."
+                        }
+                    },
+                    "Standar AKP 1.1: Triase Gawat Darurat": {
+                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi dan melaksanakan proses triase berbasis bukti (misalnya ATS/ESI) di Instalasi Gawat Darurat.": {
+                            "R (Regulasi)": "SPO Triase yang mengacu pada literatur medis berbasis bukti (contoh: Australian Triage Scale atau Emergency Severity Index).",
+                            "D (Dokumen)": "Formulir Triase dalam rekam medis yang terisi lengkap memuat kategori kedaruratan (kuning, merah, hijau, hitam) dan waktu tanggap (response time).",
+                            "O (Observasi)": "Observasi proses triase oleh dokter/perawat triase IGD segera saat pasien tiba."
+                        },
+                        "Elemen Penilaian 2: Staf yang melakukan triase telah dilatih dan kompeten.": {
+                            "D (Dokumen)": "Sertifikat pelatihan Triase, PPGD, ALS/ACLS, atau BTCLS bagi perawat dan dokter IGD."
+                        },
+                        "Elemen Penilaian 3: Pasien dengan kebutuhan darurat, mendesak, atau segera diberikan prioritas untuk asesmen dan tindakan medis.": {
+                            "D (Dokumen)": "Rekam medis yang menunjukkan pasien dengan triase merah (kritis) ditangani lebih dulu (response time nol menit) tanpa mengutamakan penyelesaian administrasi keuangan terlebih dahulu.",
+                            "O (Observasi)": "Observasi alur pelayanan IGD, pasien kritis langsung diarahkan ke ruang resusitasi."
+                        }
+                    }
+                },
+                "BAB IX. HAK PASIEN DAN KELUARGA (HPK)": {
+                    "Standar HPK 1: Hak dan Kewajiban Pasien": {
+                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi tentang hak dan kewajiban pasien serta keluarganya.": {
+                            "R (Regulasi)": "Kebijakan/Pedoman tentang pemenuhan Hak dan Kewajiban Pasien berdasarkan Undang-Undang Rumah Sakit/Kesehatan.",
+                            "D (Dokumen)": "Dokumen bukti sosialisasi regulasi hak dan kewajiban kepada seluruh staf."
+                        },
+                        "Elemen Penilaian 2: Informasi tentang hak dan kewajiban pasien tersedia dan mudah diakses oleh pasien, keluarga, dan pengunjung.": {
+                            "O (Observasi)": "Observasi ketersediaan media informasi hak dan kewajiban pasien (banner, poster, leaflet, brosur, atau display digital) di area pendaftaran, IGD, dan ruang tunggu rawat inap."
+                        },
+                        "Elemen Penilaian 3: Staf rumah sakit memahami dan menerapkan hak serta kewajiban pasien dalam memberikan asuhan.": {
+                            "W (Wawancara)": "Wawancara dengan staf medis, perawat, dan staf pendaftaran mengenai pemahaman mereka tentang hak-hak dasar pasien (seperti hak menolak tindakan, hak atas privasi)."
+                        }
+                    }
+                }
+            },
+            "C. Kelompok Sasaran Keselamatan Pasien": {
+                "BAB XV. SASARAN KESELAMATAN PASIEN (SKP)": {
+                    "Standar SKP 1: Mengidentifikasi Pasien dengan Benar": {
+                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi untuk mengidentifikasi pasien menggunakan minimal dua identitas yang unik.": {
+                            "R (Regulasi)": "SPO Identifikasi Pasien (tidak boleh menggunakan nomor kamar atau lokasi pasien dirawat sebagai pengidentifikasi)."
+                        },
+                        "Elemen Penilaian 2: Pasien diidentifikasi secara benar sebelum dilakukan tindakan klinis, pemberian obat, spesimen, dan diet.": {
+                            "O (Observasi)": "Observasi perawat saat memberikan obat atau mengambil darah: apakah meminta pasien menyebutkan nama dan tanggal lahir sambil mencocokkannya dengan gelang identitas.",
+                            "W (Wawancara)": "Wawancara dengan pasien/keluarga apakah petugas selalu menanyakan nama mereka sebelum melakukan tindakan."
+                        },
+                        "Elemen Penilaian 3: Terdapat prosedur khusus untuk identifikasi pasien yang tidak diketahui identitasnya atau pasien koma.": {
+                            "R (Regulasi)": "SPO Identifikasi Pasien Tidak Dikenal (Mr. X) atau Bencana Massal.",
+                            "D (Dokumen)": "Bukti rekam medis penggunaan sistem identifikasi sementara (misal Mr. X 01, Mr. X 02) sampai identitas asli dikonfirmasi."
+                        }
+                    }
+                }
+            }
+        };
+
+        const fileRegistry = {};
+        let currentUploadTarget = { babTitle: '', standardId: '', epId: '', rdowsType: '', buttonElement: null, slotId: '', epText: '' };
+        let slotCounter = 0;
+
+        function generateId(prefix) {
+            slotCounter++;
+            return `${prefix}_${slotCounter}`;
+        }
+
+        function getRdowsBadge(type) {
+            const styles = {
+                'R': 'bg-[#ca5c30]/10 text-[#ca5c30] border-[#ca5c30]/30 shadow-sm',
+                'D': 'bg-emerald-50 text-emerald-700 border-emerald-200 shadow-sm',
+                'O': 'bg-amber-50 text-amber-700 border-amber-200 shadow-sm',
+                'W': 'bg-purple-50 text-purple-700 border-purple-200 shadow-sm',
+                'S': 'bg-rose-50 text-rose-700 border-rose-200 shadow-sm'
+            };
+            return `<span class="${styles[type] || 'bg-slate-100'} w-8 h-8 rounded-xl font-bold text-sm border flex items-center justify-center flex-shrink-0">${type}</span>`;
+        }
+
+        function createRdowsDetail(epTitle, rdowsObject, babTitle, standarTitle) {
+            let content = '<div class="mt-4 pl-4 md:pl-5 border-l-2 border-slate-200 space-y-6 pt-2">';
+            const rdowsOrder = ['R (Regulasi)', 'D (Dokumen)', 'O (Observasi)', 'W (Wawancara)', 'S (Simulasi)'];
+            
+            // Ekstrak Nomor EP
+            const epMatch = epTitle.match(/Elemen Penilaian (\d+)/i);
+            const epNum = epMatch ? epMatch[1] : 'X';
+            
+            // Buat penamaan yang aman untuk folder
+            const safeBabTitle = babTitle.replace(/[^a-zA-Z0-9 ]/g, '').trim();
+            const safeStandarTitle = standarTitle.replace(/[^a-zA-Z0-9 ]/g, '').trim();
+            
+            rdowsOrder.forEach(key => {
+                if (rdowsObject[key]) {
+                    const type = key.charAt(0);
+                    const slotId = generateId('slot');
+                    const epText = rdowsObject[key];
+                    const safeEpText = epText.replace(/['"\\]/g, ''); // Hapus quote agar aman di inline onclick
+                    
+                    content += `
+                        <div class="relative">
+                            <div class="flex items-start gap-4 mb-3">
+                                <div class="mt-0.5">${getRdowsBadge(type)}</div>
+                                <p class="text-sehati-text/80 leading-relaxed text-sm md:text-base font-sans pt-1">${epText}</p>
+                            </div>
+                            
+                            <div id="fileList_${slotId}" class="flex flex-col gap-2 mb-3 pl-12 empty:hidden"></div>
+                            
+                            <div class="flex flex-wrap items-center gap-3 pl-12">
+                                <button id="btnUpload_${slotId}" onclick="triggerUpload('${safeBabTitle}', '${safeStandarTitle}', '${epNum}', '${type}', this, '${slotId}', '${safeEpText}')" 
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-sehati-border text-sehati-text rounded-xl text-sm font-semibold hover:bg-orange-50 hover:text-sehati-primary hover:border-sehati-primary/40 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-sehati-primary/30">
+                                    <i class="fa-solid fa-cloud-arrow-up text-sehati-primary"></i> <span class="btn-text">Unggah Bukti</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            content += '</div>';
+            return content;
+        }
+
+        function createEpAccordion(epTitle, rdowsObject, babTitle, standarTitle) {
+            const epId = generateId('ep');
+            
+            // Mencari badge EP misal "Elemen Penilaian 1"
+            let formattedTitle = epTitle;
+            const epMatch = epTitle.match(/^(Elemen Penilaian \d+:)\s*(.*)/i);
+            if(epMatch) {
+                formattedTitle = `<span class="bg-sehati-primary/10 text-sehati-primaryDark px-2 py-0.5 rounded-lg text-xs font-bold mr-2 border border-sehati-primary/20 shrink-0 inline-block mb-1 sm:mb-0">${epMatch[1]}</span> <span class="leading-snug">${epMatch[2]}</span>`;
+            }
+
+            return `
+                <div class="accordion-item-ep rounded-[16px] bg-white border border-slate-200 hover:border-sehati-primary/30 shadow-sm mt-3 overflow-hidden transition-colors duration-300">
+                    <button data-target="${epId}" class="w-full text-left py-4 px-5 text-sehati-dark hover:bg-orange-50/50 flex justify-between items-start focus:outline-none transition-colors group">
+                        <div class="text-sm md:text-base font-semibold pr-4 flex flex-col sm:flex-row sm:items-start text-sehati-text group-hover:text-sehati-primaryDark transition-colors">
+                            ${formattedTitle}
+                        </div>
+                        <span class="accordion-arrow text-sehati-text/40 text-lg leading-none mt-1 group-hover:text-sehati-primary transition-colors"><i class="fa-solid fa-chevron-right"></i></span>
+                    </button>
+                    <div id="${epId}" class="accordion-content bg-[#fdfbf7]/50">
+                        <div class="px-5 pb-5 pt-1">
+                            ${createRdowsDetail(epTitle, rdowsObject, babTitle, standarTitle)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createStandarAccordion(standarTitle, epObject, babTitle) {
+            let epContent = '';
+            for (const epTitle in epObject) {
+                epContent += createEpAccordion(epTitle, epObject[epTitle], babTitle, standarTitle);
+            }
+            const standarId = generateId('standar');
+            return `
+                <div class="accordion-item-standar bg-[#fdfbf7] rounded-[20px] border border-slate-200 overflow-hidden mb-4 transition-all duration-300">
+                    <button data-target="${standarId}" class="w-full text-left p-5 font-bold text-sehati-dark hover:text-sehati-primary flex justify-between items-center focus:outline-none transition-colors group">
+                        <span class="pr-4 text-base md:text-lg">${standarTitle}</span>
+                        <span class="accordion-arrow text-slate-400 text-xl leading-none group-hover:text-sehati-primary transition-colors"><i class="fa-solid fa-chevron-right"></i></span>
+                    </button>
+                    <div id="${standarId}" class="accordion-content bg-white">
+                        <div class="p-5 border-t border-slate-100">
+                            ${epContent}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createBabAccordion(babTitle, standarObject) {
+            let standarContent = '';
+            for (const standarTitle in standarObject) {
+                standarContent += createStandarAccordion(standarTitle, standarObject[standarTitle], babTitle);
+            }
+            const babId = generateId('bab');
+            return `
+                 <div class="accordion-item-bab bg-white shadow-sm hover:shadow-md rounded-[20px] border border-slate-100 overflow-hidden mb-6 transition-shadow duration-300">
+                    <button data-target="${babId}" class="w-full text-left p-5 md:p-6 font-heading font-bold text-xl md:text-2xl text-sehati-dark hover:text-sehati-primary bg-slate-50 hover:bg-orange-50/50 flex justify-between items-center focus:outline-none transition-colors group">
+                        <span>${babTitle}</span>
+                        <span class="accordion-arrow text-sehati-primary/50 text-xl leading-none group-hover:text-sehati-primary transition-colors"><i class="fa-solid fa-chevron-right"></i></span>
+                    </button>
+                    <div id="${babId}" class="accordion-content">
+                         <div class="p-5 md:p-6 bg-white">
+                            ${standarContent}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createKelompokAccordion(kelompokTitle, babObject) {
+            let babContent = '';
+            for (const babTitle in babObject) {
+                babContent += createBabAccordion(babTitle, babObject[babTitle]);
+            }
+            const kelompokId = generateId('kelompok');
+            return `
+                 <div class="accordion-item-kelompok bg-white shadow-card hover:shadow-card-hover rounded-[24px] border border-slate-100 overflow-hidden mb-10 transition-shadow duration-300">
+                    <button data-target="${kelompokId}" class="w-full text-left p-6 md:p-8 font-heading font-extrabold text-2xl md:text-3xl text-sehati-dark hover:text-sehati-primary flex justify-between items-center focus:outline-none transition-colors group">
+                        <span>${kelompokTitle}</span>
+                        <span class="accordion-arrow text-sehati-primary/50 text-2xl leading-none group-hover:text-sehati-primary transition-colors"><i class="fa-solid fa-chevron-right"></i></span>
+                    </button>
+                    <div id="${kelompokId}" class="accordion-content bg-[#fdfbf7]/30">
+                         <div class="p-4 sm:p-6 md:px-8 md:pb-8 pt-0">
+                            ${babContent}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('checklist-container');
+            let finalHTML = '';
+            
+            // Header Info
+            const subtitle = document.getElementById('headerSubtitle');
+            if(sessionStorage.getItem('unitKerja')) {
+                subtitle.innerHTML = `Area: <b>${currentUnitKerja}</b> | Akun Terhubung: <span class="text-sehati-primary font-semibold">${currentUserEmail}</span>`;
+            }
+
+            // Loop Data Hierarki
+            for (const kelompokTitle in checklistData) {
+                finalHTML += createKelompokAccordion(kelompokTitle, checklistData[kelompokTitle]);
+            }
+            container.innerHTML = finalHTML;
+
+            // Peringatan jika belum setup drive
+            if(!GAS_WEB_APP_URL) {
+                setTimeout(() => {
+                    showToast('Klik "Setup Drive" untuk menghubungkan penyimpanan Anda.', 'loading');
+                    setTimeout(hideToast, 4000);
+                }, 1000);
+            }
+            
+            // Event Delegation untuk semua Akordion
+            container.addEventListener('click', (event) => {
+                const header = event.target.closest('button[data-target]');
+                if (header) {
+                    const targetId = header.dataset.target;
+                    const content = document.getElementById(targetId);
+                    const parent = header.parentElement;
+
+                    if (content.classList.contains('open')) {
+                        content.classList.remove('open');
+                        parent.classList.remove('open'); // Digunakan CSS untuk rotasi panah
+                    } else {
+                        content.classList.add('open');
+                        parent.classList.add('open');
+                    }
+                }
+            });
+        });
+
+        const modal = document.getElementById('setupModal');
+        const modalContent = document.getElementById('setupModalContent');
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const msg = document.getElementById('toastMessage');
+
+            msg.textContent = message;
+            toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-[16px] shadow-floating transform transition-all duration-300 z-50 flex items-center gap-3 font-medium text-sm max-w-sm text-white ${type === 'success' ? 'bg-[#ca5c30]' : type === 'error' ? 'bg-[#ef4444]' : 'bg-[#2d3748]'}`;
+            icon.className = `text-lg ${type === 'success' ? 'fa-solid fa-check-circle' : type === 'error' ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-circle-notch spinner'}`;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+
+            if (type !== 'loading') {
+                setTimeout(() => { hideToast(); }, 3500);
+            }
+        }
+
+        function hideToast() { document.getElementById('toast').classList.add('translate-y-24', 'opacity-0'); }
+
+        function openSetupModal() {
+            document.getElementById('gasUrlInput').value = GAS_WEB_APP_URL;
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => { modal.classList.remove('opacity-0'); modalContent.classList.remove('scale-95'); }, 10);
+        }
+
+        function closeSetupModal() {
+            modal.classList.add('opacity-0'); modalContent.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+        }
+
+        async function saveGasUrl(event) {
+            if (event) event.preventDefault();
+            
+            const urlInput = document.getElementById('gasUrlInput').value.trim();
+            const btn = document.getElementById('btnSaveGas');
+            
+            if (urlInput && !urlInput.startsWith('https://script.google.com/')) {
+                showToast('URL tidak valid. Pastikan diawali dengan https://script.google.com/', 'error'); return;
+            }
+
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch spinner"></i> Menyimpan...';
+            btn.disabled = true;
+
+            try {
+                const payload = { action: 'save_drive_url', email: currentUserEmail, driveUrl: urlInput };
+                
+                // Bypass logic untuk canvas
+                let isCanvasPreview = false;
+                try { isCanvasPreview = window.self !== window.top || window.location.hostname.includes("google") || window.location.hostname.includes("sandbox"); } catch(e) { isCanvasPreview = true; }
+
+                if (isCanvasPreview && (!currentUserEmail || currentUserEmail.includes('demo'))) {
+                    GAS_WEB_APP_URL = urlInput;
+                    sessionStorage.setItem('gasUrl', urlInput);
+                    showToast('SIMULASI CANVAS: URL Drive berhasil disimpan permanen!', 'success');
+                    closeSetupModal();
+                } else {
+                    const response = await fetch(CENTRAL_GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        GAS_WEB_APP_URL = urlInput;
+                        sessionStorage.setItem('gasUrl', urlInput); 
+                        showToast('Berhasil! URL Drive Anda telah disimpan ke Database Pusat.', 'success');
+                        closeSetupModal();
+                    } else {
+                        showToast('Gagal menyimpan: ' + result.message, 'error');
+                    }
+                }
+            } catch (err) {
+                console.error("Fetch Error:", err);
+                showToast('Gagal terhubung ke database pusat.', 'error');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function copyScriptCode() {
+            const code = document.getElementById('gasScriptCode').innerText;
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = code; document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try { document.execCommand('copy'); showToast('Kode Script disalin ke clipboard'); } 
+            catch (err) { showToast('Gagal menyalin kode', 'error'); }
+            document.body.removeChild(tempTextArea);
+        }
+
+        // TRIGGER UPLOAD - Dipanggil dari tombol "Unggah Bukti"
+        function triggerUpload(babTitle, standardId, epId, rdowsType, btnElement, slotId, epText) {
+            if (!GAS_WEB_APP_URL) {
+                showToast('Anda belum mengatur URL Drive. Silakan klik "Setup Drive".', 'error'); return;
+            }
+            currentUploadTarget = { babTitle, standardId, epId, rdowsType, buttonElement: btnElement, slotId: slotId, epText: epText };
+            document.getElementById('hiddenFileInput').click();
+        }
+
+        // Event listener saat file dipilih
+        document.getElementById('hiddenFileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            event.target.value = ''; 
+            processFileUpload(file);
+        });
+
+        // PROSES UPLOAD DAN SMART NAMING
+        function processFileUpload(file) {
+            const target = currentUploadTarget;
+            if (file.size > 10 * 1024 * 1024) { showToast('Ukuran file terlalu besar (Maks 10MB)', 'error'); return; }
+
+            const epId = target.epId;
+            const type = target.rdowsType;
+            const epText = target.epText || '';
+
+            // Ekstraksi konsep judul cerdas dari teks EP
+            let cleanText = epText.replace(/^[^a-zA-Z0-9]+/, '').trim().replace(/\s*\(.*?\)\s*/g, ''); 
+            const cutOffWords = [' yang ', ' untuk ', ' sesuai ', ' berdasarkan ', ' melibatkan ', ' dengan ', ' dalam ', ' pada ', ' sebagai ', ' terhadap ', ' melalui ', ' secara '];
+            let logicalConcept = cleanText;
+            let lowestIdx = logicalConcept.length;
+            
+            cutOffWords.forEach(word => {
+                let idx = logicalConcept.toLowerCase().indexOf(word);
+                if (idx !== -1 && idx < lowestIdx && idx > 15) lowestIdx = idx;
+            });
+            logicalConcept = logicalConcept.substring(0, lowestIdx).trim().replace(/[,.;:]+$/, ''); 
+            
+            const trailingVerbs = ['ditetapkan', 'disusun', 'dilaksanakan', 'dilakukan', 'dievaluasi', 'ditindaklanjuti', 'dikoordinasikan', 'disediakan', 'tersedia', 'ada'];
+            let words = logicalConcept.split(/\s+/);
+            if (words.length > 0) {
+                if (trailingVerbs.includes(words[words.length - 1].toLowerCase())) {
+                    words.pop(); 
+                    logicalConcept = words.join(' ');
+                }
+            }
+            if (words.length > 7) logicalConcept = words.slice(0, 7).join(' '); // Batasi 7 kata
+            
+            // Kapitalisasi (Title Case)
+            let epConcept = logicalConcept.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+
+            let category = '';
+            let textToCheck = epText.toLowerCase();
+
+            if (type === 'R') {
+                if (textToCheck.includes('kebijakan') || textToCheck.includes('sk') || textToCheck.includes('keputusan')) category = '(SK)';
+                else if (textToCheck.includes('prosedur') || textToCheck.includes('spo')) category = '(SOP)';
+                else if (textToCheck.includes('pedoman') || textToCheck.includes('panduan')) category = '(Panduan)';
+                else category = '(Regulasi)';
+            } else if (type === 'D') {
+                if (textToCheck.includes('rekam medis')) category = '(Rekam Medis)';
+                else if (textToCheck.includes('laporan') || textToCheck.includes('evaluasi')) category = '(Laporan)';
+                else category = '(Dokumen)';
+            } else if (type === 'O') category = '(Observasi)';
+            else if (type === 'W') category = '(Wawancara)';
+            else if (type === 'S') category = '(Simulasi)';
+
+            const lastDotIndex = file.name.lastIndexOf('.');
+            const ext = lastDotIndex !== -1 ? file.name.substring(lastDotIndex) : '';
+            
+            // Format Naming: "EP 1 - D (Dokumen) - Bukti Pelaksanaan Evaluasi Kinerja.pdf"
+            const formattedFileName = `EP ${epId} - ${type} ${category} - ${epConcept}${ext}`;
+
+            const originalBtnHtml = target.buttonElement.innerHTML;
+            target.buttonElement.innerHTML = '<i class="fa-solid fa-circle-notch spinner text-sehati-primary"></i> Mengunggah...';
+            target.buttonElement.disabled = true;
+            showToast('Sedang mengunggah ke Drive Pribadi Anda...', 'loading');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                const folderPath = `Bukti_Akreditasi_RS/${target.babTitle}/${target.standardId}/EP_${target.epId}`;
+
+                const payload = {
+                    fileName: formattedFileName, 
+                    mimeType: file.type,
+                    fileBase64: base64Data,
+                    folderPath: folderPath,
+                    userEmail: currentUserEmail
+                };
+
+                // Bypass jika tidak ada URL (Simulator Canvas)
+                if(!GAS_WEB_APP_URL || GAS_WEB_APP_URL === '') {
+                    setTimeout(() => {
+                        hideToast();
+                        target.buttonElement.innerHTML = originalBtnHtml;
+                        target.buttonElement.disabled = false;
+                        
+                        const fileObj = { name: formattedFileName, url: URL.createObjectURL(file) };
+                        saveFileRegistry(target.slotId, fileObj);
+                        updateUIAfterUpload(target.slotId, fileObj);
+                        showToast(`Simulasi Berhasil. Dinamai: ${formattedFileName}`, 'success');
+                    }, 1500);
+                    return;
+                }
+
+                // POST ke Web App Google Drive (GAS)
+                fetch(GAS_WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    hideToast();
+                    target.buttonElement.innerHTML = originalBtnHtml;
+                    target.buttonElement.disabled = false;
+
+                    if (result.success) {
+                        const fileObj = { name: formattedFileName, url: result.url };
+                        saveFileRegistry(target.slotId, fileObj);
+                        updateUIAfterUpload(target.slotId, fileObj);
+                        showToast(`File sukses diunggah!`, 'success');
+                    } else {
+                        showToast('Gagal mengunggah: ' + result.error, 'error');
+                    }
+                })
+                .catch(error => {
+                    hideToast();
+                    target.buttonElement.innerHTML = originalBtnHtml;
+                    target.buttonElement.disabled = false;
+                    console.error('Upload Error:', error);
+                    showToast('Terjadi kesalahan koneksi ke Google Drive.', 'error');
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Menyimpan status file di local memory
+        function saveFileRegistry(slotId, fileObj) {
+            if (!fileRegistry[slotId]) fileRegistry[slotId] = []; 
+            fileRegistry[slotId].push(fileObj); 
+        }
+
+        // Merender tombol file link ke UI setelah upload berhasil
+        function updateUIAfterUpload(slotId, fileObj) {
+            const fileListContainer = document.getElementById(`fileList_${slotId}`);
+            const uploadBtn = document.getElementById(`btnUpload_${slotId}`);
+            const btnText = uploadBtn.querySelector('.btn-text');
+            
+            if (btnText) btnText.textContent = "Tambah Bukti Lain";
+            
+            const fileLink = document.createElement('a');
+            fileLink.href = fileObj.url; fileLink.target = "_blank"; fileLink.download = fileObj.name;
+            fileLink.className = "inline-flex items-center justify-between gap-3 px-4 py-2 bg-sehati-bg border border-sehati-border text-sehati-text rounded-xl text-sm font-sans hover:bg-slate-50 transition shadow-sm w-fit max-w-full group";
+            fileLink.innerHTML = `<div class="flex items-center gap-2 overflow-hidden"><i class="fa-brands fa-google-drive text-sehati-primary shrink-0"></i><span class="truncate font-medium group-hover:underline" title="${fileObj.name}">${fileObj.name}</span></div><i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70 shrink-0 group-hover:opacity-100 group-hover:text-sehati-primary transition-colors"></i>`;
+            
+            fileListContainer.appendChild(fileLink);
+        }
+    </script>
+</body>
+</html>
