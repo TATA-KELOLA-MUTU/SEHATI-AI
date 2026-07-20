@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
-        // Pengecekan Keamanan (Bypass untuk Canvas/Localhost)
         (function() {
             let isCanvasPreview = false;
             try {
@@ -342,264 +341,1919 @@ function doOptions(e) {
 
         // Data Checklist RS (Hierarki Lengkap)
         const checklistData = {
-            "A. Kelompok Manajemen Rumah Sakit": {
-                "BAB I. TATA KELOLA RUMAH SAKIT (TKRS)": {
-                    "Standar TKRS 1: Organisasi dan Tanggung Jawab Pemilik atau Representasi Pemilik": {
-                        "Elemen Penilaian 1: Rumah sakit memiliki Representasi Pemilik/Dewan Pengawas yang dipilih dan ditetapkan oleh Pemilik.": {
-                            "R (Regulasi)": "Surat Keputusan (SK) atau Dokumen Penetapan Representasi Pemilik/Dewan Pengawas oleh entitas Pemilik Rumah Sakit sesuai dengan bentuk badan hukumnya.",
-                            "D (Dokumen)": "Dokumen kualifikasi, profil, dan rekam jejak anggota Representasi Pemilik/Dewan Pengawas yang membuktikan kompetensi mereka.",
-                            "W (Wawancara)": "Wawancara dengan Pemilik atau Representasi Pemilik mengenai proses pemilihan dan penetapan."
-                        },
-                        "Elemen Penilaian 2: Tanggung jawab dan wewenang Representasi Pemilik ditetapkan dalam regulasi rumah sakit.": {
-                            "R (Regulasi)": "Dokumen Hospital Bylaws / Peraturan Internal Rumah Sakit atau dokumen lain yang secara eksplisit merinci kewenangan, tanggung jawab, dan kewajiban Representasi Pemilik.",
-                            "D (Dokumen)": "Bukti pelaksanaan tanggung jawab tersebut, seperti notulen rapat Dewan Pengawas terkait penyusunan kebijakan, evaluasi, dan pengawasan.",
-                            "W (Wawancara)": "Wawancara dengan anggota Representasi Pemilik terkait pemahaman mereka atas tanggung jawab dan wewenangnya."
-                        },
-                        "Elemen Penilaian 3: Representasi Pemilik/Dewan Pengawas melakukan evaluasi kinerja Direktur Rumah Sakit secara berkala paling sedikit satu tahun sekali.": {
-                            "R (Regulasi)": "Regulasi/SPO tentang mekanisme, frekuensi, dan kriteria penilaian kinerja Direktur RS oleh Dewan Pengawas.",
-                            "D (Dokumen)": "Laporan hasil evaluasi kinerja tahunan Direktur RS, bukti umpan balik tertulis, dan rencana tindak lanjut.",
-                            "W (Wawancara)": "Wawancara dengan Dewan Pengawas dan Direktur RS terkait proses dan hasil evaluasi kinerja tahunan."
-                        }
+        "A. Kelompok Manajemen Rumah Sakit": {
+            "BAB I. TATA KELOLA RUMAH SAKIT (TKRS)": {
+                "Standar TKRS 1: Organisasi dan Tanggung Jawab Pemilik atau Representasi Pemilik": {
+                    "Elemen Penilaian 1": {
+                        "R": "Surat Keputusan (SK) atau Dokumen Penetapan Representasi Pemilik/Dewan Pengawas oleh entitas Pemilik Rumah Sakit sesuai dengan bentuk badan hukumnya.",
+                        "D": "Dokumen kualifikasi, profil, dan rekam jejak anggota Representasi Pemilik/Dewan Pengawas yang membuktikan kompetensi mereka.",
+                        "W": "Wawancara Pemilik/Representasi Pemilik: Menggali pemahaman terkait proses pemilihan, kriteria kompetensi, dan SK penetapan struktur dewan pengawas sesuai regulasi."
                     },
-                    "Standar TKRS 2: Direktur Rumah Sakit": {
-                        "Elemen Penilaian 1: Direktur RS ditetapkan oleh Pemilik atau Representasi Pemilik sesuai dengan ketentuan peraturan perundang-undangan.": {
-                            "R (Regulasi)": "Surat Keputusan (SK) Pengangkatan Direktur RS yang dikeluarkan oleh Pemilik atau Representasi Pemilik.",
-                            "D (Dokumen)": "File kepegawaian Direktur RS yang berisi Ijazah (tenaga medis/kesehatan), STR, SIP (jika melayani pasien), dan sertifikat pelatihan manajemen rumah sakit.",
-                            "W (Wawancara)": "Wawancara dengan Direktur RS terkait proses pengangkatannya dan kualifikasinya."
-                        },
-                        "Elemen Penilaian 2: Direktur RS menetapkan struktur organisasi dan pimpinan tingkat manajerial lainnya di rumah sakit.": {
-                            "R (Regulasi)": "SK Direktur tentang Penetapan Struktur Organisasi dan Tata Kerja (SOTK) Rumah Sakit.",
-                            "D (Dokumen)": "Dokumen penetapan para pimpinan/kepala divisi/bidang beserta uraian tugas, wewenang, dan tanggung jawab masing-masing (SK Pengangkatan).",
-                            "W (Wawancara)": "Wawancara dengan jajaran manajerial mengenai uraian tugas yang mereka terima."
-                        },
-                        "Elemen Penilaian 3: Direktur RS menyusun Rencana Strategis (Renstra) dan Rencana Kerja dan Anggaran (RKA) tahunan yang disetujui oleh Representasi Pemilik.": {
-                            "R (Regulasi)": "Dokumen Rencana Strategis (Renstra) RS (misal 5 tahunan) dan Rencana Kerja dan Anggaran (RKA) Tahunan.",
-                            "D (Dokumen)": "Bukti pengesahan/persetujuan dari Representasi Pemilik (tanda tangan persetujuan, notulen rapat pengesahan RKA/Renstra).",
-                            "W (Wawancara)": "Wawancara dengan Direktur dan Representasi Pemilik mengenai proses perancangan, pembahasan, dan persetujuan anggaran."
-                        }
+                    "Elemen Penilaian 2": {
+                        "R": "Dokumen Hospital Bylaws / Peraturan Internal Rumah Sakit atau dokumen lain yang secara eksplisit merinci kewenangan, tanggung jawab, dan kewajiban Representasi Pemilik.",
+                        "D": "Bukti pelaksanaan tanggung jawab tersebut, seperti notulen rapat Dewan Pengawas terkait penyusunan kebijakan, evaluasi, dan pengawasan.",
+                        "W": "Wawancara Representasi Pemilik: Meminta penjelasan tentang peran mereka dalam mengesahkan kebijakan strategis, RKA, dan pengawasan mutu RS."
                     },
-                    "Standar TKRS 3: Kepala Bidang / Divisi / Unit Pelayanan": {
-                        "Elemen Penilaian 1: Direktur menetapkan Kepala Bidang/Divisi/Unit untuk setiap instalasi atau unit pelayanan di RS.": {
-                            "R (Regulasi)": "SK Penetapan Kepala Unit Pelayanan Klinis dan Non-Klinis beserta kualifikasinya.",
-                            "D (Dokumen)": "Dokumen profil, ijazah, dan sertifikat kompetensi tiap kepala unit yang sesuai dengan persyaratan jabatan."
-                        },
-                        "Elemen Penilaian 2: Kepala Unit Pelayanan menyusun program kerja tahunan unit dan mengusulkan anggaran operasional.": {
-                            "D (Dokumen)": "Program Kerja Tahunan untuk masing-masing unit pelayanan dan draf usulan anggaran (RAB) dari unit yang diajukan ke manajemen.",
-                            "W (Wawancara)": "Wawancara dengan Kepala Unit tentang penyusunan program kerja berbasis kebutuhan unit."
-                        },
-                        "Elemen Penilaian 3: Kepala Unit Pelayanan mengidentifikasi dan mengusulkan kebutuhan sumber daya manusia (SDM) dan fasilitas di unitnya.": {
-                            "D (Dokumen)": "Dokumen analisis beban kerja (ABK) unit, bukti pengajuan kebutuhan SDM, dan usulan penambahan/perbaikan fasilitas kesehatan di unit tersebut.",
-                            "W (Wawancara)": "Wawancara dengan Kepala Unit tentang bagaimana mereka menganalisis kekurangan staf atau alat medis."
-                        }
-                    },
-                    "Standar TKRS 4: Etika Rumah Sakit": {
-                        "Elemen Penilaian 1: Pimpinan rumah sakit menetapkan regulasi tentang tata kelola etika rumah sakit, termasuk komite etik.": {
-                            "R (Regulasi)": "SK Penetapan Pedoman Etik RS (Code of Conduct) dan SK Pembentukan Komite Etik RS beserta uraian tugasnya.",
-                            "D (Dokumen)": "Dokumen pedoman tata kelola etika, kode etik profesi, dan kode etik pegawai RS."
-                        },
-                        "Elemen Penilaian 2: Rumah sakit memiliki sistem pelaporan pelanggaran etik yang aman dan rahasia (whistleblowing system).": {
-                            "R (Regulasi)": "SPO Pelaporan pelanggaran etik dan perlindungan pelapor (Whistleblowing System).",
-                            "D (Dokumen)": "Bukti tersedianya kanal pelaporan (kotak saran, email khusus, formulir online), serta log/catatan pelaporan jika ada.",
-                            "W (Wawancara)": "Wawancara dengan staf mengenai pengetahuan mereka tentang cara melaporkan isu etika dengan aman."
-                        },
-                        "Elemen Penilaian 3: Komite etik menangani setiap dilema etik klinis maupun bisnis dan mendokumentasikan resolusinya.": {
-                            "D (Dokumen)": "Dokumen/laporan penanganan dilema etik (notulen rapat komite etik, rekomendasi komite, dan keputusan akhir).",
-                            "W (Wawancara)": "Wawancara dengan ketua Komite Etik terkait contoh kasus dilema etik (klinis/manajerial) yang pernah ditangani."
-                        }
-                    },
-                    "Standar TKRS 5: Tanggung Jawab Mutu dan Keselamatan Pasien": {
-                        "Elemen Penilaian 1: Representasi Pemilik dan Direktur menyetujui dan mendukung program Peningkatan Mutu dan Keselamatan Pasien (PMKP) secara menyeluruh.": {
-                            "R (Regulasi)": "Kebijakan/Pedoman PMKP tingkat Rumah Sakit.",
-                            "D (Dokumen)": "Bukti alokasi anggaran, penyediaan teknologi (software pelaporan), dan SDM (Komite Mutu) yang disetujui Pemilik/Direktur.",
-                            "W (Wawancara)": "Wawancara dengan Direktur mengenai bentuk dukungan riil terhadap program PMKP."
-                        },
-                        "Elemen Penilaian 2: Direktur memantau laporan capaian indikator mutu rumah sakit dan melaporkannya kepada Representasi Pemilik berkala.": {
-                            "D (Dokumen)": "Laporan Triwulan/Semester capaian Indikator Nasional Mutu (INM) dan Indikator Prioritas RS yang ditandatangani Direktur dan bukti serah terima/presentasi ke Dewan Pengawas.",
-                            "W (Wawancara)": "Wawancara dengan Komite Mutu dan Direktur mengenai mekanisme pelaporan."
-                        }
-                    },
-                    "Standar TKRS 6: Manajemen Kontrak dan Perjanjian Kerja Sama": {
-                        "Elemen Penilaian 1: Direktur RS menetapkan regulasi dan prosedur penandatanganan, monitoring, dan evaluasi perjanjian kerja sama (kontrak) klinis maupun manajerial.": {
-                            "R (Regulasi)": "Pedoman/SPO penyusunan kontrak dan Perjanjian Kerja Sama (PKS), termasuk kriteria seleksi vendor/mitra.",
-                            "D (Dokumen)": "Daftar seluruh kontrak/PKS aktif (KSO alat, cleaning service, lab rujukan, dll)."
-                        },
-                        "Elemen Penilaian 2: Pimpinan unit kerja mengawasi mutu layanan yang dikontrakkan dan memberikan laporan evaluasi kinerja mitra kerja sama.": {
-                            "D (Dokumen)": "Dokumen/Ceklist monitoring evaluasi (Monev) mutu layanan pihak ketiga yang diisi oleh Kepala Unit terkait (misalnya Kepala IPSRS mengevaluasi vendor pemeliharaan AC).",
-                            "W (Wawancara)": "Wawancara dengan kepala unit mengenai indikator mutu yang harus dipenuhi oleh mitra kerja sama."
-                        },
-                        "Elemen Penilaian 3: Ada bukti pemutusan kontrak atau teguran apabila vendor/pihak ketiga tidak memenuhi standar mutu dan keselamatan yang disepakati.": {
-                            "D (Dokumen)": "Surat teguran/peringatan kepada vendor, atau dokumen evaluasi yang menyarankan pemutusan/tidak perpanjangan kontrak jika mutu di bawah standar.",
-                            "O (Observasi)": "Observasi langsung terhadap kinerja vendor di lapangan (misal kebersihan oleh cleaning service outsoucing)."
-                        }
-                    },
-                    "Standar TKRS 7: Pengelolaan Rantai Pasok (Supply Chain Management)": {
-                        "Elemen Penilaian 1: RS menetapkan regulasi pengelolaan rantai pasok untuk obat, bahan medis habis pakai (BMHP), dan peralatan untuk mencegah kekosongan dan menjamin keaslian.": {
-                            "R (Regulasi)": "Kebijakan/SPO Manajemen Rantai Pasok, termasuk proses pengadaan dari distributor resmi.",
-                            "D (Dokumen)": "Dokumen pakta integritas distributor, surat jaminan keaslian produk, dan dokumen sertifikasi distributor (CDOB, CDAKB)."
-                        },
-                        "Elemen Penilaian 2: Direktur dan Kepala Instalasi Farmasi memastikan identifikasi risiko pada rantai pasokan dan mitigasi terhadap kelangkaan barang.": {
-                            "D (Dokumen)": "Buku daftar risiko (Risk Register) rantai pasok farmasi dan logistik, serta dokumen rencana darurat jika terjadi kelangkaan obat esensial.",
-                            "W (Wawancara)": "Wawancara dengan Kepala Farmasi dan Logistik mengenai tindakan yang dilakukan saat obat/barang kosong di pasaran."
-                        }
-                    },
-                    "Standar TKRS 8: Organisasi Medis dan Keperawatan": {
-                        "Elemen Penilaian 1: Pimpinan RS menetapkan struktur organisasi Komite Medik dan Komite Keperawatan untuk mengawal profesionalisme staf klinis.": {
-                            "R (Regulasi)": "SK Penetapan Struktur, Ketua, dan Anggota Komite Medik dan Komite Keperawatan beserta Hospital/Medical/Nursing Bylaws.",
-                            "D (Dokumen)": "Dokumen uraian tugas dan bukti pelaksanaan rapat koordinasi komite."
-                        },
-                        "Elemen Penilaian 2: Komite Medik dan Keperawatan secara proaktif memantau kepatuhan staf klinis terhadap Panduan Praktik Klinis (PPK) dan Clinical Pathway.": {
-                            "D (Dokumen)": "Hasil audit medis, audit keperawatan, laporan kepatuhan Clinical Pathway, dan tindak lanjut perbaikan.",
-                            "W (Wawancara)": "Wawancara dengan Ketua Komite Medik dan Keperawatan terkait pelaksanaan audit klinis."
-                        }
-                    },
-                    "Standar TKRS 9: Budaya Keselamatan Pasien": {
-                        "Elemen Penilaian 1: Pimpinan rumah sakit menerapkan, mengevaluasi, dan menumbuhkan budaya keselamatan (just culture / no-blame culture).": {
-                            "R (Regulasi)": "Pedoman pelaksanaan dan pengukuran Budaya Keselamatan RS.",
-                            "D (Dokumen)": "Bukti pelaksanaan survei budaya keselamatan (contoh AHRQ survey), hasil analisis, dan program perbaikannya.",
-                            "W (Wawancara)": "Wawancara dengan staf di berbagai unit untuk memastikan mereka merasa aman melaporkan insiden tanpa takut dihukum (kecuali pelanggaran berat/sengaja)."
-                        },
-                        "Elemen Penilaian 2: Direktur dan pimpinan RS secara rutin melakukan ronde keselamatan (safety walk rounds) ke unit pelayanan.": {
-                            "D (Dokumen)": "Jadwal dan bukti pelaksanaan *Safety Walk Rounds* (notulen, daftar hadir, dokumentasi foto, dan rekapitulasi temuan risiko di lapangan).",
-                            "O (Observasi)": "Observasi tindak lanjut perbaikan fisik/sistem di lapangan hasil temuan ronde keselamatan.",
-                            "W (Wawancara)": "Wawancara dengan staf di unit tentang kunjungan pimpinan RS."
-                        }
+                    "Elemen Penilaian 3": {
+                        "R": "Regulasi/SPO tentang mekanisme, frekuensi, dan kriteria penilaian kinerja Direktur RS oleh Dewan Pengawas.",
+                        "D": "Laporan hasil evaluasi kinerja tahunan Direktur RS, bukti umpan balik tertulis, dan rencana tindak lanjut.",
+                        "W": "Wawancara Dewan Pengawas & Direktur: Bagaimana mekanisme penilaian tahunan dilakukan? Apa saja indikator keberhasilan Direktur (KPI) yang dinilai?"
                     }
                 },
-                "BAB II. KUALIFIKASI DAN PENDIDIKAN STAF (KPS)": {
-                    "Standar KPS 1: Perencanaan Kebutuhan SDM": {
-                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi tentang perencanaan kebutuhan sumber daya manusia (SDM) yang mengacu pada rencana strategis (Renstra) RS.": {
-                            "R (Regulasi)": "Pedoman/Kebijakan Perencanaan dan Pemenuhan Kebutuhan SDM Rumah Sakit.",
-                            "D (Dokumen)": "Dokumen perencanaan SDM tahunan dan dokumen Renstra RS yang memuat proyeksi kebutuhan SDM.",
-                            "W (Wawancara)": "Wawancara dengan Bagian SDM/HRD dan Direktur mengenai dasar penyusunan perencanaan SDM."
-                        },
-                        "Elemen Penilaian 2: Rumah sakit memiliki dokumen analisis beban kerja (ABK) untuk menetapkan jumlah dan kualifikasi staf di setiap unit.": {
-                            "D (Dokumen)": "Dokumen Perhitungan/Analisis Beban Kerja (ABK) menggunakan metode yang diakui (misal WISN) di semua unit pelayanan dan unit kerja pendukung.",
-                            "W (Wawancara)": "Wawancara dengan Kepala Unit tentang cara mereka menghitung kebutuhan staf di unit masing-masing."
-                        },
-                        "Elemen Penilaian 3: Penempatan dan pemindahan staf (mutasi) dilakukan sesuai dengan kebutuhan dan kualifikasi yang ditetapkan.": {
-                            "R (Regulasi)": "SPO Penempatan, Rotasi, dan Mutasi Staf.",
-                            "D (Dokumen)": "SK Mutasi/Penempatan staf, bukti kesesuaian antara kualifikasi staf dengan jabatan barunya.",
-                            "W (Wawancara)": "Wawancara dengan staf yang baru dimutasi mengenai proses dan orientasi perpindahannya."
-                        }
+                "Standar TKRS 2: Direktur Rumah Sakit": {
+                    "Elemen Penilaian 1": {
+                        "R": "Surat Keputusan (SK) Pengangkatan Direktur RS yang dikeluarkan oleh Pemilik atau Representasi Pemilik.",
+                        "D": "File kepegawaian Direktur RS yang berisi Ijazah (tenaga medis/kesehatan), STR, SIP (jika melayani pasien), dan sertifikat pelatihan manajemen rumah sakit.",
+                        "W": "Wawancara Direktur RS: Mengklarifikasi proses pengangkatan, masa jabatan, dan pemenuhan persyaratan kompetensi manajemen perumahsakitan."
                     },
-                    "Standar KPS 2: Uraian Tugas Staf": {
-                        "Elemen Penilaian 1: Setiap staf rumah sakit memiliki uraian tugas, tanggung jawab, dan wewenang (Job Description) yang terkini.": {
-                            "R (Regulasi)": "Kebijakan penyusunan dan format uraian tugas untuk seluruh staf.",
-                            "D (Dokumen)": "Dokumen uraian tugas individual yang ditandatangani oleh staf bersangkutan dan atasannya, tersimpan di file kepegawaian.",
-                            "W (Wawancara)": "Wawancara dengan staf secara acak untuk memastikan mereka memahami fungsi, tugas, dan batasan tanggung jawabnya."
-                        },
-                        "Elemen Penilaian 2: Staf yang merangkap jabatan administratif dan klinis memiliki uraian tugas untuk kedua jabatan tersebut.": {
-                            "D (Dokumen)": "Dokumen uraian tugas ganda (misalnya seorang dokter spesialis yang juga menjabat sebagai Kepala Instalasi atau Direktur Medik)."
-                        }
+                    "Elemen Penilaian 2": {
+                        "R": "SK Direktur tentang Penetapan Struktur Organisasi dan Tata Kerja (SOTK) Rumah Sakit.",
+                        "D": "Dokumen penetapan para pimpinan/kepala divisi/bidang beserta uraian tugas, wewenang, dan tanggung jawab masing-masing (SK Pengangkatan).",
+                        "W": "Wawancara Jajaran Manajerial: Memastikan mereka memahami garis komando, wewenang, dan uraian tugas sesuai SOTK yang baru."
                     },
-                    "Standar KPS 3: Rekrutmen, Seleksi, dan Evaluasi File Kepegawaian": {
-                        "Elemen Penilaian 1: Rumah sakit menetapkan proses terpusat dan seragam untuk rekrutmen, seleksi, dan pengangkatan staf.": {
-                            "R (Regulasi)": "SPO Rekrutmen dan Seleksi Pegawai.",
-                            "D (Dokumen)": "Bukti pelaksanaan tahapan seleksi: pengumuman rekrutmen, hasil ujian tulis, wawancara, tes kesehatan, dan SK Pengangkatan."
-                        },
-                        "Elemen Penilaian 2: Rumah sakit memelihara file kepegawaian setiap staf yang diperbarui secara berkala dan dijaga kerahasiaannya.": {
-                            "R (Regulasi)": "SPO Pengelolaan dan Penyimpanan File Kepegawaian, termasuk ketentuan kerahasiaan data.",
-                            "D (Dokumen)": "File kepegawaian staf (fisik/elektronik) yang berisi: Kualifikasi (ijazah), STR, SIP/SIK, uraian tugas, riwayat pekerjaan, catatan diklat, dan hasil evaluasi kinerja tahunan.",
-                            "O (Observasi)": "Observasi tempat penyimpanan file kepegawaian (lemari terkunci, kontrol akses)."
-                        }
+                    "Elemen Penilaian 3": {
+                        "R": "Dokumen Rencana Strategis (Renstra) RS (misal 5 tahunan) dan Rencana Kerja dan Anggaran (RKA) Tahunan.",
+                        "D": "Bukti pengesahan/persetujuan dari Representasi Pemilik (tanda tangan persetujuan, notulen rapat pengesahan RKA/Renstra).",
+                        "W": "Wawancara Direktur: Meminta penjelasan alur sinkronisasi antara usulan anggaran dari bawah (unit) hingga menjadi RKA yang disahkan dewan pengawas."
+                    }
+                },
+                "Standar TKRS 3: Kepala Bidang / Divisi / Unit Pelayanan": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Kepala Unit Pelayanan Klinis dan Non-Klinis beserta kualifikasinya.",
+                        "D": "Dokumen profil, ijazah, dan sertifikat kompetensi tiap kepala unit yang sesuai dengan persyaratan jabatan."
                     },
-                    "Standar KPS 4: Orientasi Staf": {
-                        "Elemen Penilaian 1: Rumah sakit melaksanakan program orientasi umum bagi seluruh staf baru, staf kontrak, pegawai magang, dan peserta didik.": {
-                            "R (Regulasi)": "Pedoman Pelaksanaan Orientasi Umum RS.",
-                            "D (Dokumen)": "Jadwal, materi (meliputi Visi Misi, Mutu, Keselamatan Pasien, PPI, K3RS), absensi, dan bukti evaluasi pasca-orientasi umum.",
-                            "W (Wawancara)": "Wawancara dengan staf baru terkait pemahaman mereka atas materi orientasi umum."
-                        },
-                        "Elemen Penilaian 2: Terdapat pelaksanaan program orientasi khusus di unit kerja bagi staf baru sesuai dengan uraian tugasnya.": {
-                            "R (Regulasi)": "SPO/Kerangka Acuan Orientasi Khusus di masing-masing unit kerja.",
-                            "D (Dokumen)": "Buku/Logbook orientasi khusus (pengenalan alat, tata ruang unit, prosedur khusus unit) yang diisi oleh mentor/kepala unit dan ditandatangani staf baru.",
-                            "W (Wawancara)": "Wawancara dengan Kepala Unit dan staf baru terkait pelaksanaan orientasi khusus di lapangan."
-                        }
+                    "Elemen Penilaian 2": {
+                        "D": "Program Kerja Tahunan untuk masing-masing unit pelayanan dan draf usulan anggaran (RAB) dari unit yang diajukan ke manajemen.",
+                        "W": "Wawancara Kepala Unit: Menanyakan dasar pertimbangan saat menyusun Program Kerja Tahunan dan relevansinya dengan pelayanan mutu."
                     },
-                    "Standar KPS 5: Pendidikan dan Pelatihan": {
-                        "Elemen Penilaian 1: Rumah sakit menyusun program pendidikan dan pelatihan (Diklat) untuk seluruh staf berdasarkan analisis kebutuhan pendidikan (Training Need Analysis/TNA).": {
-                            "R (Regulasi)": "Program Kerja Tahunan Diklat RS yang didasarkan pada TNA.",
-                            "D (Dokumen)": "Dokumen TNA yang dikumpulkan dari usulan setiap unit, dan rekapitulasi prioritas pelatihan (misalnya pelatihan PPI, BHD, atau mutu).",
-                            "W (Wawancara)": "Wawancara dengan Bagian Diklat/SDM mengenai proses penyusunan kebutuhan pelatihan."
-                        },
-                        "Elemen Penilaian 2: Staf diinformasikan mengenai peluang pendidikan/pelatihan dan rumah sakit memfasilitasi pelaksanaannya sesuai anggaran.": {
-                            "D (Dokumen)": "Surat tugas mengikuti pelatihan eksternal/internal, sertifikat inhouse training, dan bukti pencatatan jam pelatihan (CPD) staf di file kepegawaian."
-                        }
+                    "Elemen Penilaian 3": {
+                        "D": "Dokumen analisis beban kerja (ABK) unit, bukti pengajuan kebutuhan SDM, dan usulan penambahan/perbaikan fasilitas kesehatan di unit tersebut.",
+                        "W": "Wawancara Kepala Unit: Meminta demonstrasi atau penjelasan metode Analisis Beban Kerja (misal WISN) yang digunakan untuk meminta tambahan staf."
+                    }
+                },
+                "Standar TKRS 4: Etika Rumah Sakit": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Pedoman Etik RS (Code of Conduct) dan SK Pembentukan Komite Etik RS beserta uraian tugasnya.",
+                        "D": "Dokumen pedoman tata kelola etika, kode etik profesi, dan kode etik pegawai RS."
                     },
-                    "Standar KPS 6: Pelatihan Bantuan Hidup Dasar (BHD)": {
-                        "Elemen Penilaian 1: Seluruh staf (klinis dan non-klinis) diberikan pelatihan Bantuan Hidup Dasar (BHD) atau Basic Life Support (BLS).": {
-                            "R (Regulasi)": "Kebijakan yang mewajibkan pelatihan BHD untuk semua pegawai RS, termasuk tenaga outsourcing seperti security dan cleaning service.",
-                            "D (Dokumen)": "Daftar hadir, dokumentasi, dan sertifikat pelatihan BHD bagi seluruh pegawai RS.",
-                            "S (Simulasi)": "Meminta staf (termasuk staf non-klinis) untuk melakukan simulasi BHD dengan pantom (boneka peraga) atau menjelaskan langkah-langkah dasar jika menemukan orang henti jantung."
-                        },
-                        "Elemen Penilaian 2: Terdapat tim reaksi cepat (Code Blue Team) yang dilatih secara khusus untuk penanganan bantuan hidup lanjut darurat medik.": {
-                            "R (Regulasi)": "SK Penetapan Tim Code Blue RS.",
-                            "D (Dokumen)": "Sertifikat ACLS (Advanced Cardiovascular Life Support) atau setara untuk tenaga medis/perawat yang masuk dalam Tim Code Blue.",
-                            "S (Simulasi)": "Simulasi aktivasi Code Blue di salah satu ruangan rawat inap/jalan."
-                        }
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Pelaporan pelanggaran etik dan perlindungan pelapor (Whistleblowing System).",
+                        "D": "Bukti tersedianya kanal pelaporan (kotak saran, email khusus, formulir online), serta log/catatan pelaporan jika ada.",
+                        "W": "Wawancara Staf RS: Menanyakan apakah mereka mengetahui tata cara melaporkan pelanggaran etik tanpa takut diintimidasi (No Blame Culture)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Dokumen/laporan penanganan dilema etik (notulen rapat komite etik, rekomendasi komite, dan keputusan akhir).",
+                        "W": "Wawancara Ketua Komite Etik: Menggali contoh kasus dilema etik (klinis/manajerial) yang pernah ditangani dan proses resolusinya."
+                    }
+                },
+                "Standar TKRS 5: Tanggung Jawab Mutu dan Keselamatan Pasien": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/Pedoman PMKP tingkat Rumah Sakit.",
+                        "D": "Bukti alokasi anggaran, penyediaan teknologi (software pelaporan), dan SDM (Komite Mutu) yang disetujui Pemilik/Direktur.",
+                        "W": "Wawancara Direktur: Mengeksplorasi bentuk dukungan riil (finansial, IT, pelatihan) pimpinan terhadap program Peningkatan Mutu RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan Triwulan/Semester capaian Indikator Nasional Mutu (INM) dan Indikator Prioritas RS yang ditandatangani Direktur dan bukti serah terima/presentasi ke Dewan Pengawas.",
+                        "W": "Wawancara Komite Mutu & Direktur: Menanyakan rutinitas dan media pelaporan hasil evaluasi mutu kepada pemilik RS."
+                    }
+                },
+                "Standar TKRS 6: Manajemen Kontrak dan Perjanjian Kerja Sama": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman/SPO penyusunan kontrak dan Perjanjian Kerja Sama (PKS), termasuk kriteria seleksi vendor/mitra.",
+                        "D": "Daftar seluruh kontrak/PKS aktif (KSO alat, cleaning service, lab rujukan, dll)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen/Ceklist monitoring evaluasi (Monev) mutu layanan pihak ketiga yang diisi oleh Kepala Unit terkait (misalnya Kepala IPSRS mengevaluasi vendor pemeliharaan AC).",
+                        "W": "Wawancara Kepala Unit: Meminta contoh parameter indikator SLA (Service Level Agreement) yang dipakai untuk menilai vendor."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Surat teguran/peringatan kepada vendor, atau dokumen evaluasi yang menyarankan pemutusan/tidak perpanjangan kontrak jika mutu di bawah standar.",
+                        "O": "Observasi Area RS: Memantau secara langsung mutu kinerja vendor pihak ketiga di lapangan (contoh: kebersihan lantai oleh cleaning service) sesuai kontrak."
+                    }
+                },
+                "Standar TKRS 7: Pengelolaan Rantai Pasok (Supply Chain Management)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/SPO Manajemen Rantai Pasok, termasuk proses pengadaan dari distributor resmi.",
+                        "D": "Dokumen pakta integritas distributor, surat jaminan keaslian produk, dan dokumen sertifikasi distributor (CDOB, CDAKB)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Buku daftar risiko (Risk Register) rantai pasok farmasi dan logistik, serta dokumen rencana darurat jika terjadi kelangkaan obat esensial.",
+                        "W": "Wawancara Kepala Farmasi/Logistik: Bagaimana SOP penanganan/mitigasi jika terjadi kelangkaan obat life-saving di tingkat distributor nasional?"
+                    }
+                },
+                "Standar TKRS 8: Organisasi Medis dan Keperawatan": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Struktur, Ketua, dan Anggota Komite Medik dan Komite Keperawatan beserta Hospital/Medical/Nursing Bylaws.",
+                        "D": "Dokumen uraian tugas dan bukti pelaksanaan rapat koordinasi komite."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Hasil audit medis, audit keperawatan, laporan kepatuhan Clinical Pathway, dan tindak lanjut perbaikan.",
+                        "W": "Wawancara Ketua Komite Medik & Keperawatan: Meminta penjelasan hasil temuan audit klinis terbesar tahun ini dan upaya perbaikannya."
+                    }
+                },
+                "Standar TKRS 9: Budaya Keselamatan Pasien": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman pelaksanaan dan pengukuran Budaya Keselamatan RS.",
+                        "D": "Bukti pelaksanaan survei budaya keselamatan (contoh AHRQ survey), hasil analisis, dan program perbaikannya.",
+                        "W": "Wawancara Staf (Acak): Menanyakan persepsi staf terkait pelaporan kesalahan klinis, apakah mereka dihakimi (punitive) atau dibina secara sistem (Just Culture)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Jadwal dan bukti pelaksanaan Safety Walk Rounds (notulen, daftar hadir, dokumentasi foto, dan rekapitulasi temuan risiko di lapangan).",
+                        "O": "Observasi Lapangan: Mengecek langsung perbaikan perabot, fasilitas, atau sistem yang menjadi temuan ronde keselamatan pimpinan.",
+                        "W": "Wawancara Staf di Unit: Mengkonfirmasi apakah Direktur benar rutin turun ke unit untuk bertanya perihal kendala keselamatan."
                     }
                 }
             },
-            "B. Kelompok Pelayanan Berfokus Pada Pasien": {
-                "BAB VIII. AKSES DAN KESINAMBUNGAN PELAYANAN (AKP)": {
-                    "Standar AKP 1: Skrining Pasien": {
-                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi tentang proses skrining baik di dalam maupun di luar rumah sakit.": {
-                            "R (Regulasi)": "Kebijakan/Pedoman Skrining Pasien (visual, medis, triase, prioritas) yang bertujuan menentukan apakah kebutuhan pasien sesuai dengan misi dan sumber daya RS."
-                        },
-                        "Elemen Penilaian 2: Terdapat bukti pelaksanaan proses skrining untuk mengidentifikasi kebutuhan pasien (kuratif, preventif, paliatif, atau rehabilitatif).": {
-                            "D (Dokumen)": "Dokumen rekam medis yang menunjukkan hasil skrining pada kontak pertama (contoh: form skrining visual di pendaftaran, skrining via telepon, atau form rujukan).",
-                            "W (Wawancara)": "Wawancara dengan petugas pendaftaran, perawat, atau security (skrining visual) mengenai kriteria penerimaan pasien."
-                        },
-                        "Elemen Penilaian 3: Pemeriksaan penunjang untuk proses skrining (laboratorium/radiologi) dilakukan sesuai standar yang ditetapkan.": {
-                            "D (Dokumen)": "Hasil pemeriksaan laboratorium/radiologi yang dijadikan dasar untuk menentukan pasien dirawat inap, masuk ICU, atau dirujuk."
-                        }
+            "BAB II. KUALIFIKASI DAN PENDIDIKAN STAF (KPS)": {
+                "Standar KPS 1: Perencanaan Kebutuhan SDM": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman/Kebijakan Perencanaan dan Pemenuhan Kebutuhan SDM Rumah Sakit.",
+                        "D": "Dokumen perencanaan SDM tahunan dan dokumen Renstra RS yang memuat proyeksi kebutuhan SDM.",
+                        "W": "Wawancara Bagian HRD: Menggali sinkronisasi antara Rencana Strategis RS 5 tahun dengan rencana perekrutan staf tahunan."
                     },
-                    "Standar AKP 1.1: Triase Gawat Darurat": {
-                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi dan melaksanakan proses triase berbasis bukti (misalnya ATS/ESI) di Instalasi Gawat Darurat.": {
-                            "R (Regulasi)": "SPO Triase yang mengacu pada literatur medis berbasis bukti (contoh: Australian Triage Scale atau Emergency Severity Index).",
-                            "D (Dokumen)": "Formulir Triase dalam rekam medis yang terisi lengkap memuat kategori kedaruratan (kuning, merah, hijau, hitam) dan waktu tanggap (response time).",
-                            "O (Observasi)": "Observasi proses triase oleh dokter/perawat triase IGD segera saat pasien tiba."
-                        },
-                        "Elemen Penilaian 2: Staf yang melakukan triase telah dilatih dan kompeten.": {
-                            "D (Dokumen)": "Sertifikat pelatihan Triase, PPGD, ALS/ACLS, atau BTCLS bagi perawat dan dokter IGD."
-                        },
-                        "Elemen Penilaian 3: Pasien dengan kebutuhan darurat, mendesak, atau segera diberikan prioritas untuk asesmen dan tindakan medis.": {
-                            "D (Dokumen)": "Rekam medis yang menunjukkan pasien dengan triase merah (kritis) ditangani lebih dulu (response time nol menit) tanpa mengutamakan penyelesaian administrasi keuangan terlebih dahulu.",
-                            "O (Observasi)": "Observasi alur pelayanan IGD, pasien kritis langsung diarahkan ke ruang resusitasi."
-                        }
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen Perhitungan/Analisis Beban Kerja (ABK) menggunakan metode yang diakui (misal WISN) di semua unit pelayanan dan unit kerja pendukung.",
+                        "W": "Wawancara Kepala Unit: Meminta pembuktian simulasi penghitungan staf harian menggunakan form ABK/WISN."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Penempatan, Rotasi, dan Mutasi Staf.",
+                        "D": "SK Mutasi/Penempatan staf, bukti kesesuaian antara kualifikasi staf dengan jabatan barunya.",
+                        "W": "Wawancara Staf Mutasi: Menanyakan apakah rotasi mereka disertai orientasi dan sesuai dengan kompetensi awalnya."
                     }
                 },
-                "BAB IX. HAK PASIEN DAN KELUARGA (HPK)": {
-                    "Standar HPK 1: Hak dan Kewajiban Pasien": {
-                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi tentang hak dan kewajiban pasien serta keluarganya.": {
-                            "R (Regulasi)": "Kebijakan/Pedoman tentang pemenuhan Hak dan Kewajiban Pasien berdasarkan Undang-Undang Rumah Sakit/Kesehatan.",
-                            "D (Dokumen)": "Dokumen bukti sosialisasi regulasi hak dan kewajiban kepada seluruh staf."
-                        },
-                        "Elemen Penilaian 2: Informasi tentang hak dan kewajiban pasien tersedia dan mudah diakses oleh pasien, keluarga, dan pengunjung.": {
-                            "O (Observasi)": "Observasi ketersediaan media informasi hak dan kewajiban pasien (banner, poster, leaflet, brosur, atau display digital) di area pendaftaran, IGD, dan ruang tunggu rawat inap."
-                        },
-                        "Elemen Penilaian 3: Staf rumah sakit memahami dan menerapkan hak serta kewajiban pasien dalam memberikan asuhan.": {
-                            "W (Wawancara)": "Wawancara dengan staf medis, perawat, dan staf pendaftaran mengenai pemahaman mereka tentang hak-hak dasar pasien (seperti hak menolak tindakan, hak atas privasi)."
-                        }
+                "Standar KPS 2: Uraian Tugas Staf": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan penyusunan dan format uraian tugas untuk seluruh staf.",
+                        "D": "Dokumen uraian tugas individual yang ditandatangani oleh staf bersangkutan dan atasannya, tersimpan di file kepegawaian.",
+                        "W": "Wawancara Staf Acak: Meminta staf menjelaskan batasan wewenang dan tugas utama sehari-harinya tanpa melihat teks."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen uraian tugas ganda (misalnya seorang dokter spesialis yang juga menjabat sebagai Kepala Instalasi atau Direktur Medik)."
+                    }
+                },
+                "Standar KPS 3: Rekrutmen, Seleksi, dan Evaluasi File Kepegawaian": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Rekrutmen dan Seleksi Pegawai.",
+                        "D": "Bukti pelaksanaan tahapan seleksi: pengumuman rekrutmen, hasil ujian tulis, wawancara, tes kesehatan, dan SK Pengangkatan."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Pengelolaan dan Penyimpanan File Kepegawaian, termasuk ketentuan kerahasiaan data.",
+                        "D": "File kepegawaian staf (fisik/elektronik) yang berisi: Kualifikasi (ijazah), STR, SIP/SIK, uraian tugas, riwayat pekerjaan, catatan diklat, dan hasil evaluasi kinerja tahunan.",
+                        "O": "Observasi Ruang HRD: Mengecek keamanan lemari penyimpanan file kepegawaian, mematikan lemari terkunci dan memiliki kontrol akses ketat."
+                    }
+                },
+                "Standar KPS 4: Orientasi Staf": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pelaksanaan Orientasi Umum RS.",
+                        "D": "Jadwal, materi (meliputi Visi Misi, Mutu, Keselamatan Pasien, PPI, K3RS), absensi, dan bukti evaluasi pasca-orientasi umum.",
+                        "W": "Wawancara Staf Baru: Menguji pemahaman mereka atas materi orientasi seperti cara pelaporan IKP, jalur evakuasi, dan cuci tangan dasar."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO/Kerangka Acuan Orientasi Khusus di masing-masing unit kerja.",
+                        "D": "Buku/Logbook orientasi khusus (pengenalan alat, tata ruang unit, prosedur khusus unit) yang diisi oleh mentor/kepala unit dan ditandatangani staf baru.",
+                        "W": "Wawancara Staf Baru & Mentor: Menggali implementasi bimbingan alat khusus (misal ventilator di ICU) saat orientasi khusus."
+                    }
+                },
+                "Standar KPS 5: Pendidikan dan Pelatihan": {
+                    "Elemen Penilaian 1": {
+                        "R": "Program Kerja Tahunan Diklat RS yang didasarkan pada TNA.",
+                        "D": "Dokumen TNA yang dikumpulkan dari usulan setiap unit, dan rekapitulasi prioritas pelatihan (misalnya pelatihan PPI, BHD, atau mutu).",
+                        "W": "Wawancara Diklat/HRD: Bagaimana RS memutuskan memprioritaskan anggaran untuk pelatihan A dibanding pelatihan B?"
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Surat tugas mengikuti pelatihan eksternal/internal, sertifikat inhouse training, dan bukti pencatatan jam pelatihan (CPD) staf di file kepegawaian."
+                    }
+                },
+                "Standar KPS 6: Pelatihan Bantuan Hidup Dasar (BHD)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan yang mewajibkan pelatihan BHD untuk semua pegawai RS, termasuk tenaga outsourcing seperti security dan cleaning service.",
+                        "D": "Daftar hadir, dokumentasi, dan sertifikat pelatihan BHD bagi seluruh pegawai RS.",
+                        "S": "Simulasi Staf Eksternal/Non-Medis: Peragaan identifikasi henti jantung, teriakan minta tolong (Code Blue), dan cara kompresi dada yang tepat pada pantom (High Quality CPR)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SK Penetapan Tim Code Blue RS.",
+                        "D": "Sertifikat ACLS (Advanced Cardiovascular Life Support) atau setara untuk tenaga medis/perawat yang masuk dalam Tim Code Blue.",
+                        "S": "Simulasi Tim Code Blue: Peragaan respon kegawatdaruratan, penggunaan Defibrilator, pengaturan jalan napas, dan delegasi tugas dalam formasi tim resusitasi."
+                    }
+                },
+                "Standar KPS 7: Kesehatan dan Keselamatan Staf (K3 Staf)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pelayanan Kesehatan dan Keselamatan Kerja Staf (K3RS).",
+                        "D": "Program kerja K3 yang mencakup skrining kesehatan awal, pemeriksaan berkala, dan imunisasi."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Hasil Medical Check Up (MCU) pegawai, rekam medis pegawai (dijaga kerahasiaannya), dan kartu bukti vaksinasi bagi staf medis/perawat/lab.",
+                        "W": "Wawancara Staf Unit Risiko: Menanyakan ketersediaan MCU gratis dan kelengkapan vaksinasi Hepatitis B bagi perawat/lab."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Penanganan tertusuk jarum/pajanan cairan tubuh infeksius, dan SPO Pelaporan tindak kekerasan terhadap staf.",
+                        "D": "Laporan investigasi tertusuk jarum, form pemberian profilaksis pasca pajanan (PPP/PEP), dan log insiden terkait staf.",
+                        "W": "Wawancara Perawat/CS: Menanyakan langkah darurat (first aid) yang dilakukan jika tanpa sengaja tertusuk jarum suntik bekas pasien."
+                    }
+                },
+                "Standar KPS 8: Kredensial Staf Medis": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Kredensial dan Rekredensial Staf Medis (diatur di Hospital Bylaws/Medical Bylaws).",
+                        "D": "File kredensial staf medis (berbeda dengan file kepegawaian), memuat form aplikasi kewenangan klinis (clinical privilege), rincian evaluasi subkomite kredensial, dan rekomendasi Ketua Komite Medik."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Surat/email balasan resmi dari Universitas penerbit ijazah, atau tangkapan layar verifikasi online ke website KKI (Konsil Kedokteran Indonesia) / Dikti."
+                    }
+                },
+                "Standar KPS 9: Penugasan Klinis (SPK) Staf Medis": {
+                    "Elemen Penilaian 1": {
+                        "D": "Dokumen SPK dan RKK yang ditandatangani oleh Direktur RS berdasarkan rekomendasi Komite Medik. Dokumen ini harus masih berlaku (maks. 3 tahun).",
+                        "O": "Observasi Nurse Station / OK: Pengecekan silang ketersediaan buku/daftar Rincian Kewenangan Klinis (RKK) dokter untuk akses perawat memastikan wewenang dokter."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Audit kesesuaian antara tindakan medis yang didokumentasikan di Rekam Medis (CPPT/laporan operasi) dengan RKK dokter tersebut.",
+                        "W": "Wawancara Perawat Jaga: Apa yang dilakukan jika DPJP menginstruksikan tindakan yang ternyata tidak ada di daftar RKK-nya?"
+                    }
+                },
+                "Standar KPS 10: Evaluasi Kinerja Profesional Berkelanjutan (OPPE) Staf Medis": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Evaluasi Kinerja Profesional Berkelanjutan (OPPE).",
+                        "D": "Form penilaian OPPE yang memuat 3 aspek: Asuhan pasien (Patient Care), Pengetahuan medis/klinis (Medical/Clinical Knowledge), dan Pembelajaran berbasis praktik (Practice-based Learning). Termasuk logbook prosedur yang dilakukan."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen pelaksanaan proctoring/FPPE untuk staf medis baru, atau untuk staf medis yang diturunkan kewenangannya (demotion) akibat insiden keselamatan.",
+                        "W": "Wawancara Komite Medik: Menggali proses pengambilan keputusan saat melakukan evaluasi terfokus (FPPE) pada dokter yang terlibat IKP."
+                    }
+                },
+                "Standar KPS 11: Rekredensial Staf Medis": {
+                    "Elemen Penilaian 1": {
+                        "D": "Form pengajuan perpanjangan/perubahan RKK, berita acara rapat subkomite kredensial, rekomendasi perpanjangan dari Ketua Komite Medik, dan SPK/RKK pembaruan dari Direktur.",
+                        "W": "Wawancara Dokter DPJP: Menceritakan alur pengajuan penambahan kewenangan klinis baru saat masa rekredensial."
+                    }
+                },
+                "Standar KPS 12: Kredensial Staf Keperawatan": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Kredensial Staf Keperawatan (diatur dalam Nursing Bylaws).",
+                        "D": "Buku Putih (White Paper) kompetensi perawat, form aplikasi kredensial, STR aktif, SIKP/SIKB aktif, dan bukti rekomendasi Subkomite Kredensial Keperawatan."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Surat/email balasan verifikasi ijazah dari institusi pendidikan perawat, dan verifikasi STR secara online via web KTKI/MTKI."
+                    }
+                },
+                "Standar KPS 13: Penugasan Klinis (SPK) Staf Keperawatan": {
+                    "Elemen Penilaian 1": {
+                        "D": "Dokumen SPK dan RKK perawat yang memuat level jenjang karir klinis perawat (misal PK I, PK II, PK III) sesuai Buku Putih.",
+                        "O": "Observasi Bangsal: Mengecek daftar jenjang karir perawat yang sedang shift untuk mengetahui siapa yang berhak mengambil tindakan khusus."
+                    }
+                },
+                "Standar KPS 14: Penilaian Kinerja Staf Keperawatan": {
+                    "Elemen Penilaian 1": {
+                        "D": "Formulir evaluasi kinerja klinis tahunan (logbook asuhan, kepatuhan SPO, komunikasi, kehadiran, etik) yang ditandatangani atasan langsung dan diserahkan ke Komite Keperawatan/SDM."
+                    }
+                },
+                "Standar KPS 15: Kredensial Tenaga Kesehatan Lain (PPA Lainnya)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Kredensial Staf Tenaga Kesehatan Lainnya (dikoordinasikan oleh Komite Nakes Lainnya/Tim Terpadu).",
+                        "D": "Bukti pelaksanaan verifikasi ijazah (PSV), STR, SIP/SIK, dan penilaian kompetensi awal bagi tenaga kesehatan profesi lainnya (Apoteker, Radiografer, Dietisien)."
+                    }
+                },
+                "Standar KPS 16: Penugasan Klinis (SPK) Tenaga Kesehatan Lain": {
+                    "Elemen Penilaian 1": {
+                        "D": "Dokumen SPK dan RKK Tenaga Kesehatan Lain (misal RKK Apoteker Klinis, RKK Radiografer) yang menjelaskan batasan kewenangan melakukan asuhan/tindakan di RS.",
+                        "O": "Observasi Instalasi Penunjang: Memastikan RKK masing-masing PPA tersedia secara fisik/sistem di Instalasi Farmasi, Radiologi, dan Lab."
+                    }
+                },
+                "Standar KPS 17: Penilaian Kinerja Tenaga Kesehatan Lain": {
+                    "Elemen Penilaian 1": {
+                        "D": "Form evaluasi kinerja tahunan tenaga kesehatan lain dan bukti pelaksanaan sidang rekredensial untuk perpanjangan SPK dan RKK mereka.",
+                        "W": "Wawancara Staf Nakes Lain: Menanyakan proses penilaian kinerja tahunan yang dilakukan oleh kepala instalasi mereka."
                     }
                 }
             },
-            "C. Kelompok Sasaran Keselamatan Pasien": {
-                "BAB XV. SASARAN KESELAMATAN PASIEN (SKP)": {
-                    "Standar SKP 1: Mengidentifikasi Pasien dengan Benar": {
-                        "Elemen Penilaian 1: Rumah sakit menetapkan regulasi untuk mengidentifikasi pasien menggunakan minimal dua identitas yang unik.": {
-                            "R (Regulasi)": "SPO Identifikasi Pasien (tidak boleh menggunakan nomor kamar atau lokasi pasien dirawat sebagai pengidentifikasi)."
-                        },
-                        "Elemen Penilaian 2: Pasien diidentifikasi secara benar sebelum dilakukan tindakan klinis, pemberian obat, spesimen, dan diet.": {
-                            "O (Observasi)": "Observasi perawat saat memberikan obat atau mengambil darah: apakah meminta pasien menyebutkan nama dan tanggal lahir sambil mencocokkannya dengan gelang identitas.",
-                            "W (Wawancara)": "Wawancara dengan pasien/keluarga apakah petugas selalu menanyakan nama mereka sebelum melakukan tindakan."
-                        },
-                        "Elemen Penilaian 3: Terdapat prosedur khusus untuk identifikasi pasien yang tidak diketahui identitasnya atau pasien koma.": {
-                            "R (Regulasi)": "SPO Identifikasi Pasien Tidak Dikenal (Mr. X) atau Bencana Massal.",
-                            "D (Dokumen)": "Bukti rekam medis penggunaan sistem identifikasi sementara (misal Mr. X 01, Mr. X 02) sampai identitas asli dikonfirmasi."
-                        }
+            "BAB III. MANAJEMEN FASILITAS DAN KESELAMATAN (MFK)": {
+                "Standar MFK 1: Kepatuhan Terhadap Peraturan Perundang-Undangan": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/Pedoman RS mengenai Manajemen Fasilitas dan Keselamatan (MFK) yang merujuk pada regulasi nasional.",
+                        "D": "Daftar peraturan perundang-undangan terbaru terkait fasilitas fisik dan keselamatan RS yang menjadi acuan.",
+                        "W": "Wawancara Tim MFK: Menanyakan update undang-undang bangunan rumah sakit terbaru yang diadaptasi oleh RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen perizinan RS (Izin Mendirikan Bangunan/PBG, Izin Operasional RS, Izin IPAL, Izin Genset, Izin Petir, Izin Bapeten/Radiologi, Izin Lift) yang masih berlaku.",
+                        "O": "Observasi Legalitas: Mengecek langsung masa berlaku pada pigura perizinan IPAL atau Bapeten yang dipasang di ruangan."
+                    }
+                },
+                "Standar MFK 2: Program Manajemen Fasilitas dan Keselamatan": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Direktur tentang Penetapan Penanggung Jawab / Komite / Tim MFK Rumah Sakit beserta uraian tugasnya.",
+                        "D": "Dokumen profil dan sertifikat pelatihan K3RS/Manajemen Fasilitas bagi Penanggung Jawab MFK."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "Program Kerja Tahunan MFK yang disahkan oleh Direktur, mencakup 6 bidang manajemen fasilitas.",
+                        "D": "Bukti pelaksanaan dari masing-masing 6 bidang program MFK tersebut."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Laporan Triwulan dan Laporan Tahunan pelaksanaan program MFK, hasil audit fasilitas, dan rekomendasi perbaikan.",
+                        "W": "Wawancara Ketua Tim MFK: Membahas hasil temuan audit fasilitas paling berisiko tahun ini dan penyelesaiannya."
+                    }
+                },
+                "Standar MFK 3: Keselamatan dan Keamanan Fasilitas": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman/SPO tentang Keselamatan dan Keamanan (Security) di lingkungan RS.",
+                        "D": "Dokumen identifikasi area berisiko (Risk Assessment) terkait keamanan (misal: ruang bayi, farmasi, kasir, IGD).",
+                        "W": "Wawancara Security: Meminta sekuriti menjelaskan zona-zona paling rawan pencurian/penculikan di RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Checklist inspeksi keliling fasilitas (facility tour/ronde fasilitas) oleh Tim K3/MFK, serta bukti tindak lanjut jika ada lantai licin, plafon rusak, atau kabel terkelupas.",
+                        "O": "Observasi Fasilitas: Mengamati fisik lingkungan RS untuk memastikan tak ada plafon bocor, lantai keramik pecah, atau kabel menjuntai."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Penggunaan Tanda Pengenal bagi staf, pasien (gelang), pengunjung (kartu penunggu), dan tamu/vendor.",
+                        "O": "Observasi Keamanan: Memantau penegakan aturan ID Card staf, gelang identitas pasien, dan kartu visitor penunggu di jam besuk."
+                    },
+                    "Elemen Penilaian 4": {
+                        "O": "Observasi CCTV: Mengecek sudut pandang kamera CCTV di kasir/ruang bayi, dan memastikan monitor kontrol berfungsi live di pos satpam."
+                    },
+                    "Elemen Penilaian 5": {
+                        "D": "Dokumen PCRA untuk setiap proyek pembangunan/renovasi, bukti koordinasi dengan PPI (ICRA Bangunan).",
+                        "O": "Observasi Proyek Renovasi: Memastikan adanya partisi triplek debu, rambu peringatan, dan jalur pekerja proyek tidak memotong jalur pasien."
+                    }
+                },
+                "Standar MFK 4: Pengelolaan Bahan Berbahaya dan Beracun (B3) serta Limbah B3": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pengelolaan B3 dan Limbah B3 (identifikasi, penyimpanan, penanganan, pembuangan).",
+                        "D": "Izin TPS Limbah B3 (jika diwajibkan Pemda) dan Kontrak Kerjasama (PKS) dengan transporter dan pengolah limbah B3 berizin."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Daftar inventaris B3 dan Lembar Data Keselamatan (Material Safety Data Sheet / MSDS) yang diperbarui dan tersedia di unit pengguna (Lab, Farmasi, CSSD, Radiologi)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "O": "Observasi TPS B3: Memastikan TPS terkunci, memiliki ventilasi udara, lantai kedap air, bak penampung cairan, dan pelabelan simbol B3 yang tepat."
+                    },
+                    "Elemen Penilaian 4": {
+                        "O": "Observasi Spill Kit: Mengecek kelengkapan isi Spill Kit infeksius & kimia di titik asuhan berisiko.",
+                        "S": "Simulasi CS/Perawat: Peragaan urutan pemakaian APD dan penggunaan absorben Spill Kit untuk menangani tumpahan darah di lantai."
+                    },
+                    "Elemen Penilaian 5": {
+                        "D": "Formulir laporan insiden tumpahan/paparan B3, bukti investigasi, dan tindak lanjut (misal: staf yang terpapar segera di-MCU/diberi profilaksis)."
+                    }
+                },
+                "Standar MFK 5: Penanggulangan Bencana (Disaster Management)": {
+                    "Elemen Penilaian 1": {
+                        "D": "Dokumen Hazard Vulnerability Analysis (HVA) yang diperbarui tahunan, dan Dokumen Hospital Disaster Plan (HDP) untuk bencana internal dan eksternal.",
+                        "W": "Wawancara Tim MFK: Meminta penjelasan proses penyusunan HVA (Analisis Kerentanan Bencana) berbasis risiko geografis RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "SPO komunikasi darurat, pengelolaan logistik saat bencana, penetapan area triase bencana, dan daftar kontak instansi terkait (BPBD, Damkar, Kepolisian)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Dokumen pelaksanaan simulasi bencana (Term of Reference/TOR, daftar hadir, foto/video), serta laporan evaluasi / debriefing pasca-simulasi.",
+                        "W": "Wawancara Staf RS: Menanyakan kode darurat untuk gempa bumi/banjir dan di mana letak Assembly Point (Titik Kumpul)."
+                    }
+                },
+                "Standar MFK 6: Proteksi Kebakaran (Fire Safety)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Proteksi Kebakaran Rumah Sakit.",
+                        "D": "Dokumen Asesmen Risiko Kebakaran (Fire Safety Risk Assessment / FSRA) yang meninjau potensi api di seluruh fasilitas."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Buku pencatatan / log pemeliharaan dan inspeksi rutin APAR (bulanan), pengujian alarm kebakaran, serta pemeliharaan hidran/sprinkler.",
+                        "O": "Observasi APAR & Hidran: Memeriksa fisik APAR (tekanan hijau, selang tidak retak, masa kedaluwarsa) dan memastikan hidran/sprinkler tidak terhalang barang."
+                    },
+                    "Elemen Penilaian 3": {
+                        "O": "Observasi Jalur Evakuasi: Memastikan tanda arah keluar terang/berpendar, pintu darurat lebar membuka ke luar, dan tangga evakuasi bersih tanpa rintangan."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Bukti pelatihan penanganan kebakaran dan simulasi evakuasi kebakaran.",
+                        "S": "Simulasi APAR: Menginstruksikan perawat/staf untuk mendemonstrasikan metode PASS (Pull, Aim, Squeeze, Sweep) menggunakan APAR kosong."
+                    },
+                    "Elemen Penilaian 5": {
+                        "R": "SK Penetapan Kawasan Tanpa Rokok (KTR).",
+                        "O": "Observasi KTR: Inspeksi area toilet umum, taman, dan kantin untuk memastikan tidak ada putung rokok maupun bau asap tembakau."
+                    }
+                },
+                "Standar MFK 7: Peralatan Medis": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pengelolaan Peralatan Medis RS.",
+                        "D": "Program kerja pengadaan, pemeliharaan, dan kalibrasi peralatan medis."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Data aset/inventaris alat medis terkini (lengkap dengan merk, tipe, nomor seri, dan lokasi)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Jadwal dan bukti pemeliharaan preventif (preventive maintenance), serta Sertifikat Kalibrasi dari lembaga berwenang (misal BPFK) yang masih berlaku.",
+                        "O": "Observasi Alat Medis: Mengecek langsung label sertifikasi kalibrasi pada Defibrilator, Patient Monitor, dan Mesin Anestesi."
+                    },
+                    "Elemen Penilaian 4": {
+                        "R": "SPO Penarikan (Recall) Peralatan Medis dan SPO Pelaporan Kerusakan Alat.",
+                        "D": "Dokumentasi pelaporan kerusakan alat (work order) dan waktu respons perbaikan oleh teknisi elektromedik (ATEM)."
+                    }
+                },
+                "Standar MFK 8: Sistem Utilitas (Ketersediaan Air dan Listrik 24 Jam)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan RS yang menjamin kontinuitas suplai air dan listrik 24/7.",
+                        "O": "Observasi Fasilitas Utilitas: Memeriksa ketersediaan bak tandon (Ground Tank) air bersih utama dan instalasi ruang Genset."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Daftar area berisiko tinggi (ICU, OK, IGD, Hemodialisa, Ruang Vaksin) yang membutuhkan backup listrik (UPS/Genset tanpa jeda) dan pasokan air bersih."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Kontrak kerja sama dengan perusahaan penyuplai air bersih (truk tangki) untuk kondisi darurat.",
+                        "O": "Observasi Genset: Memeriksa panel ATS (Automatic Transfer Switch) posisi Auto, ketersediaan tangki bahan bakar solar, dan aki starter Genset."
+                    }
+                },
+                "Standar MFK 9: Pemeliharaan dan Pengujian Sistem Utilitas Lanjutan": {
+                    "Elemen Penilaian 1": {
+                        "D": "Logbook dan jadwal pemeliharaan sentral gas medis (oksigen sentral), kompresor udara tekan, sistem tata udara (AHU/AC sentral), dan lift/elevator.",
+                        "O": "Observasi Sentral Gas Medis: Tabung gas terikat kuat dengan rantai, tidak didekatkan dengan oli/pelumas, dan meteran tekanan berfungsi dengan baik."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Bukti pelaksanaan pemanasan Genset secara rutin (misal: mingguan tanpa beban) dan pengujian Genset dengan beban penuh (minimal setiap semester/tahunan).",
+                        "W": "Wawancara Teknisi Utilitas: Berapa detik jeda perpindahan listrik (ATS) ke Genset setelah PLN mati? (Target ideal < 10 detik)."
+                    }
+                },
+                "Standar MFK 10: Pemantauan Kualitas Utilitas (Air)": {
+                    "Elemen Penilaian 1": {
+                        "D": "Hasil pemeriksaan laboratorium terakreditasi terhadap sampel air bersih RS (uji fisik, kimia, dan bakteriologi) setiap 6 bulan sekali."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Hasil pemeriksaan air Reverse Osmosis (RO) Hemodialisa (uji endotoksin dan mikrobiologi) secara berkala (bulanan atau sesuai standar nefrologi)."
+                    }
+                },
+                "Standar MFK 11: Pendidikan dan Pelatihan Staf tentang MFK": {
+                    "Elemen Penilaian 1": {
+                        "D": "Materi, daftar hadir, dan sertifikat/bukti pelatihan staf tentang MFK secara komprehensif.",
+                        "W": "Wawancara Staf Acak: Menanyakan pemahaman dasar mereka tentang letak APAR terdekat dan tindakan evakuasi jika mendengar sirine Code Red."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Sertifikat kompetensi atau pelatihan khusus bagi teknisi elektromedik (ATEM), teknisi listrik, petugas radiologi (proteksi radiasi), dan operator boiler/genset."
+                    }
+                }
+            },
+            "BAB IV. PENINGKATAN MUTU DAN KESELAMATAN PASIEN (PMKP)": {
+                "Standar PMKP 1: Pengelolaan Kegiatan Mutu": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Komite/Tim Mutu RS beserta uraian tugas, tanggung jawab, dan wewenangnya.",
+                        "D": "Dokumen kualifikasi (profil, sertifikat pelatihan PMKP) Ketua dan Anggota Komite Mutu RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "Pedoman PMKP tingkat Rumah Sakit dan Program Kerja Tahunan PMKP yang disahkan oleh Direktur.",
+                        "D": "Bukti pelaksanaan sosialisasi program PMKP ke seluruh unit kerja."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Undangan, daftar hadir, notulensi rapat koordinasi Komite Mutu dengan pimpinan unit, dan laporan monitoring program PMKP.",
+                        "W": "Wawancara Komite Mutu & Kepala Unit: Bagaimana pola komunikasi evaluasi mutu tiap bulan dilakukan antar unit?"
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Laporan triwulanan dan tahunan capaian indikator mutu, laporan insiden keselamatan pasien, yang ditandatangani Direktur dan bukti serah terima kepada Representasi Pemilik (Dewan Pengawas)."
+                    }
+                },
+                "Standar PMKP 2: Pemilihan Indikator Mutu RS": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Direktur tentang Penetapan Indikator Nasional Mutu (INM) di rumah sakit.",
+                        "D": "Kamus indikator (profil indikator) untuk setiap INM, dan bukti pengumpulan data INM.",
+                        "W": "Wawancara PIC Data Mutu: Meminta PIC menjelaskan cara pengambilan sampel/denominator untuk salah satu INM (misal: Kepatuhan Cuci Tangan)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SK Penetapan IMP-RS yang mencakup area klinis, sasaran keselamatan pasien, dan manajemen.",
+                        "D": "Kamus/profil indikator IMP-RS, dasar pemilihan IMP-RS (berdasarkan data insiden, temuan audit, atau komplain terbanyak)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SK/Dokumen penetapan IMP-Unit oleh masing-masing Kepala Unit yang disetujui Direktur/Komite Mutu.",
+                        "D": "Profil indikator IMP-Unit di masing-masing instalasi/unit kerja (misal IGD, Rajal, Farmasi, Gizi).",
+                        "W": "Wawancara Kepala Unit: Alasan dan justifikasi ilmiah pemilihan IMP di unitnya (misal: mengapa IGD memilih response time triase?)."
+                    }
+                },
+                "Standar PMKP 3: Pengumpulan, Analisis, dan Validasi Data": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pengumpulan dan Pelaporan Data Mutu.",
+                        "D": "Sertifikat atau bukti pelatihan/orientasi pengumpulan data mutu bagi PIC Unit (validator dan pengumpul data)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Bukti ketersediaan sistem teknologi informasi (misal SISMADAK, dashboard mutu RS elektronik) untuk pencatatan dan pelaporan INM serta IMP-RS.",
+                        "O": "Observasi IT: Meminta petugas memperlihatkan inputan data SISMADAK secara live ke dashboard Kementerian Kesehatan."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Laporan analisis data mutu menggunakan alat statistik dasar (run chart, bar chart, pareto chart) dan memuat tren capaian waktu ke waktu."
+                    },
+                    "Elemen Penilaian 4": {
+                        "R": "SPO Validasi Data Mutu Internal.",
+                        "D": "Formulir hasil validasi data yang menunjukkan tingkat akurasi (minimal 90% kesesuaian antara pengumpul data pertama dan validator)."
+                    }
+                },
+                "Standar PMKP 4: Pencapaian dan Upaya Perbaikan (PDSA)": {
+                    "Elemen Penilaian 1": {
+                        "D": "Dokumen rencana perbaikan berbasis siklus PDSA (Plan-Do-Study-Act) dari indikator yang capaiannya di bawah standar.",
+                        "W": "Wawancara Kepala Unit: Menanyakan siklus 'Plan' apa yang disusun jika target kepatuhan identifikasi pasien tidak mencapai 100%?"
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan hasil uji coba perbaikan (Do), analisis apakah perbaikan memberikan dampak positif terhadap capaian mutu (Study)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Bukti revisi SPO/Regulasi terkait sebagai hasil dari siklus perbaikan yang berhasil dipertahankan (Act)."
+                    }
+                },
+                "Standar PMKP 5: Evaluasi PPK dan Clinical Pathway (CP)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan 5 (lima) Clinical Pathway prioritas RS yang akan dievaluasi setiap tahun.",
+                        "D": "Dokumen PPK dan CP yang telah disahkan dan disosialisasikan."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Form audit klinis, rekapitulasi data kepatuhan CP, laporan hasil evaluasi kepatuhan CP (misal kelengkapan asuhan, LOS, dan penggunaan obat).",
+                        "W": "Wawancara Komite Medik & DPJP: Mengeksplorasi alasan mengapa angka kepatuhan pada pathway tertentu (misal Demam Berdarah) masih rendah, dan apa hambatannya."
+                    }
+                },
+                "Standar PMKP 6: Pelaporan IKP": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Keselamatan Pasien RS dan SPO Pelaporan Insiden Keselamatan Pasien.",
+                        "D": "Formulir pelaporan IKP (internal) dan ketersediaan alur pelaporan insiden 2x24 jam."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Buku register insiden / rekapitulasi IKP. Bukti pelaporan KTD/Sentinel secara online ke Komite Nasional Keselamatan Pasien (KNKP)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "W": "Wawancara Staf Acak: Minta staf memberikan contoh riil perbedaan antara KTD (Kejadian Tidak Diharapkan) dan KNC (Kejadian Nyaris Cedera) di ruangannya."
+                    }
+                },
+                "Standar PMKP 7: Investigasi IKP": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Analisis Akar Masalah / Root Cause Analysis (RCA).",
+                        "D": "Laporan tim RCA yang komprehensif (grading merah/kuning maks 45 hari), rekomendasi perbaikan sistem, dan bukti tindak lanjut (Action Plan).",
+                        "W": "Wawancara Tim KP: Mendiskusikan kendala dalam menggali 'Akar Masalah' pada kasus Sentinel Event terbaru."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Investigasi Sederhana IKP.",
+                        "D": "Laporan hasil investigasi sederhana (grading biru/hijau maks 1-2 minggu) yang dilakukan oleh Kepala Unit terkait, beserta tindak lanjut perbaikannya."
+                    }
+                },
+                "Standar PMKP 8: Budaya Keselamatan Pasien": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman pelaksanaan pengukuran budaya keselamatan (misalnya menggunakan metode survei AHRQ).",
+                        "D": "Kuesioner/Survei Budaya Keselamatan Pasien yang dibagikan ke staf."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan hasil analisis survei budaya keselamatan, pemetaan area dengan budaya keselamatan yang rendah (punitive culture), dan rencana perbaikannya.",
+                        "W": "Wawancara Direktur & Staf: Konfirmasi bahwa pimpinan RS tidak langsung memberikan sanksi pemecatan pada insiden murni human error (pendekatan Just Culture)."
+                    }
+                },
+                "Standar PMKP 9: Manajemen Risiko (Risk Register & FMEA)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Manajemen Risiko RS.",
+                        "D": "Bukti pelaksanaan pelatihan/workshop penyusunan risk register bagi Kepala Unit."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen Risk Register tingkat Unit (dibuat oleh Kepala Unit) dan Dokumen Profil Risiko tingkat Rumah Sakit (kompilasi unit + korporat).",
+                        "W": "Wawancara Kepala Unit: Minta penjelasan 3 peringkat risiko tertinggi di unitnya tahun ini dan mitigasi kontrol yang sudah berjalan."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Laporan pelaksanaan FMEA (Failure Mode and Effect Analysis) misal untuk alur peresepan obat, rekomendasi desain ulang sistem (redesign process), dan bukti uji coba hasil redesain."
+                    }
+                }
+            },
+            "BAB V. MANAJEMEN REKAM MEDIS DAN INFORMASI KESEHATAN (MRMIK)": {
+                "Standar MRMIK 1: Manajemen Informasi": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Manajemen Informasi RS, yang mencakup perencanaan, pengorganisasian, dan pengelolaan Sistem Informasi Manajemen RS (SIMRS) dan Rekam Medis Elektronik (RME).",
+                        "D": "Dokumen perencanaan kebutuhan informasi rumah sakit berdasarkan analisis kebutuhan dari PPA dan manajemen."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Daftar inventaris perangkat keras (server, komputer/PC, jaringan) dan perangkat lunak SIMRS/RME.",
+                        "O": "Observasi IT Hardware: Ketersediaan dan fungsi PC/Tablet di ruang perawatan (nurse station), poliklinik, dan IGD untuk akses rekam medis."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Bukti ketersediaan data secara real-time (contoh: dashboard jumlah bed kosong, laporan kunjungan pasien, hasil lab yang langsung masuk ke RME).",
+                        "W": "Wawancara Perawat/Admisi: Menanyakan stabilitas jaringan RME saat jam sibuk dan apakah hasil Lab bisa dilihat realtime."
+                    }
+                },
+                "Standar MRMIK 2: Privasi, Kerahasiaan, dan Keamanan Informasi": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/SPO tentang Privasi, Keamanan, dan Kerahasiaan Rekam Medis dan Informasi Pasien.",
+                        "D": "Surat Pernyataan Menjaga Kerahasiaan Data (Non-Disclosure Agreement / NDA) yang ditandatangani oleh seluruh staf (medis, perawat, rekam medis, IT)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Penetapan Hak Akses (User Privilege) SIMRS/RME.",
+                        "D": "Dokumen matriks hak akses pengguna (misal: perawat hanya bisa mengisi asesmen keperawatan, dokter bisa mengisi CPPT, kasir hanya melihat billing, dll).",
+                        "O": "Observasi SIMRS: Meninjau layar staf memastikan perawat tidak memiliki akses 'Delete' catatan medis orang lain."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Backup Data, Pemulihan Bencana (Disaster Recovery Plan / DRP), dan perlindungan anti-virus/firewall.",
+                        "D": "Log/bukti pelaksanaan backup data harian/mingguan ke server cadangan atau cloud yang aman, serta hasil uji coba DRP (pemulihan sistem jika server mati/terkena ransomware).",
+                        "O": "Observasi Ruang Server: Mengecek keamanan akses fisik (pintu biometrik/terkunci), suhu ruangan (AC presisi), dan backup daya (UPS)."
+                    }
+                },
+                "Standar MRMIK 3: Pengorganisasian Unit Rekam Medis": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pengorganisasian dan Pedoman Pelayanan Unit Rekam Medis.",
+                        "D": "SK Pembentukan Unit Rekam Medis beserta uraian tugas staf rekam medis."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "File kepegawaian Kepala Unit Rekam Medis yang berisi Ijazah (minimal D3 Rekam Medis dan Informasi Kesehatan), STR Perekam Medis (STR PMIK), dan SIP PMIK."
+                    }
+                },
+                "Standar MRMIK 4: Penyelenggaraan RM Pasien (Satu Nomor RM)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pemberian Nomor Rekam Medis (Unit Numbering System).",
+                        "D": "Bukti di sistem/SIMRS bahwa setiap identitas pasien hanya tertaut pada 1 (satu) nomor rekam medis.",
+                        "O": "Observasi Pendaftaran: Melihat langsung staf pendaftaran men-search nama/NIK pasien lama agar tidak terbuat Nomor RM baru (duplikasi)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Log distribusi/penyediaan rekam medis fisik atau ketersediaan akses RME secara real-time.",
+                        "W": "Wawancara Dokter Poliklinik: Apakah data riwayat pasien sebelumnya (historis) langsung tersedia saat pasien masuk ruang poli?"
+                    }
+                },
+                "Standar MRMIK 5: Standarisasi Singkatan dan Simbol": {
+                    "Elemen Penilaian 1": {
+                        "R": "Buku Pedoman Singkatan dan Simbol Rumah Sakit, termasuk Daftar Singkatan yang Dilarang (Do Not Use Abbreviations).",
+                        "D": "Bukti sosialisasi pedoman singkatan kepada seluruh PPA."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Hasil audit/review rekam medis terkait kepatuhan penulisan singkatan, dan ketiadaan penggunaan singkatan yang membahayakan (misalnya U untuk unit dilarang, harus ditulis 'unit').",
+                        "O": "Observasi CPPT: Mengecek tulisan tangan/teks RME DPJP apakah masih memakai singkatan dilarang (seperti IU, U, QD, MS)."
+                    }
+                },
+                "Standar MRMIK 6: Pengisian Rekam Medis oleh PPA": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan dan SPO tentang siapa saja yang berwenang mencatat di Rekam Medis (Dokter, Perawat, Bidan, Apoteker, Nutrisionis, dll).",
+                        "D": "Daftar spesimen tanda tangan dan inisial PPA (jika rekam medis manual), atau daftar user PPA di sistem RME."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Telaah/Audit rekam medis untuk memastikan kelengkapan penulisan tanggal, jam asuhan, dan kejelasan identitas PPA (cap nama/ttd, atau log digital pada RME).",
+                        "O": "Observasi RME: Memastikan sistem RME memberikan timestamp dan nama user secara otomatis pada setiap entri rekam medis yang diketik."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Koreksi Pencatatan Rekam Medis (Kertas maupun Elektronik).",
+                        "D": "Contoh pelaksanaan koreksi di RM Kertas (coret 1 garis, beri paraf, tulis perbaikan) atau Log Audit/Menu Koreksi pada RME yang melacak riwayat perubahan."
+                    }
+                },
+                "Standar MRMIK 7: Kelengkapan Isi Rekam Medis": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan tentang Standar Isi Rekam Medis untuk Rawat Jalan, Gawat Darurat, dan Rawat Inap.",
+                        "D": "Formulir/Template asesmen awal, Catatan Perkembangan Pasien Terintegrasi (CPPT), dan formulir Informed Consent yang telah diisi lengkap."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan Operasi, Laporan Anestesi, dan bukti pemberian obat (MAR - Medication Administration Record) yang terekam utuh di rekam medis pasien."
+                    }
+                },
+                "Standar MRMIK 8: Resume Medis (Ringkasan Pulang)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pembuatan Resume Medis (waktu penyelesaian maksimal 1x24 jam setelah pasien KRS/pulang).",
+                        "D": "Rekam medis pasien yang telah pulang memuat formulir Resume Medis yang sudah diisi lengkap dan ditandatangani DPJP."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Bukti tanda tangan pasien/keluarga sebagai tanda terima salinan resume medis (ringkasan pulang) di bagian administrasi/perawat."
+                    }
+                },
+                "Standar MRMIK 9: Kodifikasi dan Indeksing Penyakit": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan penggunaan ICD-10 untuk kodifikasi penyakit dan ICD-9-CM untuk tindakan medis.",
+                        "D": "Catatan kode ICD yang diselesaikan oleh PMIK (Perekam Medis) berdasarkan diagnosis kerja/akhir yang ditulis oleh DPJP di lembar resume."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Bukti audit koding BPJS atau audit internal koding rekam medis yang menunjukkan tidak ada upcoding atau downcoding akibat ketidaktepatan bacaan.",
+                        "W": "Wawancara Koder (PMIK): Langkah apa yang dilakukan koder jika DPJP menulis diagnosis yang terlalu ambigu atau tidak spesifik?"
+                    }
+                },
+                "Standar MRMIK 10: Retensi dan Pemusnahan RM": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/SPO Retensi dan Pemusnahan Rekam Medis (umumnya aktif minimal 5 tahun, inaktif 2 tahun).",
+                        "D": "Jadwal retensi arsip (JRA) rekam medis."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen Berita Acara Pemusnahan Rekam Medis yang ditandatangani Tim Pemusnah dan Direktur (untuk RM kertas yang melewati masa inaktif)."
+                    }
+                },
+                "Standar MRMIK 11: Review Mutu RM (KLPCM)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Pembentukan Panitia Rekam Medis dan Program Review Rekam Medis.",
+                        "D": "Dokumen instrumen review (Analisis Kuantitatif: kelengkapan pengisian, dan Analisis Kualitatif: konsistensi asuhan)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan hasil Analisis Kuantitatif Kelengkapan Rekam Medis (KLPCM) setiap bulan dan laporan Analisis Kualitatif setiap triwulan.",
+                        "W": "Wawancara Ketua Panitia RM: Apa komponen yang paling sering lupa diisi oleh PPA berdasarkan data audit KLPCM?"
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Bukti diseminasi/rapat penyampaian hasil telaah rekam medis ke Komite Medik/Perawat dan bukti tindak lanjut berupa peringatan atau peningkatan kepatuhan."
+                    }
+                },
+                "Standar MRMIK 12: Integrasi SIRS dan Pelaporan Eksternal": {
+                    "Elemen Penilaian 1": {
+                        "D": "Roadmap pengembangan SIMRS/RME.",
+                        "O": "Observasi Alur RME: Memeriksa integrasi modul rawat inap dengan farmasi (saat DPJP klik resep, apotek langsung menerima notifikasi tanpa resep kertas)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Tangkapan layar/bukti lapor pengisian data ke aplikasi SIRS Online (Sistem Informasi Rumah Sakit Kemenkes), INA-CBG/V-Claim BPJS, dan SISRUTE."
+                    }
+                }
+            },
+            "BAB VI. PENCEGAHAN DAN PENGENDALIAN INFEKSI (PPI)": {
+                "Standar PPI 1: Pengorganisasian PPI": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Komite/Tim PPI, dilengkapi dengan Pedoman Pengorganisasian dan Pedoman Pelayanan PPI.",
+                        "D": "Dokumen kualifikasi (ijazah, sertifikat pelatihan PPI Dasar/Lanjut) dari Ketua dan anggota Komite/Tim PPI."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SK Penetapan IPCN purna waktu (rasio umumnya 1 IPCN untuk setiap 100-150 tempat tidur).",
+                        "D": "File kepegawaian IPCN yang membuktikan telah mengikuti pelatihan IPCN komprehensif."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SK Penetapan IPCLN di unit-unit pelayanan berisiko (IGD, ICU, Rawat Inap, OK, Hemodialisa).",
+                        "D": "Uraian tugas dan bukti pelaksanaan tugas IPCLN (seperti laporan pengawasan kebersihan tangan di unit)."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Dokumen anggaran (RBA/RKA) yang mencantumkan alokasi dana untuk sarana PPI (wastafel, hand rub, APD, diklat PPI).",
+                        "W": "Wawancara Direktur & IPCN: Menggali bukti anggaran bahwa usulan perbaikan wastafel atau pembelian masker N95 oleh Tim PPI selalu didukung."
+                    }
+                },
+                "Standar PPI 2: Program PPI": {
+                    "Elemen Penilaian 1": {
+                        "R": "Program Kerja PPI tingkat RS yang disahkan oleh Direktur (mencakup kewaspadaan standar, surveilans, diklat, ICRA, dll).",
+                        "D": "Notulen rapat penyusunan program kerja PPI yang melibatkan berbagai multidisiplin (Komite Medik, Keperawatan, K3)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan Triwulan dan Tahunan pelaksanaan program PPI, termasuk capaian target dan rencana tindak lanjut perbaikan.",
+                        "W": "Wawancara IPCN: Tantangan terbesar apa yang dialami selama evaluasi program (misal: kepatuhan pemilahan limbah dokter spesialis masih rendah)."
+                    }
+                },
+                "Standar PPI 3: Surveilans HAIs": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman/SPO pelaksanaan Surveilans HAIs (meliputi VAP, IAD/CLABSI, ISK/CAUTI, IDO/SSI, Phlebitis).",
+                        "D": "Formulir pengumpulan data harian HAIs (formulir surveilans) yang diisi oleh IPCLN/IPCN."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan analisis data surveilans menggunakan grafik (tren angka infeksi tiap bulan) dan laporan benchmark/perbandingan angka infeksi.",
+                        "W": "Wawancara IPCN: Minta penjelasan jika grafik IDO/VAP bulan lalu mengalami spike (lonjakan), apa yang mereka lakukan?"
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Penanganan KLB/Outbreak infeksi di rumah sakit.",
+                        "D": "Laporan investigasi KLB infeksi (jika ada), langkah-langkah isolasi/pembatasan, dan evaluasi pasca-outbreak."
+                    }
+                },
+                "Standar PPI 4: Kewaspadaan Isolasi": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Kewaspadaan Isolasi (Kewaspadaan Standar: kebersihan tangan, APD, dekontaminasi alkes, dll. Kewaspadaan Transmisi: kontak, droplet, airborne)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Penempatan Pasien Infeksius (Kohorting atau Ruang Isolasi).",
+                        "O": "Observasi Penempatan Pasien: Mengecek kohorting pasien bed beda jenis infeksi di IGD. Jarak ranjang harus >1 meter.",
+                        "W": "Wawancara Perawat Ruang Isolasi: Bagaimana prosedur transfer pasien dengan TB Paru (Airborne) saat hendak di-Rontgen ke Radiologi?"
+                    }
+                },
+                "Standar PPI 5: Kebersihan Tangan (Hand Hygiene)": {
+                    "Elemen Penilaian 1": {
+                        "O": "Observasi Fasilitas Cuci Tangan: Wastafel berfungsi aliran airnya, sabun dispenser terisi, tisu pengering tangan ada, dan cairan hand rub tersedia di setiap titik bed pasien."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan hasil audit kepatuhan kebersihan tangan bulanan (minimal target ≥85%).",
+                        "O": "Observasi Diam-Diam: Mengawasi kepatuhan 5 Momen cuci tangan dokter/perawat saat merawat pasien di bangsal.",
+                        "S": "Simulasi Hand Hygiene: Meminta acak (contoh: sekuriti) memperagakan 6 langkah WHO dengan handrub yang benar (20-30 detik)."
+                    }
+                },
+                "Standar PPI 6: Alat Pelindung Diri (APD)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Penggunaan dan Pelepasan APD sesuai level/indikasi risiko transmisi.",
+                        "O": "Observasi Logistik APD: Memastikan boks masker, sarung tangan, gaun, dan goggle siap sedia di Nurse Station, IGD, ICU, dan OK."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan audit kepatuhan penggunaan APD dan bukti tindak lanjut jika kepatuhan rendah.",
+                        "O": "Observasi Kepatuhan: Melihat apakah perawat memakai sarung tangan bersih (bukan steril) saat pasang infus dan melepasnya usai tindakan tanpa menyentuh fasilitas lain."
+                    }
+                },
+                "Standar PPI 7: Dekontaminasi dan Sterilisasi Peralatan (CSSD)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pelayanan Unit CSSD (Central Sterile Supply Department) mulai dari pre-cleaning, cleaning, disinfeksi tingkat tinggi (DTT), hingga sterilisasi, penyimpanan, dan distribusi.",
+                        "O": "Observasi CSSD: Alur masuk barang kotor dan jalur keluar barang steril sama sekali tidak boleh memotong silang (cross traffic / one way traffic)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Logbook hasil uji indikator biologi, kimia (tape), dan fisik (suhu/tekanan mesin autoklaf). Laporan penarikan alat steril jika indikator menunjukkan kegagalan."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "Kebijakan/SPO Single-Use yang di Re-Use (batasan pemakaian ulang, syarat integritas alat, pencatatan rekam jejak alat).",
+                        "D": "Daftar alat single-use yang boleh dire-use beserta bukti pemantauan jumlah pakai (misalnya dialyzer pada Hemodialisa dicatat max 7 kali pakai)."
+                    }
+                },
+                "Standar PPI 8: Pengelolaan Linen": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pelayanan Instalasi Laundry / Pengelolaan Linen.",
+                        "O": "Observasi Ruang Laundry: Mesin cuci linen kotor (infeksius vs non-infeksius) terpisah, rak penyimpanan bersih tertutup rapat tidak lembab."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Pemisahan Linen (Kantong kuning untuk infeksius, kantong warna lain untuk non-infeksius).",
+                        "O": "Observasi Ruang Kotor (Spoolhoek): Memastikan perawat melempar linen terkena darah ke dalam kantong warna kuning, bukan hitam.",
+                        "W": "Wawancara Petugas Laundry: Bagaimana cara melipat dan mengambil linen agar debu linen tidak menyebar ke wajah?"
+                    }
+                },
+                "Standar PPI 9: Limbah Infeksius dan Benda Tajam": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pengelolaan Limbah Infeksius dan Benda Tajam.",
+                        "O": "Observasi Safety Box: Kotak kuning tempat benda tajam/jarum tidak boleh meluber. Harus diganti jika sudah 3/4 penuh. Jarum tidak ditekuk (no recapping)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Logbook penimbangan limbah infeksius harian dan Manifest elektronik pengangkutan limbah B3 oleh pihak ketiga.",
+                        "O": "Observasi TPS Limbah Medis: Mengunjungi gudang limbah B3 di luar gedung RS untuk memastikan freezer/area berpendingin aman dari lalat dan tikus."
+                    }
+                },
+                "Standar PPI 10: Pelayanan Makanan (Sanitasi Gizi)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pelayanan Gizi terkait sanitasi dan higienitas makanan.",
+                        "O": "Observasi Dapur Gizi: Inspeksi kulkas bahan makanan mentah (daging) harus di bawah, makanan matang/sayur di rak atas (mencegah tetesan). Penerapan prinsip FIFO/FEFO pada rak beras."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Sertifikat penjamah makanan, hasil pemeriksaan usap (swab) alat makan dan swab dubur/tangan petugas penjamah makanan.",
+                        "O": "Observasi Petugas Dapur: Tidak ada yang menggunakan perhiasan cincin/jam tangan, dan wajib memakai hairnet (celemek, masker) saat mengolah."
+                    }
+                },
+                "Standar PPI 11: Pengendalian Risiko Infeksi Konstruksi (ICRA Bangunan)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan penyusunan ICRA Pembangunan/Renovasi.",
+                        "D": "Dokumen ICRA Bangunan (matriks tipe proyek dan kelompok risiko pasien), yang ditandatangani Komite PPI, Manajemen Fasilitas, dan Direktur."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Checklist pemantauan mingguan oleh IPCN di area konstruksi.",
+                        "O": "Observasi Area Konstruksi/Renovasi: Plafon yang dibongkar harus dipartisi triplek rapat, lantai dipel lembab, dan pekerja wajib menggunakan sepatu khusus/jalur luar."
+                    }
+                },
+                "Standar PPI 12: Fasilitas Ruang Isolasi": {
+                    "Elemen Penilaian 1": {
+                        "D": "Logbook pemantauan tekanan udara ruangan isolasi negatif secara rutin.",
+                        "O": "Observasi Ruang Isolasi Airborne: Melihat indikator magnehelic gauge (jarum harus di sisi negatif) atau memakai metode serbuk asap (smoke test) yang tertarik masuk ke kolong pintu kamar."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Ruang Positif: Untuk RS dengan pasien imunosupresi, pastikan aliran AC Mendorong udara keluar dari kamar, bukan menyedot ke dalam kamar (mencegah masuknya spora jamur luar)."
+                    }
+                },
+                "Standar PPI 13: Edukasi dan Pelatihan PPI": {
+                    "Elemen Penilaian 1": {
+                        "D": "Materi pelatihan, daftar hadir, dan sertifikat inhouse training PPI (meliputi cuci tangan, APD, pembuangan limbah).",
+                        "W": "Wawancara Pekarya/Cleaning Service: Pertanyaan dasar tentang cairan desinfektan apa yang dipakai untuk mengepel bercak darah vs mengepel debu biasa."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Media Promosi: Pemasangan x-banner tata cara batuk (tutup mulut dengan lengan dalam) terpasang di ruang tunggu yang padat.",
+                        "W": "Wawancara Pengunjung Pasien: Apakah satpam atau perawat pernah menegur dan mengedukasi pengunjung agar mencuci tangan sebelum masuk kamar inap?"
+                    }
+                }
+            },
+            "BAB VII. PENDIDIKAN DALAM PELAYANAN KLINIS (PPK)": {
+                "Standar PPK 1: Kesepakatan sebagai RS Pendidikan": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan sebagai Rumah Sakit Pendidikan atau SK penyelenggaraan pendidikan klinis dari pimpinan/pemilik rumah sakit.",
+                        "D": "Sertifikat/SK Penetapan dari Kementerian Kesehatan sebagai RS Pendidikan / RS Jejaring Pendidikan."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen PKS yang masih berlaku antara RS dengan Universitas/Institusi Pendidikan, memuat kejelasan tanggung jawab hukum, perlindungan asuransi (jika ada), dan peran pembimbing klinis."
+                    }
+                },
+                "Standar PPK 2: Komite Koordinasi Pendidikan (Komkordik)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Komkordik atau Tim Pelaksana Pendidikan Klinis yang disahkan bersama oleh Direktur RS dan Pimpinan Institusi Pendidikan.",
+                        "D": "Dokumen pedoman pengorganisasian, uraian tugas, dan pedoman kerja Komkordik."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Program Kerja Tahunan pendidikan klinis di RS, termasuk rencana kapasitas penerimaan peserta didik dan jadwal rotasi stase."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Notulensi rapat evaluasi berkala Komkordik, bukti pelaporan permasalahan dan solusi ke Direktur RS dan Pimpinan Institusi Pendidikan.",
+                        "W": "Wawancara Ketua Komkordik: Bagaimana penyelesaian masalah jika ada konflik penjadwalan stase jaga malam mahasiswa?"
+                    }
+                },
+                "Standar PPK 3: Rasio Pendidik Klinis dan Peserta Didik": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan penetapan rasio pendidik klinis dan peserta didik untuk masing-masing program studi (misal: rasio 1 DPJP pembimbing untuk 5 dokter muda).",
+                        "D": "Dokumen analisis / kajian kapasitas rumah sakit untuk menampung peserta didik agar mutu asuhan pasien tidak terganggu."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Daftar hadir / data logbook peserta didik yang aktif di RS dan data ketersediaan pendidik klinis pada periode tersebut.",
+                        "O": "Observasi Ruang Tindakan: Pastikan ruangan dokter tidak sesak oleh terlalu banyak ko-ass saat memberikan penjelasan medis privasi ke pasien."
+                    }
+                },
+                "Standar PPK 4: Kualifikasi Pendidik Klinis": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Pendidik Klinis (Dosen Pendidik Klinis / Preseptor / Mentor) oleh Direktur RS.",
+                        "D": "File kepegawaian dan kredensial pendidik klinis yang membuktikan pendidik tersebut memiliki STR, SIP, SPK, dan RKK aktif dari RS terkait."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Sertifikat pelatihan sebagai pendidik klinis (seperti pelatihan clinical teacher, preceptor, mentor, ToT Pendidik Klinis, atau pelatihan Pekerti/AA).",
+                        "W": "Wawancara Dosen/Preceptor Klinis: Minta jelaskan teknik 'Bedside Teaching' yang ideal di era akreditasi (tanpa mendiskreditkan pasien)."
+                    }
+                },
+                "Standar PPK 5: Mutu, Keselamatan Pasien, dan Supervisi Klinis": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan tentang Tingkatan Supervisi Peserta Didik (misalnya: peserta didik co-ass disupervisi ketat secara langsung, sedangkan residen tahap akhir bisa disupervisi secara moderat/rendah di bawah tanggung jawab akhir DPJP).",
+                        "D": "Buku panduan pendidikan / logbook peserta didik yang memuat batas kewenangan penanganan pasien dan tindakan sesuai level kompetensinya."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Catatan Perkembangan Pasien Terintegrasi (CPPT) di rekam medis yang ditulis oleh peserta didik harus di-countersign (ditandatangani atau diverifikasi) oleh DPJP / Pendidik Klinis pembimbingnya.",
+                        "O": "Observasi Visite Bersama: Mengamati langsung apakah DPJP mengecek kembali stetoskop/palpasi setelah mahasiswa memeriksa.",
+                        "W": "Wawancara Peserta Didik (Co-ass): Apa batas wewenang menulis resep obat High-Alert bagi seorang mahasiswa?"
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Bukti pelaksanaan orientasi khusus peserta didik (daftar hadir, materi PMKP, SKP 1-6, PPI, K3RS) dan bukti evaluasi pasca-orientasi.",
+                        "W": "Wawancara Residen/Mahasiswa: Menanyakan langkah spesifik (Algoritma) bila mereka menemukan kesalahan obat yang akan diberikan (Medication Error)."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Formulir persetujuan umum (General Consent) yang ditandatangani pasien/keluarga, yang di dalamnya mencantumkan klausul kesediaan berpartisipasi dalam pendidikan klinis.",
+                        "W": "Wawancara Pasien RS Pendidikan: Memastikan pasien tahu mereka berhak dilayani langsung oleh dokter spesialis jika mereka menolak diperiksa oleh dokter muda."
+                    }
+                },
+                "Standar PPK 6: Evaluasi Program Pendidikan Klinis": {
+                    "Elemen Penilaian 1": {
+                        "D": "Laporan hasil pemantauan dan evaluasi program pendidikan klinis (meliputi pencapaian target kurikulum stase, kepuasan peserta didik, kepuasan pasien, dan komplain terkait pelayanan pendidikan klinis).",
+                        "W": "Wawancara Pimpinan Institusi (Fakultas): Meminta penjelasan bentuk penyesuaian kurikulum stase berdasarkan umpan balik evaluasi rumah sakit."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "Pedoman Penanganan Pelanggaran Disiplin dan Etik bagi Peserta Didik Klinis.",
+                        "D": "Dokumen rekapitulasi/laporan penanganan masalah peserta didik, bukti pembinaan, surat peringatan, atau pengembalian ke institusi pendidikan asal (jika terjadi pelanggaran berat)."
                     }
                 }
             }
+        },
+        "B. Kelompok Pelayanan Berfokus Pada Pasien": {
+            "BAB VIII. AKSES DAN KESINAMBUNGAN PELAYANAN (AKP)": {
+                "Standar AKP 1: Skrining Pasien": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/Pedoman Skrining Pasien (visual, medis, triase, prioritas) yang bertujuan menentukan apakah kebutuhan pasien sesuai dengan misi dan sumber daya RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen rekam medis yang menunjukkan hasil skrining pada kontak pertama (contoh: form skrining visual di pendaftaran, skrining via telepon, atau form rujukan).",
+                        "W": "Wawancara Security/Petugas Pintu Depan: Memeragakan pengamatan 'Skrining Visual' (batuk parah, jalan sempoyongan, pucat) untuk mengarahkan pasien."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Hasil pemeriksaan laboratorium/radiologi yang dijadikan dasar untuk menentukan pasien dirawat inap, masuk ICU, atau dirujuk."
+                    }
+                },
+                "Standar AKP 1.1: Triase Gawat Darurat": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Triase yang mengacu pada literatur medis berbasis bukti (contoh: Australian Triage Scale atau Emergency Severity Index).",
+                        "D": "Formulir Triase dalam rekam medis yang terisi lengkap memuat kategori kedaruratan (kuning, merah, hijau, hitam) dan waktu tanggap (response time).",
+                        "O": "Observasi IGD: Simulasi visual alur masuk pasien, melihat kecepatan perawat menemui pasien maksimal 5 menit di titik triase depan."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Sertifikat pelatihan Triase, PPGD, ALS/ACLS, atau BTCLS bagi perawat dan dokter IGD."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Rekam medis yang menunjukkan pasien dengan triase merah (kritis) ditangani lebih dulu (response time nol menit) tanpa mengutamakan penyelesaian administrasi keuangan terlebih dahulu.",
+                        "O": "Observasi Alur IGD: Memastikan pintu akses dari lobi ambulans langsung lurus tanpa halangan menuju bilik Resusitasi (garis merah)."
+                    }
+                },
+                "Standar AKP 1.2: Skrining Kebutuhan Asuhan & Penundaan": {
+                    "Elemen Penilaian 1": {
+                        "D": "Bukti pelaksanaan skrining kebutuhan pasien di rekam medis, dilakukan oleh medis dan keperawatan sebelum admisi rawat inap."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Catatan di rekam medis atau form penundaan pelayanan yang mencakup alasan penundaan dan alternatif yang diberikan kepada pasien.",
+                        "W": "Wawancara Pasien Poli/IGD: Menanyakan apakah dokter dan perawat minta maaf/memberikan info valid saat pelayanan terpaksa molor lebih dari 1 jam."
+                    }
+                },
+                "Standar AKP 2: Admisi dan Pendaftaran": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pelayanan Pendaftaran / Admisi Pasien."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Loket Admisi: Mesin antrean elektronik berfungsi, terdapat pembatas fisik privasi, dan alur kursi tunggu tidak berdesakan.",
+                        "W": "Wawancara Petugas Pendaftaran: Bagaimana Anda menjelaskan ke keluarga bila ruang ICU penuh 100% dan pasien harus di-waiting list?"
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Formulir pemberian informasi admisi (termasuk perkiraan biaya/General Consent) yang ditandatangani pasien/keluarga.",
+                        "W": "Wawancara Pasien Inap Baru: Konfirmasi apakah mereka menerima selembar tata tertib jam besuk dan aturan menginap di RS."
+                    }
+                },
+                "Standar AKP 2.1: Manajemen Alur Pasien (Patient Flow)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan Manajemen Alur Pasien (Bed Management / Patient Flow Management).",
+                        "D": "Sistem informasi bed (Dashboard Ketersediaan Tempat Tidur) yang diupdate secara real-time."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan evaluasi alur pasien, analisis bottleneck (misal: lamanya pasien tertahan di IGD karena menunggu bed rawat inap siap atau menunggu hasil swab), dan tindak lanjut perbaikannya.",
+                        "W": "Wawancara Case Manager (MPP) IGD: Apa langkah yang diambil bila di IGD terdapat 10 pasien tertahan > 6 jam karena antrean kamar rawat?"
+                    }
+                },
+                "Standar AKP 3: Manajer Pelayanan Pasien (MPP) / Case Manager": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan MPP / Case Manager beserta pedoman pelaksanaannya.",
+                        "D": "File kualifikasi MPP (umumnya dokter umum atau perawat senior yang telah pelatihan MPP)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Formulir skrining MPP (Form A) dan Form Evaluasi MPP (Form B) yang terdokumentasi di dalam rekam medis."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Bukti CPPT di mana DPJP membaca, memverifikasi (countersign), dan menyetujui rencana asuhan dari PPA lain (perawat, ahli gizi, apoteker).",
+                        "W": "Wawancara DPJP: Meminta DPJP menjelaskan perannya sebagai 'Clinical Leader' yang mensinergikan resep obat dan terapi gizi dari kolega PPA lain."
+                    }
+                },
+                "Standar AKP 4: Transfer Pasien Internal": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Transfer Pasien Internal (misal dari IGD ke ICU, Ruang Rawat ke OK)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "Pedoman pendampingan pasien berdasar derajat kondisi (Derajat 0, 1, 2, 3). Misal, Derajat 3 (kritis) harus didampingi dokter spesialis/dokter terlatih ALS.",
+                        "D": "Formulir transfer internal di rekam medis yang menyebutkan nama petugas pendamping dan alat yang dibawa saat transfer (misal bag valve mask/monitor)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Dokumen/Form Serah Terima (Handover) menggunakan metode SBAR tertulis di rekam medis.",
+                        "O": "Observasi Transportasi Pasien: Mengamati perpindahan fisik pasien dari brankar ICU ke tempat tidur ruang rawat inap reguler, memastikan komunikasi serah terima jalan terus."
+                    }
+                },
+                "Standar AKP 5: Pemulangan (Discharge Plan) dan Cuti": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/SPO Pemulangan Pasien dan Cuti Perawatan (Leave of Absence)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Formulir asesmen awal yang memuat kriteria discharge planning (identifikasi pasien yang butuh edukasi khusus, butuh kursi roda, atau home care perawat luka di rumah)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Bukti dokumentasi pemberian edukasi kepulangan (obat bawa pulang, diet makanan, jadwal kontrol ke poli) ditandatangani di rekam medis."
+                    }
+                },
+                "Standar AKP 5.1: Resume Medis (Ringkasan Pulang)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Penulisan Resume Medis oleh DPJP.",
+                        "D": "Resume Medis yang diisi lengkap memuat diagnosis akhir, indikasi rawat, prosedur/tindakan, obat saat pulang, dan instruksi tindak lanjut (jangan ada kolom yang dikosongkan/blank)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Bukti penyerahan salinan cetak/digital resume medis dengan tanda tangan terima dari pasien/keluarga."
+                    }
+                },
+                "Standar AKP 5.2: Pasien Pulang Atas Permintaan Sendiri (APS)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pasien Pulang Atas Permintaan Sendiri (APS/AMA - Against Medical Advice)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Formulir Penolakan Tindakan / Pulang APS yang ditandatangani pasien/keluarga, dokter, dan saksi, yang dengan jelas memuat klausa bahwa pasien menanggung penuh risiko perburukan penyakit atau kematian."
+                    }
+                },
+                "Standar AKP 5.3: Pasien Melarikan Diri": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Penanganan Pasien Melarikan Diri."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan insiden keamanan, laporan ke kepolisian/satpam (bila pasien psikiatri atau penyakit menular membahayakan publik), dan pencatatan absensi mendadak di rekam medis."
+                    }
+                },
+                "Standar AKP 5.4: Rujukan Keluar RS": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Rujukan Pasien keluar fasilitas."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Catatan kondisi klinis pra-rujukan dan lembar observasi selama di ambulans yang menunjukkan upaya stabilisasi telah dilakukan (misal pemasangan jalan napas paten, resusitasi cairan shock)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Buku register rujukan atau catatan komunikasi (misal via aplikasi SISRUTE/telepon/WA resmi RS) yang membuktikan nama RS rujukan, nama penerima, dan jam konfirmasi persetujuan bed siap sebelum pasien jalan."
+                    }
+                },
+                "Standar AKP 5.5: Proses Rujukan": {
+                    "Elemen Penilaian 1": {
+                        "D": "Surat tugas perawat/dokter pendamping ambulans beserta salinan bukti sertifikasi kompetensi gawat darurat (BTCLS/ACLS) yang dimiliki."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Formulir Rujukan Keluar yang lengkap dan salinan hasil pemeriksaan penunjang (lab/radiologi/CD hasil CT-Scan) yang disertakan/dipegang perawat saat transport."
+                    }
+                },
+                "Standar AKP 6: Transportasi Ambulans": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pengelolaan dan Pemeliharaan Ambulans (termasuk klausa kontrak kerja sama pihak ketiga bila menyewa ambulans vendor)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Ceklis harian kelengkapan obat emergensi, oksigen central ambulans, dan baterai alat bantu napas di dalam ambulans.",
+                        "O": "Observasi Ambulans: Inspeksi interior ruang belakang ambulans untuk memastikan kelengkapan AED/Monitor, suction portabel, klem stretcher, dan lampu cukup."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Dekontaminasi Ambulans pasca transfer pasien (khususnya pasien berdarah/infeksius).",
+                        "D": "Logbook pembersihan/penyemprotan disinfektan ambulans oleh petugas sopir/cleaning service khusus."
+                    }
+                }
+            },
+            "BAB IX. HAK PASIEN DAN KELUARGA (HPK)": {
+                "Standar HPK 1: Hak dan Kewajiban Pasien": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/Pedoman tentang pemenuhan Hak dan Kewajiban Pasien berdasarkan Undang-Undang Rumah Sakit/Kesehatan (minimal 18 hak pasien).",
+                        "D": "Dokumen bukti sosialisasi regulasi hak dan kewajiban kepada seluruh staf medis dan non-medis."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Area Publik: Ketersediaan media informasi hak dan kewajiban pasien berupa standing banner besar, poster terang, atau display TV di lobi utama, IGD, dan ruang tunggu poliklinik."
+                    },
+                    "Elemen Penilaian 3": {
+                        "W": "Wawancara Perawat & Dokter: Memberikan simulasi 'Jika ada pasien menolak disuntik antibiotik walau lukanya infeksi berat, apa hak pasien yang Anda hormati dan apa kewajiban Anda?'"
+                    }
+                },
+                "Standar HPK 1.1: Kebutuhan Spiritual": {
+                    "Elemen Penilaian 1": {
+                        "D": "Formulir asesmen awal keperawatan atau pendaftaran yang memuat isian kolom agama, kepercayaan, dan kebutuhan khusus pantangan terkait nilai spiritual.",
+                        "W": "Wawancara Perawat Ruangan: Meminta perawat menjelaskan prosedur fasilitasi jika pasien beragama minoritas ingin dipanggilkan pemuka agama."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Fasilitasi Kebutuhan Rohani/Spiritual Pasien.",
+                        "D": "Daftar kontak rohaniwan (dari 6 agama yang diakui) yang bekerja sama dengan RS (MOU), dan bukti formulir permintaan bimbingan rohani di rekam medis."
+                    }
+                },
+                "Standar HPK 1.2: Hak Atas Privasi": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Perlindungan Privasi Pasien (saat wawancara klinis, pemeriksaan fisik, tindakan, dan transportasi)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Tindakan Perawat: Mengamati apakah perawat langsung menutup gorden (sampai ujung) saat mau mengganti infus/memeriksa luka, dan menutup pintu ruangan.",
+                        "W": "Wawancara Pasien: Menanyakan apakah saat dokter visite melakukan anamnesis penyakit sensitif, suaranya dijaga agar tak didengar bed sebelah."
+                    }
+                },
+                "Standar HPK 1.3: Perlindungan Harta Benda": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Penyimpanan dan Perlindungan Barang Milik Pasien (terutama pasien tidak sadar akibat laka lantas, lansia tanpa keluarga, atau pasien bius masuk OK)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Buku register penitipan barang berharga (jam, cincin, dompet), form serah terima barang bermaterai/tanda tangan 2 saksi antara perawat/security dan keluarga pasien.",
+                        "O": "Observasi Nurse Station/Security: Memastikan adanya brankas atau loker besi tertanam yang kuncinya dipegang khusus oleh karu/satpam."
+                    }
+                },
+                "Standar HPK 1.4: Perlindungan Fisik dan Kelompok Rentan": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Perlindungan Pasien dari Kekerasan Fisik (fisik verbal, pelecehan) dan SPO Pembatasan Pengunjung."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Visitor Management: Mengecek sistem penukaran KTP dengan kartu kalung Visitor saat jam luar besuk. Mengecek teguran security bila ada pengunjung bergerombol di selasar.",
+                        "W": "Wawancara Security: Skenario bila ada mantan suami/istri pasien yang datang menerobos masuk saat pasien minta dilarang dijenguk."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Perlindungan Kelompok Berisiko (termasuk SPO pencegahan penculikan bayi / Code Pink).",
+                        "D": "Bukti pemasangan gelang identitas bayi (pink/biru ganda di kaki & tangan) disandingkan dengan identitas ibu, atau label khusus untuk pasien psikiatri rawan lari."
+                    }
+                },
+                "Standar HPK 2: Second Opinion & Edukasi Asuhan": {
+                    "Elemen Penilaian 1": {
+                        "D": "Catatan edukasi terintegrasi di rekam medis (ditandatangani pasien) yang menunjukkan DPJP telah menjelaskan kondisi pasien, diagnosis, rencana terapi dan hasil pengobatan KTD.",
+                        "W": "Wawancara Pasien: Bertanya ke pasien 'Bapak dirawat sakit apa? Dan tadi dokter bilang rencana operasinya hari apa?' untuk cek efektivitas komunikasi."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Pemberian Hak Second Opinion.",
+                        "D": "Formulir persetujuan peminjaman data/rontgen untuk *second opinion* yang ditandatangani pasien/keluarga (jika pasien minta dirujuk ke faskes lain).",
+                        "W": "Wawancara Perawat/DPJP: Menguji apakah RS mendukung, atau justru mempersulit, jika pasien ragu pada vonis dokter dan minta didatangkan konsulen spesialis kedua."
+                    }
+                },
+                "Standar HPK 2.1: Manajemen Nyeri": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman/SPO Manajemen Nyeri (pengaturan skala penggunaan: VAS/NRS untuk dewasa sadar, Wong-Baker FACES untuk anak, FLACC untuk bayi, CPOT untuk ICU)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumentasi di rekam medis (CPPT atau Form Asesmen) yang menunjukkan asesmen derajat nyeri awal (skor 0-10), intervensi yang diberikan, dan skor evaluasi ulang jam berikutnya."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Lembar checklist edukasi nyeri di rekam medis (mengajarkan metode relaksasi napas dalam, distraksi musik, posisi tidur).",
+                        "W": "Wawancara Pasien Pasca Operasi: 'Bapak diajarkan cara mengurangi nyeri kalau obatnya habis dari jarum infus?'"
+                    }
+                },
+                "Standar HPK 2.2: Asuhan Tahap Terminal (Paliatif)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman/SPO Asuhan Pasien Tahap Terminal (End of Life Care) yang mengutamakan Quality of Life bebas nyeri di akhir hayat."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Asesmen khusus pasien terminal di rekam medis yang mencakup penilaian tanda vital, manajemen sesak napas (dyspnea), mual muntah (cachexia), dan pelibatan duka cita keluarga.",
+                        "W": "Wawancara Perawat ICU: Cara memfasilitasi keluarga yang ingin membacakan doa/Yasinan/Sakramen khusus di samping ranjang pasien koma tanpa mengganggu pasien ICU lain."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Penetapan Do Not Resuscitate (DNR) penghentian dukungan hidup.",
+                        "D": "Formulir penolakan resusitasi (DNR) berwarna khusus/stiker ungu yang telah ditandatangani 100% lengkap oleh keluarga sah dan DPJP (dua dokter)."
+                    }
+                },
+                "Standar HPK 3: Komplain dan Konflik": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Penanganan Komplain dan Konflik Pasien, termasuk manajemen litigasi bila terjadi komplain masuk koran/sosmed."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Pojok Pengaduan: Kotak kepuasan pelanggan, nomor hotline SMS/WA di tembok kasir, barcode scan form Google keluhan.",
+                        "D": "Tersedianya brosur khusus alur komplain di admission."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Buku register komplain/pengaduan, bukti penyelesaian komplain (notulensi mediasi, bukti transfer refund/diskon, surat balasan/tanggapan tertulis), dan laporan kompilasi bulanan ke Direktur.",
+                        "W": "Wawancara Customer Service / Humas: Apa batasan waktu Service Level Agreement (SLA) untuk keluhan pelayanan perawat kasar vs dugaan malpraktik obat?"
+                    }
+                },
+                "Standar HPK 4: Persetujuan Umum (General Consent)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pemberian Informasi dan Permintaan Persetujuan Umum (General Consent) di pintu masuk rumah sakit (Rawat Jalan/IGD/Rawat Inap)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Formulir *General Consent* dalam rekam medis yang diisi tidak kosong. Di dalamnya ada pasal tentang setuju dirawat, batas privasi (izin sebut nama pasien atau tidak di ruang tunggu), kewajiban bayar BPJS/Tunai, & pelibatan mahasiswa kedokteran."
+                    },
+                    "Elemen Penilaian 3": {
+                        "W": "Wawancara Petugas Pendaftaran: Simulasi saat meminta General Consent. Apakah petugas hanya bilang 'Tanda tangan di sini ya Bu', atau menjelaskan poin-poin krusial dalam form?"
+                    }
+                },
+                "Standar HPK 4.1: Informed Consent Medis (Persetujuan Tindakan)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Persetujuan Tindakan Kedokteran (Informed Consent). SK Direktur yang menetapkan 10-20 daftar Tindakan Invasif/Beresiko Tinggi (contoh: cabut gigi, pasang NGT, kateter Vena Sentral) yang Wajib IC tertulis."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Formulir Informed Consent di rekam medis yang memuat kolom Diagnosis, Tujuan, Alternatif, Risiko (kematian, perdarahan), Prognosis. Semua dicentang/ditulis oleh DPJP. Ditandatangani DPJP (pemberi), Wali (penerima), Perawat (Saksi).",
+                        "W": "Wawancara Dokter Bedah: Minta penjelasan proses perizinan operasi ke keluarga jika pasien di IGD dalam kondisi koma darurat dan tak ada wali sama sekali (Life Saving clause)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Pembuktian bahwa 3 prosedur berikut TIDAK digabung dalam 1 kertas: Persetujuan Operasi Bedah, Persetujuan Bius Anestesi, dan Persetujuan Transfusi Darah (3 form IC harus terpisah)."
+                    }
+                }
+            },
+            "BAB X. PENGKAJIAN PASIEN (PP)": {
+                "Standar PP 1: Pengkajian Awal": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/Pedoman Pengkajian Pasien (Asesmen Awal Pasien), yang mengatur isi minimal form asesmen, waktu SLA penyelesaian, dan kewenangan profesi."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Telaah rekam medis pasien rawat inap untuk melihat kolom tanggal & jam. Form Asesmen Awal Keperawatan & Asesmen Awal Medis harus sudah ditandatangani penuh < 24 jam setelah jam pasien di-admit masuk bangsal.",
+                        "W": "Wawancara DPJP/PPJA: Apa kendala utama penyelesaian asesmen dokter dalam 24 jam pertama hari libur?"
+                    }
+                },
+                "Standar PP 1.1: Isi Pengkajian": {
+                    "Elemen Penilaian 1": {
+                        "D": "Ceklis audit form asesmen awal di rekam medis: Kelengkapan kolom bio-psiko-sosial, keluhan utama, tanda vital lengkap, dan riwayat kesehatan keluarga."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Kolom riwayat alergi di form rekam medis tercetak tebal. Jika pasien menjawab 'Ada', jenis alergi (misal: Penisilin) ditulis.",
+                        "O": "Observasi Pasien: Jika di rekam medis tertulis alergi udang/amoxicillin, pasien harus sedang memakai Gelang Alergi (merah) di tangan yang sama dengan gelang pink/birunya."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Kolom skrining nyeri terisi dengan skala angka (0-10) atau gambar wajah. Lokasi nyeri disilang pada gambar anatomi tubuh manusia di form asesmen."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Kolom Asesmen Risiko Jatuh (Morse Scale untuk >18 tahun, Humpty Dumpty <18 tahun) terisi total skornya, lalu dikategorikan Risiko Rendah/Sedang/Tinggi."
+                    }
+                },
+                "Standar PP 1.2: Skrining Gizi dan Fungsional": {
+                    "Elemen Penilaian 1": {
+                        "D": "Formulir skrining gizi dasar (misal: MST - Malnutrition Screening Tool) terisi oleh perawat. Pertanyaan: apakah BB turun tanpa sengaja? Apakah nafsu makan menurun?"
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Asesmen Lanjutan Gizi (NCP - Nutrition Care Process format ADIME) oleh Dietisien bagi pasien dengan skor skrining gizi (MST > 2) atau diagnosis diabetes berat."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Skrining status aktivitas mandiri (Indeks Barthel). Jika pasien lumpuh (total care), ada bukti rujukan konsul ke dokter spesialis KFR / unit rehabilitasi medik."
+                    }
+                },
+                "Standar PP 1.3: Pengkajian Populasi Khusus": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Asesmen Khusus Pasien Populasi Rentan (Anak, Geriatri, Jiwa, Kebidanan, Ketergantungan Obat, Korban KDRT)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Pengecekan rekam medis pada kasus tertentu: Formulir Partograf untuk ibu inpartu normal, Formulir Skor Depresi/Mini Mental State untuk pasien psikiatri/geriatri."
+                    }
+                },
+                "Standar PP 2: Pengkajian Ulang (CPPT)": {
+                    "Elemen Penilaian 1": {
+                        "D": "Kepatuhan pengisian Catatan Perkembangan Pasien Terintegrasi (CPPT). DPJP menulis pengkajian S-O-A-P beserta instruksi obat minimal 1x setiap harinya."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Perawat menulis pengkajian ulang (S-O-A-P) minimal 1x per shift dinas (Pagi, Sore, Malam), mengevaluasi demam atau status selang infus pasien."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Apoteker (farmasi klinis) dan Dietisien ikut menyumbang entri S-O-A-P di kertas/halaman sistem CPPT yang SAMA (tidak dipisah bukunya) agar terintegrasi."
+                    }
+                },
+                "Standar PP 3: Pelayanan Laboratorium": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pengorganisasian dan Pedoman Pelayanan Instalasi Laboratorium."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SK Pengangkatan Kepala Instalasi Laboratorium (Dokter Spesialis Patologi Klinik/Sp.PK).",
+                        "D": "Kualifikasi SIP Sp.PK aktif dan jadwal piket shift analis lab 24 jam nonstop."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SK Penetapan Turn Around Time (Waktu Tunggu TAT) Lab untuk cito (contoh <1 jam) dan rutin (contoh <2 jam).",
+                        "D": "Dashboard capaian/persentase keterlambatan hasil laboratorium setiap bulan."
+                    }
+                },
+                "Standar PP 3.1: Pelaporan Nilai Kritis Laboratorium": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Daftar Rentang Nilai Kritis Laboratorium (misal Kalium < 2.5 atau Trombosit < 20.000) dan SPO Pelaporan Hasil Kritis."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Buku Ekspedisi/Register Telepon Nilai Kritis di Lab. Dan bukti cap/tulisan 'Dilaporkan jam XX via telepon, TBaK lengkap' di form CPPT perawat ruangan.",
+                        "W": "Wawancara Analis Lab & Perawat: Praktekkan simulasi telepon melaporkan Hemoglobin 4 g/dL menggunakan format TBaK."
+                    }
+                },
+                "Standar PP 3.2: Reagensia Laboratorium": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pengadaan, Penerimaan, Penyimpanan, dan Pemantauan Stok Reagen Lab."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Kulkas Reagen: Suhu chiller dipantau dengan termometer air raksa/digital bersertifikat (2-8 derajat celcius). Botol reagen dilabeli 'Tgl Buka: ... BUD: ...'.",
+                        "D": "Logbook kontrol suhu harian kulkas (Pagi, Siang, Sore) tidak boleh ada celah bolong."
+                    }
+                },
+                "Standar PP 3.3: Kendali Mutu Laboratorium (PMI/PME)": {
+                    "Elemen Penilaian 1": {
+                        "D": "Dokumen hasil Quality Control (QC) Internal mesin hematologi/kimia darah harian yang digambar ke dalam Grafik Levey-Jennings.",
+                        "O": "Observasi Lab: Memastikan tidak ada sampel pasien yang dikerjakan jika mesin mengeluarkan nilai kontrol 'Out of Range' pada pagi hari sebelum QC divalidasi."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Sertifikat Pemantapan Mutu Eksternal (PME) tingkat nasional/internasional (misal Kemenkes RI/PDS PatKLIn) yang nilainya di atas ambang lulus."
+                    }
+                },
+                "Standar PP 4: Pelayanan Radiologi Klinik": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pengorganisasian dan Pedoman Pelayanan Instalasi Radiologi (meliputi Rontgen, USG, CT Scan)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "SK Kepala Radiologi (Dokter Spesialis Radiologi), kelengkapan SIP/STR Radiografer, dan jadwal standby 24 jam shift radiologi IGD."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SK Penetapan Waktu Tunggu Hasil Radiologi (TAT) & Daftar Hasil Kritis Pencitraan (misal Tension Pneumothorax di Foto Thorax).",
+                        "D": "Logbook bukti pelaporan lisan cito nilai kritis foto rontgen radiologi kepada IGD."
+                    }
+                },
+                "Standar PP 4.1: Proteksi Keselamatan Radiasi": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Keselamatan dan Proteksi Radiasi RS. SK Direktur atas Penunjukan Petugas Proteksi Radiasi (PPR) Medik dengan lisensi BAPETEN aktif."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Fasilitas Rontgen: Ada lampu peringatan 'Awas Sinar X' merah di atas pintu nyala saat menembak. Ketersediaan Apron timbal di gantung rapi tanpa dilipat.",
+                        "D": "Hasil uji fluoroskopi mendeteksi retakan/kebocoran pada struktur Apron timbal (Leak Test tahunan)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Kartu hasil pemantauan dosis paparan radiasi personal staf radiografer dengan dosimeter (TLD badge) yang dievaluasi tiap 3 bulan oleh BPFK/instansi berwenang."
+                    }
+                },
+                "Standar PP 4.2: Kendali Mutu Peralatan Radiologi": {
+                    "Elemen Penilaian 1": {
+                        "D": "Sertifikat Izin Pemanfaatan Tenaga Nuklir (BAPETEN) dan Sertifikat Uji Kesesuaian (Uji Fungsi) Pesawat Sinar-X oleh BPFK yang semuanya belum mati masa berlakunya."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Buku reject analysis log (analisis penolakan/pengulangan foto rontgen) yang direkapitulasi per bulan. Mengkaji mengapa gambar kabur/under-exposed."
+                    }
+                },
+                "Standar PP 5: Pelayanan Darah (BDRS)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pelayanan Unit Transfusi Darah (BDRS) di Rumah Sakit, termasuk rantai dingin darah (Cold Chain)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "SK Penanggung Jawab Bank Darah (bisa Sp.PK atau dokter terlatih) dan STR/SIP petugas teknisi transfusi darah (PTTD)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Uji Silang Serasi (Crossmatch), Penerimaan Darah dari PMI, dan Retur Darah Sisa.",
+                        "O": "Observasi Kulkas Darah: Harus menggunakan Blood Bank Refrigerator bersuhu stabil (2-6 derajat celcius) dengan sensor alarm jika suhu anjlok."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Setiap rekam medis pasien yang menerima kantong darah/PRC harus memiliki Formulir Informed Consent Transfusi Darah lengkap bertanda tangan DPJP dan pasien."
+                    },
+                    "Elemen Penilaian 5": {
+                        "D": "Lembar khusus 'Pemantauan Reaksi Transfusi Darah' di RM pasien, yang wajib diisi data tekanan darah & suhu pada 15 menit pertama tetesan darah mulai masuk tubuh."
+                    }
+                }
+            },
+            "BAB XI. PELAYANAN DAN ASUHAN PASIEN (PAP)": {
+                "Standar PAP 1: Pelayanan Asuhan Seragam": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan Pelayanan dan Asuhan Pasien yang menegaskan larangan perbedaan tingkat kualitas dan akses asuhan untuk pasien kelas 3 BPJS dengan kelas VIP Tunai (Asuhan Seragam)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Telaah rekam medis di bangsal berbeda. Kualitas kelengkapan asesmen asuhan antara Pasien VIP (Paviliun) dan Pasien Bangsal Massal harus sama komprehensifnya.",
+                        "W": "Wawancara Perawat Ruangan: Apakah jadwal pemeriksaan dokter umum/spesialis di kelas 3 BPJS dilakukan sama frekuensinya dengan pasien kelas VVIP?"
+                    }
+                },
+                "Standar PAP 1.1: Asuhan Terintegrasi PPA": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Asuhan Pasien Terintegrasi dengan filosofi Patient Centered Care (PCC). Pasien bukan hanya objek instruksi dokter."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Tulisan di rekam medis CPPT yang membuktikan Dokter membahas target kalori harian pasien dengan Dietisien (Ahli Gizi), bukan jalan sendiri-sendiri.",
+                        "O": "Observasi Ronde Klinis (Morning Report): Mengamati apakah saat DPJP memeriksa pasien di bangsal, apoteker ruangan atau perawat kepala ikut mendampingi (case conference)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Penggunaan Format S-O-A-P yang konsisten di RM. Dokter mem-verifikasi dan me-review catatan Perawat/Dietisien yang ditulis sebelumnya dengan pembubuhan paraf."
+                    }
+                },
+                "Standar PAP 1.2: Instruksi Tindakan Medis": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pemberian Instruksi Medis (instruksi pemberian obat, injeksi, ganti balutan, pasang kateter).",
+                        "D": "Kerapian instruksi tertulis di RM. Tidak boleh ada pemberian terapi obat tanpa bukti instruksi (order) dari dokter yang berwenang (SPK jelas)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Catatan instruksi dokter yang tegas di kolom 'P' (Plan/Planning) CPPT. Bila instruksi via telepon/WhatsApp, form stempel konfirmasi 'TBaK' sudah dibubuhi tanda tangan asli DPJP hari itu."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Lembar permohonan cek darah Lab & Rontgen. Diagnosis Indikasi klinis (Misal: 'Susp. Typoid Fever') dicantumkan tegas di kertas order, tidak dibiarkan kosong."
+                    }
+                },
+                "Standar PAP 2: Pasien Risiko Tinggi (Restraint, Menular, Koma)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pelayanan Pasien Risiko Tinggi (meliputi tata laksana pasien koma, pemakaian alat ventilasi mekanik (Ventilator), pasien dengan penyakit gila/menular, pasien hemodialisa, dan pasien imunosupresif/kemoterapi)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Kelengkapan Form Asuhan Risiko Tinggi di RM. Jika pasien diikat ranjang (Restraint), harus ada Form Persetujuan Keluarga & Lembar Observasi sirkulasi darah pergelangan tangan setiap 1-2 jam sekali.",
+                        "O": "Observasi Perawatan Restraint: Memastikan pergelangan pasien agitasi/amuk yang diikat tidak lecet, aliran darah ujung jari normal (tidak pucat), dan ikatan tidak membunuh jalan napas."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Salinan sertifikat perawat ICU dasar, sertifikat pelatihan Hemodialisa, atau pelatihan khusus Psikiatri (handling pasien amuk).",
+                        "W": "Wawancara Perawat Hemodialisa (HD): Menanyakan indikator komplikasi klinis utama selama mesin HD dijalankan (hipotensi, kram otot)."
+                    }
+                },
+                "Standar PAP 2.1: Early Warning System (EWS)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pelaksanaan Sistem Peringatan Dini (EWS), yang mewajibkan seluruh perawat dapat menilai perburukan klinis lebih dini sebelum Code Blue."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Grafik EWS (NEWS untuk dewasa, PEWS untuk anak, MEWS kebidanan) terisi di rekam medis harian, menggunakan sistem skor parameter nadi, nafas, tekanan darah, suhu, dan kesadaran (AVPU).",
+                        "O": "Observasi Pengukuran EWS: Perawat mengambil tensi dan nadi, lalu langsung menggambar nilai skoring (0-1-2-3) ke dalam kertas EWS bewarna (hijau/kuning/merah)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Bukti pelaksanaan 'Algoritma Eskalasi' di CPPT. Jika skor kuning (menengah), ada bukti catat lapor ke dokter jaga. Jika skor merah, lapor DPJP cito dan siapkan monitor.",
+                        "W": "Wawancara Perawat Rawat Inap: 'Suster, kalau skor EWS pasien kamar 101 angkanya 7 (Merah), sesuai SOP apa yang harus Suster lakukan dalam 10 menit pertama?'"
+                    }
+                },
+                "Standar PAP 2.2: Pelayanan Resusitasi (Code Blue)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Penyelenggaraan Code Blue 24 Jam dan SK Susunan Tim Utama (Leader, Airway, Kompresi, Obat/Defib)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Lembar log harian pengecekan (ceklis) alat & isi obat Troli Emergensi (Crash Cart) yang ditandatangani perawat penanggung jawab.",
+                        "O": "Observasi Troli Emergensi: Troli wajib digembok pakai segel pengaman bernomor (Lock Seal) plastik mudah putus. Defibrilator colok listrik stand-by siap pakai. Tidak ada debu tebal di laci atas."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Laporan response time Code Blue (harus di bawah 5 menit sejak teriakan awal hingga tim Advance dengan alat tiba di lokasi). Tercatat di form Resusitasi Kardioulmoner (RJP).",
+                        "W": "Wawancara Tim Code Blue: Menanyakan kendala tercepat evakuasi (misal letak lift, troli nyangkut) yang memperburuk SLA waktu tiba 5 menit."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Kumpulan sertifikat pelatihan ACLS dokter Tim Code Blue dan pelatihan BLS (BHD) untuk seluruh lapisan staf RS.",
+                        "S": "Simulasi MEGACode: Peragaan mendadak (Unannounced) henti jantung di poli rawat jalan. Surveyor menilai teriakan awal, telepon sentral 'Code Blue di Poli Dalam', hingga pijatan jantung dan shocking DC Shock (Defib) pantom."
+                    }
+                },
+                "Standar PAP 3: Pelayanan Gizi Terintegrasi": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Asuhan Terapi Gizi Terintegrasi (Klinik) RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Catatan asuhan gizi metode ADIME (Assessment, Diagnosis, Intervention, Monitoring, Evaluation) ditulis rapi di lembar CPPT pasien oleh Ahli Gizi/Dietisien, khususnya untuk pasien Malnutrisi/Diabetes."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Evaluasi sisa piring makanan pasien (Food Comstock / Food Recall) yang di-rekapitulasi harian. Menunjukkan efektivitas apakah diet lunak habis dimakan atau selalu dimuntahkan.",
+                        "W": "Wawancara Dietisien & Pasien: Menanyakan apakah Dietisien selalu menanyakan pasien tentang alergi ikan/susu atau preferensi lidah saat makanan pertama disajikan."
+                    }
+                },
+                "Standar PAP 4: Manajemen Nyeri Klinis": {
+                    "Elemen Penilaian 1": {
+                        "R": "Panduan Praktik Klinis (PPK) Tata Laksana Nyeri berbasis Step-Ladder WHO."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Laporan pengobatan di CPPT yang membuktikan korelasi positif: Pasien yang skala nyerinya hebat/berat diresepkan analgesik injeksi kuat (opioid jika perlu), bukan sebatas obat oral ringan.",
+                        "O": "Observasi Kamar Operasi (PACU): Penggunaan mesin Patient Controlled Analgesia (PCA) untuk pasien pasca caesar/bedah tulang belakang (jika layanan ini ada)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Evaluasi berkala di lembar rekam medis: 'Nyeri sudah berkurang dari skala 8 menjadi 3 setelah injeksi ketorolac jam 10:00'."
+                    }
+                },
+                "Standar PAP 5: Asuhan Pasien Tahap Terminal": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Asuhan Paliatif / Pasien Menjelang Ajal (End of Life)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Pencatatan intervensi medis di CPPT memfokuskan tindakan pada penurunan penderitaan: Pengurangan sesak (oksigen saturasi tinggi, suction hati-hati), pengurangan nyeri ekstrem (injeksi morfin reguler), bukan pengobatan kuratif yang sia-sia."
+                    }
+                }
+            },
+            "BAB XII. PELAYANAN ANESTESI DAN BEDAH (PAB)": {
+                "Standar PAB 1: Pengorganisasian Anestesi": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pengorganisasian dan Pedoman Pelayanan Departemen/Instalasi Anestesiologi dan Terapi Intensif."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SK Penetapan Kepala Pelayanan Anestesi (Wajib bergelar Dokter Spesialis Anestesiologi / Sp.An).",
+                        "D": "File Kredensial Sp.An penanggung jawab lengkap dengan RKK valid, STR aktif, dan SIP."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Jadwal dinas/piketan shift On-Call tim dokter spesialis anestesi dan perawat penata anestesi yang menjamin coveran 24 Jam IGD/VK/OK."
+                    }
+                },
+                "Standar PAB 2: Sedasi Moderat dan Dalam (Luar OK)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan/SPO Pemberian Sedasi Moderat dan Dalam (Pelaksanaan Endoskopi, Cabut Gigi Anak, MRI anak, reposisi sendi di IGD)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Dokumen SPK & RKK klinis untuk dokter IGD/Dokter Gigi/Perawat terlatih ACLS yang berani menyuntikkan obat penenang kuat (sedasi dalam) di luar pengawasan langsung Sp.An."
+                    },
+                    "Elemen Penilaian 3": {
+                        "O": "Observasi Ruang Endoskopi/Poli Gigi: Syarat mutlak harus punya mesin oksigen sentral, alat intubasi, monitor jantung/SPO2 portabel, Ambubag, dan obat antidotum (Flumazenil, Nalokson) di meja tindakan."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Formulir Pemantauan Sedasi (Lembar Anestesi Kuning Spesifik) yang diisi Tensi, Nadi per 5 menit, dan kriteria Pulih Sadar (Misal Skor Aldrete) sebelum dibolehkan pulang oleh dokter."
+                    }
+                },
+                "Standar PAB 3: Asesmen Pra-Anestesi": {
+                    "Elemen Penilaian 1": {
+                        "D": "Formulir 'Asesmen Pra-Anestesi' di rekam medis terisi penuh. Dilakukan H-1 atau beberapa jam sebelum operasi. Mencantumkan Skoring Status Fisik ASA (ASA 1 s/d 5) dan Mallampati untuk intubasi."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Formulir 'Asesmen Pra-Induksi' diisi ulang sesaat detik-detik pasien mau dibius masuk OK (Sign-In) oleh dokter bius untuk cek jantung/tensi akut."
+                    }
+                },
+                "Standar PAB 3.1: Informed Consent Anestesi": {
+                    "Elemen Penilaian 1": {
+                        "D": "Catatan edukasi dalam form terintegrasi: Bukti Sp.An menjelaskan jenis bius (Bius Total, Separuh/Spinal, Lokal), komplikasi (sakit kepala pasca spinal, cabut gigi palsu, mual), dan penanganan nyeri infus pasca operasi."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Selembar form 'Informed Consent Tindakan ANESTESI' (Kertas Terpisah Berbeda dengan Form IC Bedah), yang ditandatangani sah oleh Sp.An, keluarga Wali, dan Pasien."
+                    }
+                },
+                "Standar PAB 4: Pemantauan Selama Operasi (Intra-Op)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pemantauan Fisiologis Pasien Selama Proses Operasi Anestesi."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Lembar Anestesi Intra-Operatif. Berisi tabel dan titik-titik kurva (O2, Denyut Nadi, Tensi) yang ditarik garis setiap 5 menit. Terisi jumlah mili darah keluar (kasa) dan cairan masuk. Wajib 100% lengkap tanpa bolong."
+                    }
+                },
+                "Standar PAB 5: Ruang Pulih Sadar (PACU)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pemindahan Pasien dari Recovery Room / Ruang Pulih Sadar (PACU). Kewajiban pengisian instrumen Skor Pemulihan (Aldrete untuk Umum, Bromage untuk Tulang Belakang/Spinal)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Lembar observasi PACU di rekam medis. Perawat PACU mencatat suhu tubuh, saturasi O2 pasca ekstubasi, dan ada tidaknya respon nyeri."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Tanda Tangan Pelepasan (Discharge Sign). Pasien boleh dikirim balik ke bangsal hanya bila Skor Aldrete > 8 dan ada tanda tangan Sp.An / Perawat PACU yang sah berwenang."
+                    }
+                },
+                "Standar PAB 6: Asesmen dan Edukasi Bedah": {
+                    "Elemen Penilaian 1": {
+                        "D": "Formulir 'Asesmen Pra-Bedah' di RM. DPJP Bedah menulis ringkasan justifikasi / alasan klinis kuat mengapa pasien ini harus diiris/dioperasi (Diagnosis Pra-Bedah)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Catatan teknik operasi dan posisi operasi di form rencana asuhan RM pasien."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Form 'Informed Consent Tindakan BEDAH'. DPJP Bedah mencentang & menjelaskan risiko perdarahan, perluasan operasi, kemungkinan cacat organ, atau stoma pembuangan. Semua terekam sah dengan tanda tangan."
+                    }
+                },
+                "Standar PAB 7: Laporan Operasi (Surgical Report)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pembuatan Laporan Operasi wajib dikerjakan saat di meja sebelum pasien keluar ruangan pemulihan."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Form 'Laporan Operasi' tuntas diisi tanpa coretan. Komponen mutlak: Diagnosis Pra & Pasca, Jam Insisi dimulai, Jam selesai, Estimasi Darah Keluar (EBL), Jenis Jaringan (Paten/PA) yang dikirim ke lab, Tanda Tangan DPJP Bedah."
+                    }
+                },
+                "Standar PAB 7.1: Asuhan Pasca-Bedah": {
+                    "Elemen Penilaian 1": {
+                        "D": "Kolom Instruksi Pasca Bedah (Post-Op Orders) di rekam medis terisi jelas. Misal: Boleh minum sedikit bertahap, Antibiotik IV dilanjut, Cek Hb 6 jam post-op."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Waktu penulisan instruksi tidak lebih dari 24 jam setelah operasi, dan langsung disusul pembuatan CPPT hari ke-1 post operasi oleh DPJP Bedah saat Visite Pagi."
+                    }
+                },
+                "Standar PAB 8: Implan Medis": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan dan SPO Pengadaan, Sterilisasi, Penyimpanan, dan Pelacakan Alat Implan (Pen Ortopedi, Lensa Mata IOL, Pacemaker, Mesh Bedah, Kawat Gigi)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Logbook Sistem Pelacakan Implan (Traceability) di Farmasi Kamar Operasi. Bila pabrik menarik (Recall) lot Implan karena karat, RS bisa langsung tahu nama & no HP pasien mana saja yang sudah ditanamkan produk tersebut."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Bukti penempelan Stiker Barcode Batch/No.Seri Implan di formulir Laporan Operasi (RM) pasien yang bersangkutan."
+                    }
+                }
+            },
+            "BAB XIII. PELAYANAN KEFARMASIAN DAN PENGGUNAAN OBAT (PKPO)": {
+                "Standar PKPO 1: Pengorganisasian Pelayanan Kefarmasian": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Pengorganisasian IFRS yang mengatur sistem Pelayanan Satu Pintu (One Gate System). Apotek luar/swasta tidak boleh intervensi dalam gedung RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "SK Kepala Instalasi Farmasi RS (IFRS) dengan kualifikasi Ijazah Apoteker (S.Farm, Apt), STRA asli, dan Surat Izin Praktik Apoteker (SIPA) aktif pasang pigura."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SK Pembentukan Komite Farmasi dan Terapi (KFT) lintas divisi profesi.",
+                        "D": "Notulensi rapat evaluasi bulanan KFT: Menyeleksi usulan obat baru, mencoret obat formularium yang tak laku, evaluasi dokter spesialis yang ngotot meresepkan obat luar fornas."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Buku ceklis bukti supervisi berkala dari Apoteker yang blusukan memeriksa penyimpanan troli obat di bangsal, kulkas IGD, dan lemari obat OK minimal sebulan sekali."
+                    }
+                },
+                "Standar PKPO 2: Formularium RS & Pengadaan": {
+                    "Elemen Penilaian 1": {
+                        "R": "Buku cetak/PDF Formularium Rumah Sakit (Fornas RS) edisi tahun aktif berjalan.",
+                        "D": "Akses Formularium elektronik di layar komputer poli/SIMRS (dokter tinggal search drop-down obat)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Usulan Obat Baru ke dalam Formularium (harus berbasis Evidence Based, jurnal ilmiah jelas, uji kemanjuran, bukan hadiah gratifikasi).",
+                        "D": "Tumpukan Formulir Permintaan Obat Non-Formularium yang telah direviu tegang oleh KFT."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Daftar list obat kosong (Stock Out) ditempel/broadcast WA dari Farmasi, serta daftar substitusinya (misal: Obat A merk X kosong pabrik, diganti Obat A merk Y setara)."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Salinan kontrak Perjanjian Kerja Sama Pengadaan Obat (PKS) atau faktur retur resmi dari Pedagang Besar Farmasi (PBF) bersertifikat CDOB resmi dari BPOM, anti obat palsu."
+                    }
+                },
+                "Standar PKPO 3: Keamanan Penyimpanan": {
+                    "Elemen Penilaian 1": {
+                        "O": "Observasi Gudang Farmasi: Ruangan bersih, tidak lembab, bebas kecoak/tikus. Termohigrometer digantung dan kartu pemantauan suhu/kelembaban harian terisi penuh tanpa bolong fiktif."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SK Daftar Obat High Alert (Risiko Tinggi Kematian) dan Obat LASA (Look-Alike Sound-Alike).",
+                        "O": "Observasi Pelabelan Kotak Obat: Stiker Merah terpasang di Ampul/Vial High Alert. Susunan laci LASA diberi celah 1 kotak pemisah, serta teknik huruf tebal 'Tall Man Lettering' (CefoTAXime vs CefoTETan)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Buku Register Keluar Masuk Narkotika & Psikotropika dengan saldo cocok.",
+                        "O": "Observasi Lemari Narkoba: Lemari kayu/besi tanam tebal, berpintu ganda (Double Door), gembok kunci dobel (Double Lock), dan kunci fisik dipegang oleh dua Apoteker berbeda saat serah terima shift jaga."
+                    },
+                    "Elemen Penilaian 4": {
+                        "O": "Observasi Ruang Penyimpanan B3/Gas: Alkohol drum jerigen jauh dari sumber listrik panas, Tabung Oksigen terantai kuat dengan ring besi dinding agar tidak menggelinding/meledak mekar."
+                    }
+                },
+                "Standar PKPO 3.1: Pengelolaan Obat Emergensi Troli": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Daftar Isi Standar Obat Emergensi (Epinefrin, Amiodaron, Lidokain, dsb) untuk berbagai tipe troli (Troli Dewasa vs Troli Anak).",
+                        "D": "Daftar kertas inventaris ter-laminating digantung/ditempel tegas di badan troli emergensi merah."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Buku Catatan Pemecahan Segel Plastik (Lock Seal Troli). Setiap kali dipakai gawat darurat (Code Blue), segel putus, obat diambil, dicatat, diganti baru hari itu juga dari Apotek, lalu disegel dengan nomor seri baru."
+                    }
+                },
+                "Standar PKPO 4: Peresepan (Prescribing) dan Rekonsiliasi": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Penulisan Resep. Kebijakan Daftar PPA berwenang menulis resep khusus (Bidan D3 tak boleh resep antikoagulan, Dokter Umum tak boleh resep kemoterapi kanker murni).",
+                        "D": "Spesimen paraf daftar dokter resep."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Telaah kelengkapan isi resep R/ di SIMRS/Manual (Nama 2 kata, BB anak mutlak ada, alergi, dosis mg, signa jam lengkap).",
+                        "O": "Observasi SIMRS Modul Peresepan E-Prescribing: Fitur drop down dosis otomatis berfungsi mengurangi Typo tulisan tangan cakar ayam dokter."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Buku Catatan Klarifikasi Farmasi. Bukti riwayat Apoteker menelpon konfirmasi DPJP karena dosis Cefotaxim anak ditulis 5000 mg (kesalahan fatal fatal). DPJP tanda tangan koreksi resep."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Formulir Rekonsiliasi Obat di RM. Pasien masuk rawat inap membawa tas kresek isi pil dari rumah sakit sebelumnya/Apotek Kimia Farma. Apoteker mewawancarai, memilah, mendata, dan men-stop obat lama jika tabrakan (interaksi) dengan obat RS."
+                    }
+                },
+                "Standar PKPO 5: Penyiapan (Dispensing) dan Serah Terima": {
+                    "Elemen Penilaian 1": {
+                        "O": "Observasi Area Racikan Apotek (Dispensing Area): Meja kerja *stainless steel* (mudah dilap alkohol), lampu terang, mortar alu bersih, petugas memakai hairnet penutup kepala dan masker medis."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Bukti paraf centangan 'Telaah Resep Administratif & Klinis'. Sebelum obat ditarik dari rak, apoteker screening dulu (Apakah alergi obat ini? Apakah ada duplikasi polifarmasi NSAID?)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "O": "Observasi Etiket Obat Cetak Stiker: Font nama terang, Aturan minum jelas '3 x 1 tablet sesudah makan', tanggal penyiapan. Khusus racikan Puyer Anak, WAJIB tertulis Batas Kadaluarsa Buatan/BUD (Beyond Use Date) misal max 14 hari, BUKAN tanggal Expired botol aslinya."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Log Pemberian Informasi Obat (PIO) di loket antrean. Pasien tanda tangan bukti setuju mengerti saat Apoteker Konseling menjelaskan cara kerja obat tetes telinga yang benar.",
+                        "W": "Wawancara Pasien Rawat Jalan: 'Bapak, tadi dari loket obat, antibiotik sirup ini sudah dijelaskan cara pakainya sebelum atau sesudah makan?'"
+                    }
+                },
+                "Standar PKPO 5.1: Obat Steril Intravena & Sitostatika": {
+                    "Elemen Penilaian 1": {
+                        "O": "Observasi Ruang Pencampuran Steril: Isolasi kabinet khusus (Biosafety Cabinet / BSC) tekanan negatif untuk oplos obat kemoterapi kanker, atau Laminar Air Flow (LAF) untuk peracikan TPN nutrisi parenteral infus putih.",
+                        "D": "Sertifikat Pelatihan Pencampuran Sediaan Steril (Aseptic Dispensing) dari apoteker ruang isolasi tersebut."
+                    }
+                },
+                "Standar PKPO 6: Pemberian (Administration) 5 Benar": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pemberian Obat, batasan wewenang delegasi injeksi dari dokter ke perawat."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Perawat Tindakan Injeksi: Melihat perawat membawa troli obat pasien ke bed, mencocokkan Nama/No RM di bungkus obat dengan identitas Gelang, mempraktekkan '5 Benar' (Benar Pasien, Obat, Dosis, Rute, Waktu).",
+                        "W": "Wawancara Perawat Rawat Inap: Meminta perawat merinci langkah Prosedur Double Check Injeksi Insulin (Dua perawat melihat garis strip jarum suntik 10 unit bersama-sama sebelum ditusuk ke perut)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Obat Bawaan Pasien & Self-Administration (Obat yang dibawa pasien sendiri dari rumah, misal obat Asma hirup).",
+                        "D": "Formulir titip simpan obat luar di Nurse Station. Obat pasien dilabel khusus milik pasien untuk di-dispensing sesuai jadwal."
+                    }
+                },
+                "Standar PKPO 7: Pemantauan Efek, MESO & Error": {
+                    "Elemen Penilaian 1": {
+                        "D": "Catatan Terintegrasi (CPPT). Perawat/Dokter menulis reaksi setelah minum Paracetamol. Apoteker menulis visite farmasi klinis menilai kepatuhan minum obat."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Pelaporan Efek Samping Obat (MESO).",
+                        "D": "Lembar kuning lapor BPOM / Laporan Internal Farmakovigilans. Pasien disuntik Penisilin tiba-tiba timbul bentol alergi gatal berat. Didokumentasi dan ditindak lapor sistem."
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Investigasi Insiden Medication Error (Salah Pasien, Salah Obat, Salah Dosis, Kejadian Nyaris Cedera / KNC farmasi).",
+                        "D": "Laporan IKP terkait obat di Apotek/Ruangan (Misal: perawat hampir memberikan antibiotik pasien kasur 1 ke kasur 2, tapi ketahuan karena dicek identitas). Laporan ke KMKP internal RS."
+                    }
+                }
+            },
+            "BAB XIV. KOMUNIKASI DAN EDUKASI (KE)": {
+                "Standar KE 1: Komunikasi Publik": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Komunikasi Publik Rumah Sakit dan SPO Komunikasi Informasi Edukasi Publik.",
+                        "D": "Brosur, Banner, Konten IG/TikTok/Website Resmi RS tentang layanan unggulan, cara daftar BPJS, rincian paket persalinan."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Tata Letak Informasi: Papan Denah Evakuasi jelas, Papan nama Dokter dan Jam Praktik Poli terpajang elektronik/cetak besar di Hall Pendaftaran.",
+                        "W": "Wawancara Petugas Informasi/Resepsionis: Skenario bila keluarga mau mengantar kakek yang susah jalan (peminjaman kursi roda roda/jalur rujukan cepat)."
+                    }
+                },
+                "Standar KE 2: Komunikasi Diagnostik Medis": {
+                    "Elemen Penilaian 1": {
+                        "D": "Tanda tangan pasien/keluarga di form Lembar Edukasi Terintegrasi / RM yang membenarkan DPJP telah gamblang menjelaskan vonis sakit gagal ginjal & harus cuci darah seumur hidup.",
+                        "W": "Wawancara Pasien: Cek pemahaman pasien tentang bahasa tubuh dan ucapan dokter, apakah memuaskan dan tidak mengintimidasi."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "SPO Penyediaan Penerjemah Bahasa (Misal penerjemah bahasa daerah Tegal, Sunda, Madura, atau Bahasa Isyarat Tuli SLB).",
+                        "D": "Daftar pegawai internal (perawat/CS) yang dikualifikasi ahli bahasa daerah X. Surat MOU Eksternal dengan SLB tuna rungu setempat. Bukti pamflet info fasilitas translasi tersedia bagi pasien difabel."
+                    }
+                },
+                "Standar KE 3: Komunikasi PPA Efektif (SBAR)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Komunikasi Via Telepon dan SPO Konsultasi SBAR & TBaK.",
+                        "D": "Lembar stempel TBaK lengkap paraf DPJP dalam tempo waktu < 24 jam instruksi diberikan verbal per telepon."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Buku tulis operan jaga perawat ruangan shift pagi ke shift siang berisi tulisan berformat S-B-A-R (Situation-Background-Assessment-Recommendation).",
+                        "O": "Observasi Bedside Handover: Mengikuti gerak perawat ganti dinas yang serah terima tepat di depan ranjang pasien, melibatkan pasien jika ada keluhan langsung."
+                    }
+                },
+                "Standar KE 4: Asesmen Pra-Edukasi": {
+                    "Elemen Penilaian 1": {
+                        "D": "Bagian Asesmen Edukasi di RM tercentang. Menggali data: Pasien tamatan SD/Sarjana? Punya gangguan mata rabun dekat? Sedang depresi/nyeri menolak diedukasi?"
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Bukti kustomisasi metode edukasi berdasarkan hasil asesmen RM. (Misal: Pasien lansia buta huruf maka edukator tidak memberikan selebaran bacaan, melainkan video/demonstrasi pakai alat peraga)."
+                    }
+                },
+                "Standar KE 5: Pelaksanaan Edukasi Pasien Terintegrasi": {
+                    "Elemen Penilaian 1": {
+                        "D": "Formulir Rekam Medis 'Edukasi Pasien & Keluarga Terintegrasi' yang penuh catatan ringkas edukasi lintas profesi (Dokter: Obat diminum 3 bulan tanpa putus. Dietisien: Hindari jerohan jengkol. Perawat: Cara ganti perban)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "W": "Wawancara Pasien Pulang: Pasien menceritakan bahwa apoteker telah memberi wejangan cara mengatur jam minum pil jantung dengan sirup lambung di jam berbeda."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Pengecekan kolom 'Paham / Perlu Ulang / Belum Diajarkan' (Verifikasi). Kolom tanda tangan Edukator dan Pasien terpenuhi (sebagai bukti absah bahwa pasien telah diajar metode Teach-Back mengulang penjelasan kembali).",
+                        "O": "Observasi Edukator Gizi: Meminta pasien menyebutkan ulang 3 makanan pantangan gula setelah dijelaskan 5 menit sebelumnya (Metode Teach Back)."
+                    }
+                },
+                "Standar KE 6: PKRS (Promosi Kesehatan RS)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Pembentukan Tim Promosi Kesehatan Rumah Sakit (PKRS) berserta Rencana Kerja Anggarannya.",
+                        "D": "Kumpulan materi Slide/Leaflet, dokumentasi foto, absensi penyuluhan kelompok di poli KIA/Poli Penyakit Dalam/Ruang Tunggu ICU."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Bukti cap approval Komite Medik/Komite PKRS di atas master leaflet Hipertensi yang diedarkan, memastikan konten edukasinya tidak hoaks (Evidence based modern).",
+                        "O": "Observasi TV Edukasi PKRS: Mengecek rotasi pemutaran film animasi pendek cara CTPS, Etika Batuk di TV Plasma lorong antrean apotek/poli."
+                    }
+                }
+            }
+        },
+        "C. Kelompok Sasaran Keselamatan Pasien": {
+            "BAB XV. SASARAN KESELAMATAN PASIEN (SKP)": {
+                "Standar SKP 1: Identifikasi Benar": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pemasangan Gelang Identitas dan SPO Identifikasi Pasien (Wajib mencocokkan min. 2 parameter Unik: Nama Lengkap Ejaan KTP & Tgl Lahir / Nomor RM. BUKAN Nomor Bed / Poli)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Kepatuhan Perawat/Phlebotomist: Mengamati proses saat akan menusuk jarum darah/pasang kantong transfusi. Harus bertanya terbuka 'Sebutkan nama bapak dan tanggal lahirnya?', sambil mata membandingkan huruf di gelang tangan pasien.",
+                        "W": "Wawancara Pasien Bedah: 'Bu, tadi waktu didorong ke kamar operasi, ditanyain nama dan dicek gelangnya berapa kali oleh petugas beda?'"
+                    },
+                    "Elemen Penilaian 3": {
+                        "R": "SPO Identifikasi Bencana/Trauma tanpa KTP (Mr.X).",
+                        "D": "Bukti Rekam Medis pendaftaran sementara pasien gawat darurat kecelakaan lalin tanpa keluarga menggunakan sistem urut/barcode sementara gelang (Misal: Pria X 001 - 25 Mei 2024)."
+                    }
+                },
+                "Standar SKP 2: Komunikasi Efektif": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Tata Cara Lapor Instruksi Verbal dan SPO Serah Terima (Handover) memakai prinsip SBAR."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Ceklis Laporan Telepon TBaK. Perawat yang menelepon spesialis (Tulis) saran obat, (Baca) ulang keras-keras Eja NATO untuk obat LASA, dan (Konfirmasi) dari ujung telepon.",
+                        "O": "Observasi Perawat Nurse Station: Mendengar langsung proses percakapan pelaporan nilai kalium kritis via pesawat telepon dinding ke HP dokter."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Buku Catatan Ekspedisi Nilai Kritis Instalasi Lab / Rontgen. Jam keluar print lab kritis, jam telepon diangkat oleh bangsal (SLA max waktu tunggunya 15-30 menit)."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Buku form Operan Jaga / Shift Handover. Berisi catatan SBAR perpindahan dari shift Perawat Pagi ke Sore.",
+                        "O": "Observasi Bedside Handover Ruang Perawatan: Perawat tidak hanya serah terima di meja nurse station (sambil ngopi), tapi wajib jalan berkeliling menunjuk pasien di ranjang sambil transfer data klinis."
+                    }
+                },
+                "Standar SKP 3: Keamanan High Alert (Obat Waspada Tinggi)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pengelolaan Obat High Alert (Risiko Kematian Salah Dosis: Insulin, Kemoterapi, Opiat/Morfin, Relaksan Otot) & Elektrolit Konsentrat."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Laci Troli Farmasi: Pemasangan Stiker Merah peringatan tebal pada ampul berbahaya. Obat suara/rupa mirip (LASA) tidak ditumpuk/disisihkan jarak 1 kotak. Tall Man Lettering pada stiker nama kotak."
+                    },
+                    "Elemen Penilaian 3": {
+                        "O": "Observasi Troli Obat Bangsal Kelas: Buktikan bahwa 100% TIDAK ADA sediaan murni elektrolit pekat botol seperti KCl 7.4%, NaCl 3%, Meylon 8.4% di bangsal rawat inap biasa. (Jika terpaksa harus diseduh/mix dulu di Pharmacy IV Admixture tersentralisasi sebelum naik bangsal)."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Lembar Pemberian Obat RM (MAR).",
+                        "W": "Wawancara Dua Perawat Jaga: 'Mbak, tolong jelaskan step per step cara Anda melakukan prosedur Independent Double Check (Pengecekan Silang Independen) sebelum menembakkan injeksi Insulin 6 Unit ke pasien gula darah 400?'"
+                    }
+                },
+                "Standar SKP 4: Lokasi/Prosedur/Pasien Bedah Tepat": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Site Marking (Penandaan Lokasi Irisan). SPO Ceklis Keselamatan Bedah Jeda (Sign-In, Time-Out, Sign-Out)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "RM Site Marking tercentang di ruang tunggu premedikasi/bangsal sebelum dibius tidur.",
+                        "O": "Observasi Site Marking Pra-Operasi: Mengecek langsung pada anggota tubuh pasien (Kaki Kanan patah, Hernia kiri, Bola Mata Kanan) yang digambar coretan Spidol Anti Air Permanen bentuk centang/lingkaran oleh spesialis bedah yang mengiris."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Form lembar Kertas WHO Surgical Safety Checklist. Diisi rapi 3 kolom jam Sign In, jam Time Out (sebelum iris pisau pertama), dan jam Sign Out (penutupan luka terakhir/hitung kasa jarum).",
+                        "O": "Observasi Kamar Bedah (Time Out): Tim bedah (Sp.B, Sp.An, Sirkuler) berhenti ngocek HP 1 menit. Perawat membacakan keras: 'Nama Pasien Bpk A, Operasi Usus Buntu, Alergi Negatif, Darah Disiapkan 2 kolf, Profilaksis Masuk?'. Tim bersahut OK."
+                    }
+                },
+                "Standar SKP 5: Cuci Tangan (PPI) Terkait Pelayanan": {
+                    "Elemen Penilaian 1": {
+                        "R": "Kebijakan Hand Hygiene RS yang merujuk patokan saklek Panduan WHO 5 Momen (Sebelum sentuh, Sebelum steril, Setelah risiko cair, Setelah sentuh, Setelah sentuh perabot)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Infrastruktur Hand Hygiene: Dispenser Handrub di dinding antar bed pasien ICU terisi penuh, tidak kadaluarsa/encer. Wastafel air tidak kotor berlumut, sabun tidak dicampur air keras, tisu rol memadai (tak pakai lap kain gantung kotor)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Dasbor/Buku rekapan Audit Kepatuhan Cuci Tangan RS dari IPCN PPI per triwulan.",
+                        "S": "Simulasi Acak Staf Klinis: Meminta Bidan Poli Kandungan untuk mendemonstrasikan gaya cuci tangan pakai sabun cair selama 40-60 detik sambil menyebutkan urutan Gosok Punggung, Sela, Mengunci, Jempol putar, Ujung jari bilas (Tepung Selaci Puput)."
+                    }
+                },
+                "Standar SKP 6: Kurangi Risiko Cedera Jatuh": {
+                    "Elemen Penilaian 1": {
+                        "R": "SPO Pencegahan Pasien Jatuh (Asesmen awal IGD/Poli & Intervensi)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Formulir Rekam Medis Skoring Jatuh. Jika dewasa diskor pakai Skala Morse (punya riwayat jatuh? pakai kruk infus jalan?). Pasien bayi/anak pakai Skala Humpty Dumpty."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Ceklis Intervensi Asuhan Keperawatan Risiko Tinggi Jatuh Terlaksana (Naikkan dua sisi side rails, tempel pin kuning, rendahkan ranjang maksimal ke lantai, lampu tidak mati).",
+                        "O": "Observasi Bangsal Perawatan: Mengunjungi pasien lansia struk. Pastikan kancing Gelang Resiko Jatuh (Warna Kuning) sudah diceklik di gelang tangannya, dan ada logo segitiga kuning awas jatuh tertempel menggantung di pinggir ranjang/pintu."
+                    }
+                }
+            }
+        },
+        "D. Kelompok Program Nasional": {
+            "BAB XVI. PROGRAM NASIONAL (PROGNAS)": {
+                "Standar PROGNAS 1: PONEK 24 Jam (Ibu & Bayi)": {
+                    "Elemen Penilaian 1": {
+                        "R": "Pedoman Penyelenggaraan Pelayanan Obstetri Neonatal Emergensi Komprehensif (PONEK) 24 Jam. SK Penetapan Susunan Tim PONEK RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Zonasi PONEK IGD: Denah Triase Maternitas langsung nembus lorong cepat ke VK (Kamar Bersalin) dan OK Ponek (Caesar). Peralatan resusitasi ibu pre-eklamsia dan asfiksia neonatus box pemanas (Infant Warmer) lengkap berjejer."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Dokumentasi di Partograf/Lembar persalinan bukti bahwa bayi telah ditengkurapkan ke dada ibu telanjang dada jam ke-0 pasca lahir (Inisiasi Menyusu Dini/IMD) tanpa langsung disusu formula, serta form edukasi laktasi ASI Eksklusif tercatat."
+                    },
+                    "Elemen Penilaian 4": {
+                        "R": "SPO Pelaksanaan Perawatan Metode Kangguru (Kangaroo Mother Care) pada BBLR/Prematur.",
+                        "O": "Observasi Ruang Perinatologi / NICU: Tersedia ruang privasi (kursi ibu malas/sofa bed lipat) untuk ibu memangku telanjang kulit menempel dengan bayi prematurnya, serta apron kain elastis bedong kangguru."
+                    }
+                },
+                "Standar PROGNAS 2: TB DOTS": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Tim DOTS / Pelayanan Tuberkulosis RS dan Pedoman Strategi DOTS 24 Jam RS."
+                    },
+                    "Elemen Penilaian 2": {
+                        "O": "Observasi Poli MDR/TB DOTS: Berada di area terbuka/sirkulasi sangat lancar. Ruang tunggu pasien terpisah agar pasien tidak batuk menulari poli umum. Ruang Sputum Booth (Bilik dahak) ada di taman belakang kaca."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Buku Register Pasien TB (TB-04). Alur form rujukan sampel pot dahak ke mesin Tes Cepat Molekuler (TCM GeneXpert), hingga copy resep pengambilan Obat Anti Tuberkulosis (OAT Paket FDC warna-warni) dari depo farmasi."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Bukti pelaporan insidensi kasus positif TB lewat Tangkapan Layar (Screenshot) akun dashboard online Sistem Informasi Tuberkulosis (SITB) Kemenkes. Bukti diupdate konstan mingguan oleh tim koder/perawat DOTS RS."
+                    }
+                },
+                "Standar PROGNAS 3: HIV/AIDS (VCT)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Pembentukan Tim Pelayanan Terpadu HIV/AIDS dan Pedoman VCT (Voluntary Counseling Testing) & PDP (Perawatan Dukungan Pengobatan)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Register Konseling (Kerahasiaan medis terjamin) dan log buku pengambilan stok terapi ARV (Antiretroviral).",
+                        "O": "Observasi Ruang VCT: Pintu ruang tertutup, kedap suara, nyaman untuk wawancara intim agar pasien suspek HIV tidak stigma di-judging oleh pasien umum lorong RS."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Bukti sinkronisasi data temuan pasien ODHIV baru rumah sakit ke dalam Sistem Informasi HIV AIDS (SIHA) pusat Kemenkes (tangkapan layar sistem login admin rumah sakit)."
+                    }
+                },
+                "Standar PROGNAS 4: Stunting & Wasting": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Tim Penurunan Prevalensi Stunting dan Wasting RS (Terdiri dr.Sp.A, Bidan, Ahli Gizi Dietisien Klinis)."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Rekam Medis Anak/Buku KIA Ibu. Pengeplotan titik grafik kurva pertumbuhan Z-Score standar WHO terisi manual/digital.",
+                        "O": "Observasi Poli Tumbang / Anak: Fasilitas alat ukur pita panjang bayi (Infantometer board kaku, BUKAN meteran kain baju lentur) dan Timbangan Digital Baby Scale bersertifikat tera kalibrasi rutin."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Lembar edukasi pemberian makan (Dietisien RS mengajarkan MP-ASI tekstur tepat protein tinggi, bukan bubur cair karbohidrat semata) beserta resep PKMK (Pangan Olahan Keperluan Medis Khusus) jika BB tidak naik adekuat."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Kertas Lembar Surat Rujukan Balik (Rujuk Berjenjang). Kasus stunting yang sudah di-screening penyebab penyakit dasar di RS (misal karena flek paru TB/Jantung bawaan), dikembalikan PR pemantauan status gizi posyandunya ke surat kontrol Puskesmas FKTP Asal."
+                    }
+                },
+                "Standar PROGNAS 5: Keluarga Berencana (PKBRS)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Tim Pelayanan KB Rumah Sakit (PKBRS) dan Program Kerja Konseling Kontrasepsi."
+                    },
+                    "Elemen Penilaian 2": {
+                        "D": "Informed Consent Pemasangan Alat Kontrasepsi Dalam Rahim (AKDR/IUD) atau Sterilisasi mantap Tubektomi (MOW). Catatan di RM bahwa bidan konselor telah mengedukasi MKJP sebelum pasien pulang pasca operasi Caesar.",
+                        "W": "Wawancara Pasien Nifas: 'Ibu, kemarin habis melahirkan sesar, bidan/dokternya nawarin mau pasang KB IUD sekalian tidak supaya tidak kebobolan cepat hamil lagi?'"
+                    },
+                    "Elemen Penilaian 3": {
+                        "O": "Observasi Farmasi VK/Maternitas: Mengecek laci stok gudang RS untuk ragam sediaan KB (Implan susuk, IUD Copper T, Suntikan hormon) dalam kondisi tidak kedaluwarsa dan memadai."
+                    }
+                },
+                "Standar PROGNAS 6: PPRA (Pengendalian Resistensi Antimikroba)": {
+                    "Elemen Penilaian 1": {
+                        "R": "SK Penetapan Tim Program Pengendalian Resistensi Antimikroba (PPRA) yang memegang kemudi pemakaian antibiotik kuat di RS. Serta Program Kerja Tahunan sosialisasi bahaya kebal antibiotik."
+                    },
+                    "Elemen Penilaian 2": {
+                        "R": "Buku saku Panduan Penggunaan Antimikroba Profilaksis dan Terapi (PPAB) RS (Tabel pedoman empiris: kalau bedah usus buntu profilaksisnya harus Cefazolin 2gr pre-op 1 jam, dsb)."
+                    },
+                    "Elemen Penilaian 3": {
+                        "D": "Form Permintaan Antibiotik Golongan Restricted / Reserve (Misal: Meropenem, Vancomycin). Apoteker poli TIDAK BOLEH meracik jika lembar form ini belum mendapat tanda tangan ACC pertimbangan dari Tim Dokter PPRA / Konsultan Penyakit Dalam Infeksi."
+                    },
+                    "Elemen Penilaian 4": {
+                        "D": "Laporan Audit Antibiotik: Evaluasi Kuantitatif hitungan matematik persentase DDD/100 patient days (Defined Daily Dose) dan Laporan Evaluasi Kualitatif menilai kerasionalan peresepan dokter (Alur Gyssens Kategori 0 hingga VI). Hasil dipresentasikan di rapat komite medis bulanan."
+                    }
+                }
+            }
+        }
         };
 
         const fileRegistry = {};
@@ -624,7 +2278,13 @@ function doOptions(e) {
 
         function createRdowsDetail(epTitle, rdowsObject, babTitle, standarTitle) {
             let content = '<div class="mt-4 pl-4 md:pl-5 border-l-2 border-slate-200 space-y-6 pt-2">';
-            const rdowsOrder = ['R (Regulasi)', 'D (Dokumen)', 'O (Observasi)', 'W (Wawancara)', 'S (Simulasi)'];
+            const rdowsOrder = [
+                { key: 'R', label: 'R (Regulasi)' },
+                { key: 'D', label: 'D (Dokumen)' },
+                { key: 'O', label: 'O (Observasi)' },
+                { key: 'W', label: 'W (Wawancara)' },
+                { key: 'S', label: 'S (Simulasi)' }
+            ];
             
             // Ekstrak Nomor EP
             const epMatch = epTitle.match(/Elemen Penilaian (\d+)/i);
@@ -634,11 +2294,12 @@ function doOptions(e) {
             const safeBabTitle = babTitle.replace(/[^a-zA-Z0-9 ]/g, '').trim();
             const safeStandarTitle = standarTitle.replace(/[^a-zA-Z0-9 ]/g, '').trim();
             
-            rdowsOrder.forEach(key => {
-                if (rdowsObject[key]) {
-                    const type = key.charAt(0);
+            rdowsOrder.forEach(item => {
+                // Mendukung format data lama 'R (Regulasi)' dan data baru 'R'
+                const epText = rdowsObject[item.key] || rdowsObject[item.label];
+                if (epText) {
+                    const type = item.key;
                     const slotId = generateId('slot');
-                    const epText = rdowsObject[key];
                     const safeEpText = epText.replace(/['"\\]/g, ''); // Hapus quote agar aman di inline onclick
                     
                     content += `
