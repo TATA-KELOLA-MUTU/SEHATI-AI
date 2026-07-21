@@ -6,18 +6,17 @@
     <title>Dasbor Hierarki ILP & Akreditasi Puskesmas</title>
     
     <script>
-        // Pengecekan Keamanan Domain (Whitelist)
+        // Pengecekan Keamanan Domain
         (function() {
             const allowedDomains = [
                 "tata-kelola-mutu.github.io",
-                "domain-kedua-anda.github.io" // Silakan ganti dengan domain resmi Anda
+                "domain-kedua-anda.github.io"
             ];
             const currentDomain = window.location.hostname.toLowerCase();
             const isLocal = currentDomain === "localhost" || currentDomain === "127.0.0.1" || currentDomain === "";
             const isCanvasPreview = window.self !== window.top || currentDomain.includes("google") || currentDomain.includes("sandbox");
             
             if (!allowedDomains.includes(currentDomain) && !isLocal && !isCanvasPreview) {
-                // Jika domain tidak cocok, hentikan eksekusi dan timpa seluruh HTML
                 document.documentElement.innerHTML = `
                     <div style="display:flex; justify-content:center; align-items:center; height:100vh; background-color:#fdfbf7; color:#ca5c30; font-family:'Plus Jakarta Sans', sans-serif; text-align:center; padding:20px;">
                         <div>
@@ -25,7 +24,7 @@
                             <p style="color:#2d3748; font-weight:600;">Lisensi SEHATI tidak valid untuk domain ini.</p>
                         </div>
                     </div>`;
-                throw new Error("Unauthorized Access"); // Menghentikan sisa eksekusi JavaScript
+                throw new Error("Unauthorized Access");
             }
         })();
     </script>
@@ -42,11 +41,11 @@
                 extend: {
                     colors: {
                         earthy: {
-                            bg: '#fdfbf7',     // Cream
-                            main: '#ca5c30',   // Terracotta
-                            text: '#2d3748',   // Dark Gray
-                            border: '#e8e3d9', // Soft border
-                            light: '#f5efe6'   // Soft highlight
+                            bg: '#fdfbf7',     
+                            main: '#ca5c30',   
+                            text: '#2d3748',   
+                            border: '#e8e3d9', 
+                            light: '#f5efe6'   
                         }
                     },
                     boxShadow: {
@@ -65,21 +64,17 @@
         body { background-color: #fdfbf7; color: #2d3748; }
         .chart-container { position: relative; width: 100%; max-width: 500px; height: auto; margin: auto; }
         
-        /* Tab Button Styles */
         .tab-button { color: #2d3748; }
         .tab-button.active { background-color: #ca5c30; color: white; box-shadow: 0 4px 15px -3px rgba(202, 92, 48, 0.4); border-color: transparent; }
         
-        /* Accordion Logic */
         .accordion-header { cursor: pointer; }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
         .accordion-content.open { max-height: 8000vh; transition: max-height 0.8s ease-in; }
         
-        /* Animations */
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .nav-container::-webkit-scrollbar { display: none; }
         
-        /* Custom Scrollbar for Modal */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #fdfbf7; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #e8e3d9; border-radius: 10px; }
@@ -93,29 +88,24 @@
     </div>
 
     <div id="floating-select-modal" class="fixed inset-0 z-[70] hidden items-center justify-center opacity-0 transition-opacity duration-300">
-        <!-- Backdrop -->
         <div class="absolute inset-0 bg-earthy-text/40 backdrop-blur-sm transition-opacity" onclick="closeFloatingSelect()"></div>
-        <!-- Modal Content -->
         <div class="relative bg-white rounded-[32px] shadow-2xl w-[90%] max-w-sm p-6 transform scale-95 transition-transform duration-300 flex flex-col max-h-[85vh] border border-earthy-border" id="floating-select-content">
             <h3 class="font-serif text-2xl font-bold text-earthy-main mb-6 text-center">Pilih Kategori</h3>
             <div class="space-y-3 overflow-y-auto pr-1 custom-scrollbar" id="floating-select-options">
-                <!-- Pilihan akan disisipkan oleh JavaScript -->
+                <!-- Pilihan disisipkan oleh JavaScript -->
             </div>
             <button onclick="closeFloatingSelect()" class="mt-6 w-full py-4 rounded-full bg-earthy-light text-earthy-text font-bold hover:bg-[#e6dccb] transition-colors shadow-sm">Batal</button>
         </div>
     </div>
 
     <div class="container mx-auto p-4 md:p-8 max-w-7xl relative z-10">
-        
-        <!-- Tombol Kembali ke Dashboard -->
         <div class="mb-2">
-            <a href="dashboard.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-earthy-border rounded-full text-sm font-bold text-earthy-text hover:border-earthy-main hover:text-earthy-main shadow-sm transition-all duration-300 group">
+            <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-earthy-border rounded-full text-sm font-bold text-earthy-text hover:border-earthy-main hover:text-earthy-main shadow-sm transition-all duration-300 group">
                 <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Kembali ke Dashboard
-            </a>
+            </button>
         </div>
 
-        <!-- Header -->
         <header class="text-center mb-8 pt-2">
             <div class="inline-block bg-earthy-light text-earthy-main border border-earthy-border px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4 shadow-sm">
                 Versi Matriks Silang (ILP × SIAP)
@@ -150,7 +140,6 @@
                     <p class="max-w-2xl mx-auto text-earthy-text/70 font-medium">Dasbor ini memetakan standar akreditasi ke dalam hierarki Program dan Kegiatan spesifik di setiap Klaster.</p>
                 </section>
 
-                <!-- Audit Box -->
                 <div class="bg-[#f0f3eb] border border-[#d2dabc] rounded-[24px] p-6 sm:p-8 mb-12 shadow-card relative overflow-hidden">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                         <div class="flex-1">
@@ -201,7 +190,6 @@
                     <div class="chart-container"><canvas id="klasterDistributionChart"></canvas></div>
                 </div>
 
-                <!-- Info RDOWS -->
                 <section class="text-center mb-8 mt-12">
                     <h2 class="text-2xl font-serif font-bold text-earthy-text mb-2">Pilar Evaluasi Akreditasi (RDOWS)</h2>
                 </section>
@@ -236,7 +224,6 @@
                 </section>
                 
                 <div class="sticky top-4 z-[50] bg-white/90 backdrop-blur-md border border-earthy-border rounded-full p-2 flex justify-start sm:justify-center gap-2 overflow-x-auto whitespace-nowrap mb-8 shadow-sm mx-auto max-w-4xl custom-scrollbar" id="klaster-sub-nav">
-                    <!-- Tombol-tombol akan di-generate oleh JavaScript -->
                 </div>
 
                 <div id="explorer-content" class="space-y-8"></div>
@@ -245,12 +232,10 @@
             <div id="view-inventory" class="view hidden fade-in">
                 <section class="text-center mb-10">
                     <h2 class="text-3xl font-serif font-bold text-earthy-text mb-3">Checklist Otomatis</h2>
-                    <p class="max-w-2xl mx-auto text-earthy-text/70 font-medium">Menerjemahkan <span id="text-tot-ep-inv" class="font-bold text-earthy-main">0</span> titik EP menjadi to-do list praktis untuk persiapan Akreditasi.</p>
+                    <p class="max-w-2xl mx-auto text-earthy-text/70 font-medium">Menerjemahkan <span id="text-tot-ep-inv" class="font-bold text-earthy-main bg-earthy-light px-2 py-1 rounded-md">0</span> titik EP menjadi to-do list praktis untuk persiapan Akreditasi.</p>
                 </section>
                 
                 <div class="bg-white p-6 sm:p-8 rounded-[32px] shadow-card border border-earthy-border">
-                    
-                    <!-- Implementasi Wajib: Input trigger untuk Floating Select Modal -->
                     <div class="mb-10 max-w-sm mx-auto relative">
                         <label class="block text-sm font-bold text-earthy-text/60 mb-2 text-center uppercase tracking-widest">Kategori Filter</label>
                         <input type="text" readonly id="inventory-select-input" onclick="openFloatingSelect()" 
@@ -272,7 +257,6 @@
     </div>
 
 <script>
-// Fungsi Toast
 function showToast(message) {
     const toast = document.getElementById('toast');
     document.getElementById('toast-message').textContent = message;
@@ -280,8 +264,10 @@ function showToast(message) {
     setTimeout(() => { toast.classList.add('translate-y-[200%]', 'opacity-0'); }, 4000);
 }
 
-// Implementasi Wajib Floating Select
+// State Aplikasi Global
 let activeInventoryType = 'R';
+let klasterChartInstance = null;
+
 const inventoryOptions = [
     { value: 'R', label: '📜 Regulasi', desc: 'SK, SOP, Kerangka Acuan' },
     { value: 'D', label: '📄 Dokumen Bukti', desc: 'Rekam medis, form, laporan' },
@@ -295,8 +281,9 @@ function openFloatingSelect() {
     const content = document.getElementById('floating-select-content');
     const optionsContainer = document.getElementById('floating-select-options');
     
+    // Perbaikan Penting: Menghindari masalah escaping dengan melewatkan value sebagai string yang aman
     optionsContainer.innerHTML = inventoryOptions.map(opt => `
-        <button onclick="selectInventoryOption('${opt.value}', '${opt.label}')" 
+        <button onclick="selectInventoryOption('${opt.value}')" 
             class="w-full text-left px-5 py-4 rounded-[20px] border-2 transition-all flex items-center justify-between group 
             ${activeInventoryType === opt.value ? 'border-earthy-main bg-earthy-main text-white shadow-md' : 'border-earthy-border text-earthy-text bg-white hover:border-[#ca5c30]/40'}">
             <div>
@@ -308,7 +295,6 @@ function openFloatingSelect() {
     `).join('');
 
     modal.classList.remove('hidden');
-    // Microtask delay for animation triggering
     setTimeout(() => {
         modal.classList.remove('opacity-0');
         content.classList.remove('scale-95');
@@ -323,13 +309,35 @@ function closeFloatingSelect() {
     setTimeout(() => { modal.classList.add('hidden'); }, 300);
 }
 
-function selectInventoryOption(value, label) {
-    document.getElementById('inventory-select-input').value = label;
-    activeInventoryType = value;
-    renderInventoryContent();
-    closeFloatingSelect();
+// Fungsi global untuk filter yang memanggil render ulang data
+function selectInventoryOption(value) {
+    const selectedOpt = inventoryOptions.find(o => o.value === value);
+    if (selectedOpt) {
+        document.getElementById('inventory-select-input').value = selectedOpt.label;
+        activeInventoryType = value;
+        renderInventoryContent();
+        closeFloatingSelect();
+    }
 }
 
+function switchView(viewId) {
+    const views = ['dashboard', 'explorer', 'inventory'];
+    views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if(el) el.classList.add('hidden');
+        const btn = document.getElementById(`tab-${v}`);
+        if(btn) btn.classList.remove('active');
+    });
+    
+    document.getElementById(`view-${viewId}`).classList.remove('hidden');
+    document.getElementById(`tab-${viewId}`).classList.add('active');
+
+    if (viewId === 'dashboard') initDashboard();
+    if (viewId === 'explorer') renderExplorerContent();
+    if (viewId === 'inventory') renderInventoryContent();
+}
+
+// Data mentah Akreditasi
 const rawData = {
 "BAB1":{title:"BAB I: KEPEMIMPINAN DAN MANAJEMEN PUSKESMAS (KMP)",standarList:[
 {id:"Standar 1.1",title:"Perencanaan dan kemudahan akses",kriteriaList:[
@@ -484,6 +492,33 @@ const klasterMapping = [
   ]}
 ];
 
+// Inisialisasi pengolahan data
+let dynamicCounts = { totalKlaster: 0, totalProgram: 0, totalKriteriaMapping: 0, totalEPMapping: 0, chartLabels: [], chartData: [], chartColors: [] };
+let uniqueKriteriaAcc = new Set();
+let uniqueEPAcc = new Set();
+let kriteriaCrossMap = {};
+const ilpData = [];
+const inventoryData = { 
+    'R': { title: "📜 Inventarisasi Regulasi", groups: [] }, 
+    'D': { title: "📄 Inventarisasi Dokumen Bukti", groups: [] }, 
+    'O': { title: "👀 Inventarisasi Observasi", groups: [] }, 
+    'W': { title: "💬 Inventarisasi Wawancara", groups: [] }, 
+    'S': { title: "🏃 Inventarisasi Simulasi", groups: [] } 
+};
+
+// Pengisian set data unik untuk perhitungan rekapitulasi awal
+Object.values(rawData).forEach(bab => {
+    bab.standarList.forEach(std => {
+        std.kriteriaList.forEach(krit => {
+            uniqueKriteriaAcc.add(krit.id);
+            krit.eps.forEach(ep => {
+                const match = ep.match(/^([a-z])\)/i);
+                if (match) uniqueEPAcc.add(`${krit.id}_${match[1]}`);
+            });
+        });
+    });
+});
+
 function findKriteriaData(kriteriaId) {
     for (const [babKey, babData] of Object.entries(rawData)) {
         for (const standar of babData.standarList) {
@@ -497,43 +532,12 @@ function findKriteriaData(kriteriaId) {
     return null;
 }
 
-let dynamicCounts = { totalKlaster: 0, totalProgram: 0, totalKriteriaMapping: 0, totalEPMapping: 0, chartLabels: [], chartData: [], chartColors: [] };
-let uniqueKriteriaAcc = new Set();
-let uniqueEPAcc = new Set();
-let kriteriaCrossMap = {};
-
-Object.values(rawData).forEach(bab => {
-    bab.standarList.forEach(std => {
-        std.kriteriaList.forEach(krit => {
-            uniqueKriteriaAcc.add(krit.id);
-            krit.eps.forEach(ep => {
-                const match = ep.match(/^([a-z])\)/i);
-                if (match) uniqueEPAcc.add(`${krit.id}_${match[1]}`);
-            });
-        });
-    });
-});
-
-const ilpData = [];
-const inventoryData = { 
-    'R': { title: "📜 Inventarisasi Regulasi", groups: [] }, 
-    'D': { title: "📄 Inventarisasi Dokumen Bukti", groups: [] }, 
-    'O': { title: "👀 Inventarisasi Observasi", groups: [] }, 
-    'W': { title: "💬 Inventarisasi Wawancara", groups: [] }, 
-    'S': { title: "🏃 Inventarisasi Simulasi", groups: [] } 
-};
-
 function transformInventoryText(type, cleanText) {
     let textLower = cleanText.toLowerCase();
     let resultHTML = "", rawTextForCopy = "";
     
-    // Konfigurasi Warna Earthy
     const typeColor = {
-        'R': 'text-[#8f7d6d]', // Stone
-        'D': 'text-[#6b705c]', // Sage
-        'O': 'text-[#d4a373]', // Ochre
-        'W': 'text-[#8b5a2b]', // Warmbrown
-        'S': 'text-[#ca5c30]'  // Terracotta
+        'R': 'text-[#8f7d6d]', 'D': 'text-[#6b705c]', 'O': 'text-[#d4a373]', 'W': 'text-[#8b5a2b]', 'S': 'text-[#ca5c30]'
     }[type];
 
     if (type === 'R') {
@@ -586,6 +590,7 @@ function addToInventory(type, klasterTitle, programTitle, babTitle, standarTitle
     }
 }
 
+// Proses silang memetakan kriteria ke klaster mana saja
 klasterMapping.forEach(klaster => {
     klaster.programs.forEach(prog => {
         prog.kriteria.forEach(kritId => {
@@ -596,6 +601,7 @@ klasterMapping.forEach(klaster => {
     });
 });
 
+// Proses pembuatan hierarki ILP dan ekstraksi EP
 klasterMapping.forEach(klaster => {
     dynamicCounts.totalKlaster++;
     let kriteriaInKlaster = 0;
@@ -642,158 +648,170 @@ klasterMapping.forEach(klaster => {
     dynamicCounts.chartColors.push(klaster.chartColor);
 });
 
+// Fungsi Rendering Tampilan Explorer
+function getRdowsIcon(type) { const icons = {'R':'📜', 'D':'📄', 'O':'👀', 'W':'💬', 'S':'🏃'}; return icons[type] || '📌'; }
+
+function renderExplorerContent() {
+    const container = document.getElementById('explorer-content');
+    if (container.innerHTML !== '') return; 
+    
+    const subNav = document.getElementById('klaster-sub-nav');
+    subNav.innerHTML = ilpData.map(k => {
+        const shortName = k.title.split(':')[0];
+        const safeId = k.title.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
+        return `<button onclick="document.getElementById('box-${safeId}').scrollIntoView({behavior: 'smooth', block: 'start'})" class="flex-none px-5 py-2 rounded-full text-sm font-bold text-earthy-text border-2 border-transparent hover:border-earthy-main/30 hover:bg-[#fcfaf7] transition-all focus:outline-none">${shortName}</button>`;
+    }).join('');
+    
+    ilpData.forEach(klaster => {
+        const safeId = klaster.title.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
+        const el = document.createElement('div');
+        el.id = `box-${safeId}`;
+        el.className = 'border border-earthy-border rounded-[24px] shadow-card bg-white overflow-hidden scroll-mt-28';
+        el.innerHTML = `<h2 class="text-xl font-serif font-bold ${klaster.colorTheme.text} ${klaster.colorTheme.bg} p-5 flex items-center"><span class="mr-3 text-2xl">${klaster.icon}</span> ${klaster.title}</h2>`;
+        const content = document.createElement('div');
+        content.className = 'p-5 space-y-6';
+
+        klaster.programList.forEach(prog => {
+            const progEl = document.createElement('div');
+            progEl.className = 'border border-earthy-border rounded-[20px] overflow-hidden shadow-sm';
+            progEl.innerHTML = `<div class="${klaster.colorTheme.lightBg} p-4 font-bold text-earthy-text border-b border-earthy-border">${prog.title}</div>`;
+            const kritCont = document.createElement('div');
+
+            prog.kriteriaList.forEach(krit => {
+                const kritAcc = document.createElement('div');
+                kritAcc.className = 'border-b last:border-b-0 border-earthy-border';
+                
+                let originalId = krit.kriteriaId.replace('Kriteria ', '');
+                let tags = Array.from(kriteriaCrossMap[originalId] || []);
+                let isCrossMapped = tags.length > 1;
+                let tagHtml = isCrossMapped 
+                    ? `<span class="inline-flex ml-3 items-center px-2.5 py-1 rounded-full text-[10px] font-black tracking-widest uppercase bg-[#fcf1ed] text-[#ca5c30] border border-[#eec9ba] shadow-sm"><span class="mr-1">🔗</span> KLASTER: ${tags.join(', ')}</span>` 
+                    : `<span class="inline-flex ml-3 items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[#f4f1ee] text-[#8f7d6d] border border-[#d3c9c1]">${tags[0]}</span>`;
+
+                kritAcc.innerHTML = `
+                    <div class="accordion-header flex justify-between items-center p-5 hover:bg-[#fcfaf7] transition-colors">
+                        <div class="flex-1">
+                            <span class="text-xs font-bold text-earthy-text/50 block mb-1 uppercase tracking-wider font-sans">${krit.babTitle} > ${krit.standarTitle}</span>
+                            <h3 class="font-serif font-bold text-earthy-text text-lg pr-4 flex flex-wrap items-center gap-y-2">
+                                <span>${krit.kriteriaId}: ${krit.kriteriaTitle}</span> 
+                                ${tagHtml}
+                            </h3>
+                        </div>
+                        <span class="transform transition-transform duration-300 text-earthy-main text-xl font-black ml-4">▼</span>
+                    </div>
+                    <div class="accordion-content bg-white px-5 pb-5">
+                        ${krit.elements.map(ep => `
+                            <div class="bg-[#fdfbf7] p-5 rounded-[16px] border border-earthy-border mb-4 mt-2 shadow-sm hover:border-[#d9a05b]/30 transition-colors">
+                                <p class="font-bold text-earthy-text font-sans">EP ${ep.id}) ${ep.text}</p>
+                                <div class="mt-4 border-t border-earthy-border pt-4 flex flex-wrap gap-2">
+                                    ${ep.rdows.map(r => `<span class="inline-flex items-center text-xs font-bold bg-white text-earthy-text border border-earthy-border rounded-full px-3 py-1.5 shadow-sm"><span class="mr-1.5">${getRdowsIcon(r.type)}</span> ${r.type}: ${r.detail}</span>`).join('')}
+                                </div>
+                            </div>`).join('')}
+                    </div>`;
+                kritCont.appendChild(kritAcc);
+                kritAcc.querySelector('.accordion-header').addEventListener('click', function() {
+                    this.querySelector('span.transform').style.transform = this.nextElementSibling.classList.toggle('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+                });
+            });
+            progEl.appendChild(kritCont);
+            content.appendChild(progEl);
+        });
+        el.appendChild(content);
+        container.appendChild(el);
+    });
+}
+
+// Fungsi Rendering Tampilan Inventarisasi (Dinamis berdasarkan filter)
+function renderInventoryContent() {
+    const container = document.getElementById('inventory-content');
+    const data = inventoryData[activeInventoryType];
+    
+    let filterTotal = 0;
+    if (data && data.groups) {
+        data.groups.forEach(g => filterTotal += g.items.length);
+    }
+    
+    // Perbarui angka jumlah EP spesifik yang ditampilkan pada label checklist
+    const countEl = document.getElementById('text-tot-ep-inv');
+    if (countEl) countEl.textContent = filterTotal;
+
+    if (!data || data.groups.length === 0) { 
+        container.innerHTML = `<p class="text-center text-earthy-text/50 my-8 font-medium">Tidak ada data untuk kategori ini.</p>`; 
+        return; 
+    }
+
+    let html = '<div class="space-y-10">';
+    data.groups.forEach(group => {
+        html += `<div>
+                    <h3 class="text-xl font-serif font-bold text-earthy-text border-b-2 border-earthy-border pb-3 mb-4">${group.title} <span class="text-sm font-sans font-medium text-earthy-text/50">(${group.items.length} Bukti Telusur)</span></h3>
+                    <ul class="space-y-4 list-none pl-0">`;
+        group.items.forEach(item => {
+            html += `
+                <li class="p-5 bg-white rounded-[24px] border border-earthy-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-earthy-main/30 transition-all shadow-sm group">
+                    <span class="text-earthy-text text-sm md:text-base flex-1 leading-relaxed font-medium">${item.displayHtml} <span class="text-xs font-mono font-bold bg-[#fdfbf7] text-earthy-text/60 border border-earthy-border px-2 py-1 rounded-md ml-1 whitespace-nowrap">${item.reference}</span></span>
+                    <button class="copy-btn shrink-0 inline-flex items-center px-5 py-2.5 text-sm font-bold text-white bg-earthy-main rounded-full shadow-md hover:bg-[#b5522b] transition-all transform hover:scale-105 active:scale-95" data-text="${item.copyText.replace(/"/g, '&quot;')}">Salin Teks</button>
+                </li>`;
+        });
+        html += `</ul></div>`;
+    });
+    container.innerHTML = html + '</div>';
+
+    // Tambahkan Event Listener ke semua tombol Salin Teks yang baru dimuat
+    container.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const ta = document.createElement("textarea"); 
+            ta.value = this.getAttribute('data-text');
+            ta.style.position = "fixed"; 
+            document.body.appendChild(ta); 
+            ta.select(); 
+            document.execCommand('copy'); 
+            document.body.removeChild(ta);
+            
+            showToast("Berhasil disalin ke clipboard!");
+            const og = this.innerHTML; 
+            this.innerHTML = `✓ Tersalin`; 
+            this.classList.replace("bg-earthy-main", "bg-[#6b705c]");
+            setTimeout(() => { 
+                this.innerHTML = og; 
+                this.classList.replace("bg-[#6b705c]", "bg-earthy-main"); 
+            }, 2000);
+        });
+    });
+}
+
+function initDashboard() {
+    if (klasterChartInstance) klasterChartInstance.destroy();
+    klasterChartInstance = new Chart(document.getElementById('klasterDistributionChart'), {
+        type: 'polarArea', 
+        data: { labels: dynamicCounts.chartLabels, datasets: [{ label: 'Kriteria Terpetakan', data: dynamicCounts.chartData, backgroundColor: dynamicCounts.chartColors, borderColor: '#fdfbf7', borderWidth: 3 }] },
+        options: { 
+            responsive: true, maintainAspectRatio: false, 
+            plugins: { legend: { position: 'bottom', labels: { font: { family: "'Plus Jakarta Sans', sans-serif", weight: 'bold' }, color: '#2d3748' } } },
+            scales: { r: { grid: { color: '#e8e3d9' } } }
+        }
+    });
+}
+
+// Inisialisasi saat struktur dokumen selesai dimuat
 document.addEventListener('DOMContentLoaded', function() {
-    // Populate stats
+    // Memasukkan angka statis ke halaman dasbor
     document.getElementById('count-klaster').textContent = dynamicCounts.totalKlaster;
     document.getElementById('count-program').textContent = dynamicCounts.totalProgram;
     document.getElementById('count-kriteria-map').textContent = dynamicCounts.totalKriteriaMapping;
     document.getElementById('count-ep-map').textContent = dynamicCounts.totalEPMapping;
-    document.getElementById('text-tot-ep-inv').textContent = dynamicCounts.totalEPMapping;
     document.getElementById('val-kriteria').textContent = uniqueKriteriaAcc.size;
     document.getElementById('val-ep').textContent = uniqueEPAcc.size;
 
-    const views = document.querySelectorAll('.view');
-    const tabButtons = document.querySelectorAll('.tab-button');
-    let klasterChartInstance = null;
-
-    function switchView(viewId) {
-        views.forEach(v => v.classList.add('hidden'));
-        document.getElementById(`view-${viewId}`).classList.remove('hidden');
-        tabButtons.forEach(btn => btn.classList.toggle('active', btn.id === `tab-${viewId}`));
-    }
-
-    function switchInventoryView(type) {
-        activeInventoryType = type;
-        renderInventoryContent();
-    }
-    
-    function getRdowsIcon(type) { const icons = {'R':'📜', 'D':'📄', 'O':'👀', 'W':'💬', 'S':'🏃'}; return icons[type] || '📌'; }
-
-    function renderExplorerContent() {
-        const container = document.getElementById('explorer-content');
-        if (container.innerHTML !== '') return; // Render once
-        
-        const subNav = document.getElementById('klaster-sub-nav');
-        subNav.innerHTML = ilpData.map(k => {
-            const shortName = k.title.split(':')[0];
-            const safeId = k.title.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
-            return `<button onclick="document.getElementById('box-${safeId}').scrollIntoView({behavior: 'smooth', block: 'start'})" class="flex-none px-5 py-2 rounded-full text-sm font-bold text-earthy-text border-2 border-transparent hover:border-earthy-main/30 hover:bg-[#fcfaf7] transition-all focus:outline-none">${shortName}</button>`;
-        }).join('');
-        
-        ilpData.forEach(klaster => {
-            const safeId = klaster.title.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
-            const el = document.createElement('div');
-            el.id = `box-${safeId}`;
-            el.className = 'border border-earthy-border rounded-[24px] shadow-card bg-white overflow-hidden scroll-mt-28';
-            el.innerHTML = `<h2 class="text-xl font-serif font-bold ${klaster.colorTheme.text} ${klaster.colorTheme.bg} p-5 flex items-center"><span class="mr-3 text-2xl">${klaster.icon}</span> ${klaster.title}</h2>`;
-            const content = document.createElement('div');
-            content.className = 'p-5 space-y-6';
-
-            klaster.programList.forEach(prog => {
-                const progEl = document.createElement('div');
-                progEl.className = 'border border-earthy-border rounded-[20px] overflow-hidden shadow-sm';
-                progEl.innerHTML = `<div class="${klaster.colorTheme.lightBg} p-4 font-bold text-earthy-text border-b border-earthy-border">${prog.title}</div>`;
-                const kritCont = document.createElement('div');
-
-                prog.kriteriaList.forEach(krit => {
-                    const kritAcc = document.createElement('div');
-                    kritAcc.className = 'border-b last:border-b-0 border-earthy-border';
-                    
-                    // Logika Badge Cross Map (Kriteria Ganda)
-                    let originalId = krit.kriteriaId.replace('Kriteria ', '');
-                    let tags = Array.from(kriteriaCrossMap[originalId] || []);
-                    let isCrossMapped = tags.length > 1;
-                    let tagHtml = isCrossMapped 
-                        ? `<span class="inline-flex ml-3 items-center px-2.5 py-1 rounded-full text-[10px] font-black tracking-widest uppercase bg-[#fcf1ed] text-[#ca5c30] border border-[#eec9ba] shadow-sm"><span class="mr-1">🔗</span> KLASTER: ${tags.join(', ')}</span>` 
-                        : `<span class="inline-flex ml-3 items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[#f4f1ee] text-[#8f7d6d] border border-[#d3c9c1]">${tags[0]}</span>`;
-
-                    kritAcc.innerHTML = `
-                        <div class="accordion-header flex justify-between items-center p-5 hover:bg-[#fcfaf7] transition-colors">
-                            <div class="flex-1">
-                                <span class="text-xs font-bold text-earthy-text/50 block mb-1 uppercase tracking-wider font-sans">${krit.babTitle} > ${krit.standarTitle}</span>
-                                <h3 class="font-serif font-bold text-earthy-text text-lg pr-4 flex flex-wrap items-center gap-y-2">
-                                    <span>${krit.kriteriaId}: ${krit.kriteriaTitle}</span> 
-                                    ${tagHtml}
-                                </h3>
-                            </div>
-                            <span class="transform transition-transform duration-300 text-earthy-main text-xl font-black ml-4">▼</span>
-                        </div>
-                        <div class="accordion-content bg-white px-5 pb-5">
-                            ${krit.elements.map(ep => `
-                                <div class="bg-[#fdfbf7] p-5 rounded-[16px] border border-earthy-border mb-4 mt-2 shadow-sm hover:border-[#d9a05b]/30 transition-colors">
-                                    <p class="font-bold text-earthy-text font-sans">EP ${ep.id}) ${ep.text}</p>
-                                    <div class="mt-4 border-t border-earthy-border pt-4 flex flex-wrap gap-2">
-                                        ${ep.rdows.map(r => `<span class="inline-flex items-center text-xs font-bold bg-white text-earthy-text border border-earthy-border rounded-full px-3 py-1.5 shadow-sm"><span class="mr-1.5">${getRdowsIcon(r.type)}</span> ${r.type}: ${r.detail}</span>`).join('')}
-                                    </div>
-                                </div>`).join('')}
-                        </div>`;
-                    kritCont.appendChild(kritAcc);
-                    kritAcc.querySelector('.accordion-header').addEventListener('click', function() {
-                        this.querySelector('span.transform').style.transform = this.nextElementSibling.classList.toggle('open') ? 'rotate(180deg)' : 'rotate(0deg)';
-                    });
-                });
-                progEl.appendChild(kritCont);
-                content.appendChild(progEl);
-            });
-            el.appendChild(content);
-            container.appendChild(el);
+    // Pasang Event Listener untuk Tab
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.addEventListener('click', () => { 
+            switchView(btn.id.replace('tab-', '')); 
         });
-    }
+    });
 
-    function renderInventoryContent() {
-        const container = document.getElementById('inventory-content');
-        const data = inventoryData[activeInventoryType];
-        if (!data || data.groups.length === 0) { container.innerHTML = `<p class="text-center text-earthy-text/50 my-8 font-medium">Tidak ada data untuk kategori ini.</p>`; return; }
-
-        let html = '<div class="space-y-10">';
-        data.groups.forEach(group => {
-            html += `<div>
-                        <h3 class="text-xl font-serif font-bold text-earthy-text border-b-2 border-earthy-border pb-3 mb-4">${group.title} <span class="text-sm font-sans font-medium text-earthy-text/50">(${group.items.length} Bukti Telusur)</span></h3>
-                        <ul class="space-y-4 list-none pl-0">`;
-            group.items.forEach(item => {
-                html += `
-                    <li class="p-5 bg-white rounded-[24px] border border-earthy-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-earthy-main/30 transition-all shadow-sm group">
-                        <span class="text-earthy-text text-sm md:text-base flex-1 leading-relaxed font-medium">${item.displayHtml} <span class="text-xs font-mono font-bold bg-[#fdfbf7] text-earthy-text/60 border border-earthy-border px-2 py-1 rounded-md ml-1 whitespace-nowrap">${item.reference}</span></span>
-                        <button class="copy-btn shrink-0 inline-flex items-center px-5 py-2.5 text-sm font-bold text-white bg-earthy-main rounded-full shadow-md hover:bg-[#b5522b] transition-all transform hover:scale-105 active:scale-95" data-text="${item.copyText.replace(/"/g, '&quot;')}">Salin Teks</button>
-                    </li>`;
-            });
-            html += `</ul></div>`;
-        });
-        container.innerHTML = html + '</div>';
-
-        container.querySelectorAll('.copy-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const ta = document.createElement("textarea"); ta.value = this.getAttribute('data-text');
-                ta.style.position = "fixed"; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-                showToast("Berhasil disalin ke clipboard!");
-                const og = this.innerHTML; this.innerHTML = `✓ Tersalin`; this.classList.replace("bg-earthy-main", "bg-[#6b705c]");
-                setTimeout(() => { this.innerHTML = og; this.classList.replace("bg-[#6b705c]", "bg-earthy-main"); }, 2000);
-            });
-        });
-    }
-    
-    function initDashboard() {
-        if (klasterChartInstance) klasterChartInstance.destroy();
-        klasterChartInstance = new Chart(document.getElementById('klasterDistributionChart'), {
-            type: 'polarArea', 
-            data: { labels: dynamicCounts.chartLabels, datasets: [{ label: 'Kriteria Terpetakan', data: dynamicCounts.chartData, backgroundColor: dynamicCounts.chartColors, borderColor: '#fdfbf7', borderWidth: 3 }] },
-            options: { 
-                responsive: true, maintainAspectRatio: false, 
-                plugins: { legend: { position: 'bottom', labels: { font: { family: "'Plus Jakarta Sans', sans-serif", weight: 'bold' }, color: '#2d3748' } } },
-                scales: { r: { grid: { color: '#e8e3d9' } } }
-            }
-        });
-    }
-
-    // Routing Navigation
-    tabButtons.forEach(btn => btn.addEventListener('click', () => { 
-        switchView(btn.id.replace('tab-', '')); 
-        if (btn.id === 'tab-dashboard') initDashboard(); 
-        else if (btn.id === 'tab-explorer') renderExplorerContent(); 
-    }));
-
-    // Inisialisasi awal
-    switchView('dashboard'); initDashboard(); renderInventoryContent(); 
+    // Mulai tampilan awal pada Dasbor Utama
+    switchView('dashboard'); 
+    renderInventoryContent(); 
 });
 </script>
 </body>
