@@ -13,7 +13,7 @@
             ];
             const currentDomain = window.location.hostname.toLowerCase();
             const isLocal = currentDomain === "localhost" || currentDomain === "127.0.0.1" || currentDomain === "";
-            const isCanvasPreview = window.self !== window.top || currentDomain.includes("google") || currentDomain.includes("sandbox");
+            const isCanvasPreview = window.self !== window.top || currentDomain.includes("google") || currentDomain.includes("sandbox") || currentDomain.includes("usercontent");
             
             if (!allowedDomains.includes(currentDomain) && !isLocal && !isCanvasPreview) {
                 document.documentElement.innerHTML = `
@@ -332,6 +332,14 @@
                     <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:text-brand-terra shadow-sm"><i class="fa-solid fa-hospital text-xs"></i></div>
                     Rumah Sakit
                 </button>
+                <button type="button" onclick="selectFasyankes('LabKes', 'Laboratorium Kesehatan')" class="w-full p-3.5 rounded-xl border border-brand-surface bg-brand-cream hover:border-brand-terra hover:bg-brand-terra/5 text-left text-sm font-semibold text-brand-text transition-all group flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:text-brand-terra shadow-sm"><i class="fa-solid fa-flask text-xs"></i></div>
+                    Laboratorium Kesehatan
+                </button>
+                <button type="button" onclick="selectFasyankes('UTD', 'Unit Transfusi Darah')" class="w-full p-3.5 rounded-xl border border-brand-surface bg-brand-cream hover:border-brand-terra hover:bg-brand-terra/5 text-left text-sm font-semibold text-brand-text transition-all group flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:text-brand-terra shadow-sm"><i class="fa-solid fa-droplet text-xs"></i></div>
+                    Unit Transfusi Darah
+                </button>
             </div>
         </div>
     </div>
@@ -345,8 +353,8 @@
     </div>
 
     <script>
-        // URL API Google Apps Script - URL Anda tidak diubah sesuai instruksi
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbxSY00llFZ1ggKvIGGpaHB9hcPhurvm4Kc1bf2P8WQgeM4E5ooRQRtk_6twpzXveZVu/exec";
+        // URL API Google Apps Script
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxXURJA4zvBb_2uQ4kus0_YKND2YlfZ0Hj7Q_EmFouKxcwiQ06pxKuDw21jOSGoXdEQ/exec";
 
         // Kontrol Modal Fasyankes (Floating Select)
         let activeFasyankesTarget = '';
@@ -455,12 +463,16 @@
             const alertIcon = document.getElementById('alertIcon');
             const alertText = document.getElementById('alertText');
             
-            alertBox.classList.remove('bg-red-50', 'border-red-200', 'text-red-700', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-700');
+            // Hapus semua class warna sebelumnya
+            alertBox.classList.remove('bg-red-50', 'border-red-200', 'text-red-700', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-700', 'bg-amber-50', 'border-amber-200', 'text-amber-700');
             alertIcon.className = "fa-solid mt-0.5";
             
             if (type === 'success') {
                 alertBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-700');
                 alertIcon.classList.add('fa-circle-check');
+            } else if (type === 'warning') {
+                alertBox.classList.add('bg-amber-50', 'border-amber-200', 'text-amber-700');
+                alertIcon.classList.add('fa-triangle-exclamation');
             } else {
                 alertBox.classList.add('bg-red-50', 'border-red-200', 'text-red-700');
                 alertIcon.classList.add('fa-circle-exclamation');
@@ -469,7 +481,7 @@
             alertText.innerText = message;
             alertBox.classList.remove('hidden');
             
-            setTimeout(() => { alertBox.classList.add('hidden'); }, 6000);
+            setTimeout(() => { alertBox.classList.add('hidden'); }, 8000); // Diperpanjang jadi 8 detik agar sempat dibaca
         }
 
         async function handleLogin(e) {
@@ -542,7 +554,13 @@
                     document.getElementById('regFasyankesDisplay').value = '';
                     
                     switchTab('login');
-                    showAlert("Registrasi Berhasil! Silakan masuk.", 'success');
+                    
+                    // Cek apakah backend mengirimkan peringatan (email sudah dipakai di layanan lain)
+                    if (result.warning) {
+                        showAlert("Registrasi Berhasil! Info: " + result.warning, 'warning');
+                    } else {
+                        showAlert("Registrasi Berhasil! Silakan tunggu approval atau langsung masuk.", 'success');
+                    }
                 } else {
                     showAlert("Registrasi Gagal: " + (result.message || "Data invalid."), 'error');
                 }
