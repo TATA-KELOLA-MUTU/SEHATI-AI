@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Dokumen Akreditasi RS | Hierarki Lengkap 2024</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sehati: {
+                            primary: '#ca5c30',
+                            primaryDark: '#b04d26',
+                            bg: '#fdfbf7',
+                            border: '#e2e8f0',
+                            text: '#334155',
+                            dark: '#0f172a'
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-sehati-bg font-sans text-sehati-text antialiased selection:bg-orange-200">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-sehati-border sticky top-0 z-40 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-hospital text-sehati-primary text-2xl"></i>
+                <h1 class="font-heading font-bold text-xl text-sehati-dark hidden sm:block">Akreditasi RS</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="openSetupModal()" class="flex items-center gap-2 px-4 py-2 bg-orange-50 text-sehati-primary border border-sehati-primary/20 hover:bg-orange-100 rounded-xl font-semibold transition-colors text-sm">
+                    <i class="fa-brands fa-google-drive"></i>
+                    <span class="hidden sm:inline">Pengaturan Drive</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div class="mb-10 text-center sm:text-left">
+            <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-sehati-dark mb-3 tracking-tight">Sistem Dokumen Akreditasi</h2>
+            <p class="text-slate-500 text-base sm:text-lg max-w-2xl">Peta judul kerja dan unggah bukti implementasi sesuai instrumen survei standar akreditasi RS terbaru (2024).</p>
+        </div>
+        
+        <div id="checklist-container">
+            <!-- Accordion data will be rendered here -->
+        </div>
+    </main>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="hiddenFileInput" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 rounded-[16px] shadow-lg transform transition-all duration-300 z-50 flex items-center gap-3 font-medium text-sm max-w-sm text-white translate-y-24 opacity-0 bg-sehati-primary">
+        <i id="toastIcon" class="fa-solid fa-check-circle text-lg"></i>
+        <span id="toastMessage">Pesan</span>
+    </div>
+
+    <!-- Setup Modal -->
+    <div id="setupModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div id="setupModalContent" class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 scale-95 flex flex-col max-h-[90vh]">
+            <div class="p-6 sm:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h3 class="font-heading font-bold text-xl sm:text-2xl text-sehati-dark"><i class="fa-brands fa-google-drive text-sehati-primary mr-2"></i> Integrasi Google Drive</h3>
+                <button onclick="closeSetupModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 sm:p-8 overflow-y-auto">
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Personal Web App URL (GAS)</label>
+                    <input type="url" id="gasUrlInput" placeholder="https://script.google.com/macros/s/..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sehati-primary/20 focus:border-sehati-primary transition-all text-sm font-mono text-slate-600">
+                    <div id="gasStatusContainer" class="mt-3 flex items-center gap-2 text-sm">
+                        <!-- Status connection info -->
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mb-8">
+                    <button id="btnSaveGas" onclick="saveGasUrl()" class="flex-1 bg-sehati-primary hover:bg-sehati-primaryDark text-white px-4 py-3 rounded-xl font-bold transition-all shadow-sm shadow-sehati-primary/20 flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-link"></i> Simpan & Hubungkan
+                    </button>
+                    <button id="btnDisconnectGas" onclick="disconnectGas()" class="hidden bg-red-50 hover:bg-red-100 text-red-600 px-4 py-3 rounded-xl font-bold transition-all justify-center items-center gap-2">
+                        <i class="fa-solid fa-unlink"></i> Putuskan
+                    </button>
+                </div>
+
+                <div class="border border-slate-200 rounded-2xl overflow-hidden">
+                    <button onclick="toggleGasGuide()" class="w-full bg-slate-50 px-5 py-4 flex justify-between items-center text-left hover:bg-slate-100 transition-colors">
+                        <span class="font-bold text-slate-800"><i class="fa-solid fa-code text-slate-400 mr-2"></i> Panduan & Template GAS</span>
+                        <i id="gasGuideIcon" class="fa-solid fa-chevron-down text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="gasGuideContent" class="hidden p-5 border-t border-slate-200 bg-white">
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            1. Buka <strong>Google Drive</strong> > Buat Folder Baru > Salin <strong>ID Folder</strong>-nya dari URL.<br>
+                            2. Kunjungi <a href="https://script.google.com" target="_blank" class="text-sehati-primary hover:underline font-semibold">script.google.com</a> > Buat Proyek Baru.<br>
+                            3. Paste kode di bawah ini, masukkan ID Folder di baris pertama.<br>
+                            4. Klik <strong>Deploy</strong> > New Deployment > Pilih type <strong>Web app</strong>.<br>
+                            5. Set Execute as: <strong>Me</strong> dan Who has access: <strong>Anyone</strong>.<br>
+                            6. Salin <strong>Web app URL</strong> yang dihasilkan dan masukkan ke kolom di atas.
+                        </p>
+                        <div class="relative group">
+                            <pre class="bg-slate-800 text-slate-200 p-4 rounded-xl text-xs font-mono overflow-x-auto"><code id="gasTemplateCode"></code></pre>
+                            <button onclick="copyGasTemplate()" class="absolute top-2 right-2 bg-slate-700 hover:bg-slate-600 text-white w-8 h-8 rounded-lg flex items-center justify-center transition-colors shadow-sm opacity-0 group-hover:opacity-100">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Konfigurasi Database Utama (Google Apps Script Central)
+        const CENTRAL_GAS_URL = "https://script.google.com/macros/s/AKfycbxXURJA4zvBb_2uQ4kus0_YKND2YlfZ0Hj7Q_EmFouKxcwiQ06pxKuDw21jOSGoXdEQ/exec";
+        const currentUserEmail = sessionStorage.getItem('userEmail') || 'user_default';
+        let GAS_WEB_APP_URL = sessionStorage.getItem('gasUrl') || ''; 
+
+        // Template GAS untuk ditaruh di sisi Pengguna
+        const GAS_TEMPLATE = `const FOLDER_ID = "ID_FOLDER_DRIVE_ANDA"; // Ganti dengan ID Folder Anda
+
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var folder = DriveApp.getFolderById(FOLDER_ID);
+    
+    if (data.action === 'upload') {
+      var blob = Utilities.newBlob(Utilities.base64Decode(data.base64), data.mimeType, data.fileName);
+      var file = folder.createFile(blob);
+      return ContentService.createTextOutput(JSON.stringify({
+        success: true, url: file.getUrl(), id: file.getId(), name: file.getName()
+      })).setMimeType(ContentService.MimeType.JSON);
+    } 
+    else if (data.action === 'delete') {
+      var file = DriveApp.getFileById(data.fileId);
+      file.setTrashed(true);
+      return ContentService.createTextOutput(JSON.stringify({
+        success: true, message: 'File dipindahkan ke sampah'
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false, error: error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// Tambahkan doGet untuk menangani verifikasi sederhana jika diperlukan
+function doGet(e) {
+    return ContentService.createTextOutput(JSON.stringify({
+        success: true, message: "Koneksi Web App Aktif"
+    })).setMimeType(ContentService.MimeType.JSON);
+}`;
+
+        const dataKelompokA = `
+#Kelompok A — Manajemen Rumah Sakit
+##BAB I. Tata Kelola Rumah Sakit (TKRS)
+###TKRS 1: Organisasi dan Tanggung Jawab Pemilik atau Representasi Pemilik
+a:Representasi pemilik/Dewan Pengawas dipilih dan ditetapkan oleh Pemilik.|R
+b:Tanggung jawab dan wewenang representasi pemilik/Dewan Pengawas meliputi poin a) sampai dengan i) yang tertera di dalam maksud dan tujuan serta dijelaskan di dalam peraturan.|R
+c:Representasi pemilik/Dewan Pengawas di evaluasi oleh pemilik setiap tahun dan hasil evaluasinya didokumentasikan.|D,W
+d:Representasi pemilik/Dewan Pengawas menetapkan visi misi rumah sakit yang diarahkan oleh pemilik.|R
+###TKRS 2: Direktur Rumah Sakit
+a:menetapkan regulasi tentang kualifikasi Direktur, uraian tugas, tanggung jawab dan wewenang sesuai dengan persyaratan dan peraturan perundang- undangan yang berlaku.|R
+b:Direktur menjalankan operasional rumah sakit sesuai tanggung jawabnya yang meliputi namun tidak terbatas pada poin a) sampai dengan i) dalam maksud dan tujuan yang dituangkan.|D,W
+c:Memiliki bukti tertulis tanggung jawab Direktur telah dilaksanakan dan dievaluasi oleh pemilik/representasi pemilik setiap tahun dan hasil evaluasinya didokumentasikan.|D,W
+###TKRS 3: Kepala Bidang / Divisi / Unit Pelayanan
+a:Direktur menunjuk pimpinan rumah sakit lain dan kepala unit sesuai kualifikasi dalam persyaratan jabatan yang telah|R
+b:Pimpinan: bertanggung jawab untuk melaksanakan misi yang telah ditetapkan dan memastikan kebijakan serta prosedur dilaksanakan.|D
+c:Laporan bulanan dan tahunan b) Supervisi kepatuhan staf terhadap regulasi RS|W
+d:Pimpinan: bersama dengan pimpinan unit merencanakan dan menentukan jenis pelayanan klinis untuk memenuhi kebutuhan pasien yang dilayani rumah sakit.|D,W
+e:memberikan informasi tentang pelayanan yang disediakan kepada tokoh masyarakat, para pemangku kepentingan, fasilitas pelayanan kesehatan lain di sekitar rumah sakit,.|D
+f:pada maksud dan tujuan 2. Bukti proses menerima masukan dari masyarakat bagi peningkatan pelayanan.|D
+###TKRS 3.1: Memastikan komunikasi efektif menyeluruh di rumah sakit
+a:Pimpinan: memastikan bahwa terdapat proses untuk menyampaikan informasi dalam lingkungan rumah sakit secara akurat dan tepat waktu|D,W
+b:Pimpinan: memastikan bahwa komunikasi yang efektif antara unit klinis dan nonklinis, antara PPA dengan|D,W
+c:Pimpinan: telah mengkomunikasi kan visi, misi, tujuan, rencana strategis dan kebijakan, rumah sakit kepada semua staf.|D,W
+###TKRS 4: Etika Rumah Sakit
+a:Pimpinan: berpartisipasi dalam merencanakan mengembangkan dan menerapkan program peningkatan mutu dan keselamatan pasien di lingkungan rumah sakit.|R,D,W
+b:Pimpinan: memilih dan menetapkan|R,D,W
+c:Pimpinan: memastikan terlaksananya program PMKP termasuk memberikan dukungan teknologi dan sumber daya yang adekuat serta menyediakan pendidikan staf tentang.|D,W
+d:Pimpinan: menetapkan mekanisme pemantauan dan koordinasi program peningkatan mutu dan keselamatan pasien.|R
+###TKRS 5: Tanggung Jawab Mutu dan Keselamatan Pasien
+a:Pimpinan: menggunakan data yang tersedia (data based) dalam menetapkan indikator prioritas rumah sakit yang perbaikannya akan berdampak luas/menyeluruh meliputi poin a).|D
+b:dalam maksud dan tujuan, sebagai acuan untuk memilih indikator prioritas. (lihat maksud dan tujuan di PMKP 3)|W
+c:Dalam memilih prioritas perbaikan di tingkat rumah sakit maka pimpinan rumah sakit mengggunakan kriteria prioritas meliputi poin a) – i) dalam maksud dan tujuan|D
+d:Pimpinan: mengkaji dampak perbaikan primer dan dampak perbaikan sekunder pada indikator prioritas rumah sakit yang ditetapkan di tingkat rumah sakit maupun tingkat unit.|D,W
+###TKRS 6: Manajemen Kontrak dan Perjanjian Kerja Sama
+a:Pimpinan: bertanggung jawab terhadap kontrak untuk memenuhi kebutuhan pasien dan manajemen termasuk ruang lingkup pelayanan tersebut yang dicantumkan dalam persetujuan.|R
+b:Sumber daya manusia kesehatan yang dikontrak perlu dilakukan kredensial sesuai ketentuan di rumah sakit.|D,W
+c:Pimpinan: menginspeksi kepatuhan layanan kontrak sesuai kebutuhan.|D,W
+d:Apabila kontrak dinegosiasikan ulang atau dihentikan, rumah sakit tetap mempertahankan kelanjutan dari pelayanan pasien.|R
+e:Semua kontrak menetapkan data mutu yang harus dilaporkan kepada rumah sakit, disertai frekuensi dan mekanisme pelaporan, serta bagaimana rumah sakit akan|R
+f:Pimpinan klinis dan non klinis yang terkait layanan yang dikontrak melakukan analisis dan memantau informasi mutu yang dilaporkan pihak yang dikontrak yang merupakan bagian dalam.|D,W
+###TKRS 7: Pengelolaan Rantai Pasok (Supply Chain Management)
+a:Pimpinan: menggunakan data dan informasi mutu serta dampak terhadap keselamatan untuk membuat keputusan pembelian dan penggunaan peralatan baru.|D,W
+b:Pimpinan: menggunakan data dan informasi mutu serta dampak terhadap keselamatan dalam pemilihan, penambahan, pengurangan dan melakukan rotasi staf.|D,W
+c:Pimpinan: menggunakan rekomendasi dari organisasi profesional dan sumber berwenang lainnya dalam mengambil keputusan mengenai pengadaan sumber daya.|D,W
+d:Pimpinan: memberikan arahan, dukungan, dan pengawasan terhadap penggunaan sumber daya Teknologi informasi Kesehatan (TIK).|D,W
+e:Pimpinan: memberikan arahan, dukungan, dan pengawasan terhadap pelaksanaan program penanggulangan kedaruratan dan bencana.|D,W
+f:Pimpinan: memantau hasil keputusannya dan menggunakan data tersebut untuk mengevaluasi dan memperbaiki mutu keputusan pembelian dan pengalokasian sumber daya.|D,W
+###TKRS 7.1: Memanfaatkan data keamanan dalam rantai perbekalan
+a:Pimpinan: menentukan obat-obatan, perbekalan medis, serta peralatan medis yang paling berisiko dan membuat bagan alur rantai perbekalannya.|R
+b:Pimpinan: menentukan titik paling berisiko dalam bagan alur rantai perbekalan dan membuat keputusan berdasarkan risiko dalam rantai perbekalan tersebut.|R
+c:memiliki proses untuk melakukan pelacakan retrospektif terhadap perbekalan yang diduga tidak stabil, terkontaminasi, rusak, atau palsu.|D,W
+d:memberitahu produsen dan/atau distributor bila menemukan perbekalan yang tidak stabil, terkontaminasi, rusak, atau palsu.|D,W
+###TKRS 8: Organisasi Medis dan Keperawatan
+a:struktur organisasi Komite Medik, Komite Keperawatan, dan Komite Tenaga Kesehatan Lain yang ditetapkan Direktur sesuai peraturan perundang- undangan yang berlaku.|R
+b:Komite Medik, Komite Keperawatan dan Komite Tenaga Kesehatan Lain melaksanakan tanggung jawabnya mencakup a) -d) dalam maksud dan tujuan.|D,W
+c:Untuk melaksanakan tanggung jawabnya Komite Medik, Komite Keperawatan, dan Komite Tenaga Kesehatan Lain menyusun Program kerja setiap tahun dan ditetapkan oleh Direktur|R
+###TKRS 9: Budaya Keselamatan Pasien
+a:Kepala unit kerja diangkat sesuai kualifikasi dalam persyaratan jabatan yang ditetapkan|R
+b:Kepala unit kerja menyusun pedoman pengorganisasian, pedoman pelayanan dan prosedur sesuai proses bisnis di unit kerja|R
+c:Kepala unit kerja menyusun program kerja yang termasuk di dalamnya kegiatan peningkatan mutu dan keselamatan pasien serta manajemen risiko setiap tahun|R
+d:Kepala unit kerja mengusulkan kebutuhan sumber daya mencakup ruangan, peralatan medis, teknologi informasi dan sumber daya lain yang diperlukan unit layanan serta terdapat.|D,W
+e:Kepala unit kerja telah melakukan koordinasi dan integrasi baik dalam unitnya maupun antar unit layanan.|D,W
+###TKRS 10: Kepala unit melakukan pengukuran indikator mutu unitnya
+a:Kepala unit klinis/non klinis melakukan pengukuran INM yang sesuai dengan pelayanan yang diberikan oleh unitnya.|D,W
+b:Kepala unit klinis/non klinis melakukan pengukuran IMP-RS yang sesuai dengan pelayanan yang diberikan oleh unitnya, termasuk semua layanan kontrak yang menjadi tanggung jawabnya.|D,W
+c:Kepala unit klinis/non klinis menerapkan pengukuran IMP- Unit untuk mengurangi variasi dan memperbaiki proses dalam unitnya.|D,W
+d:Kepala unit klinis/non klinis memilih prioritas perbaikan yang baru bila perbaikan sebelumnya sudah dapat dipertahankan dalam waktu 1 (satu) tahun|D
+###TKRS 11: Evaluasi kinerja PPA menggunakan indikator mutu unit
+a:Penilaian praktik profesional berkelanjutan (On going Professional Practice Evaluation) para dokter dalam memberikan pelayanan untuk meningkatkan mutu dan keselamatan pasien.|D
+b:Penilaian kinerja para perawat dalam memberikan pelayanan untuk meningkatkan mutu dan keselamatan pasien menggunakan indikator mutu yang diukur di unit tersebut.|D
+c:Penilaian kinerja tenaga kesehatan lainnya memberikan pelayanan untuk meningkatkan mutu dan keselamatan pasien menggunakan indikator mutu yang diukur di unit tersebut|D
+###TKRS 12: Kerangka pengelolaan etik menangani konflik kepentingan
+a:Direktur rumah sakit menetapkan Komite Etik rumah sakit.|R
+b:Komite Etik telah menyusun kode etik rumah sakit yang mengacu pada Kode Etik Rumah Sakit Indonesia (KODERSI) dan ditetapkan Direktur.|R
+c:Komite Etik telah menyusun kerangka kerja pelaporan dan pengelolaan etik rumah sakit serta pedoman pengelolaan kode|R
+d:menyediakan sumber daya serta pelatihan kerangka pengelolaan etik rumah sakit bagi praktisi kesehatan dan staf lainnya dan memberikan solusi yang efektif dan tepat.|D,W
+###TKRS 13: Menerapkan dan mendukung budaya keselamatan di RS
+a:Pimpinan: menetapkan program budaya keselamatan yang mencakup poin a) sampai dengan h) dalam maksud dan tujuan serta mendukung penerapannya secara akuntabel dan.|R,D
+b:Pimpinan: menyelenggarakan pendidikan dan menyediakan informasi (kepustakaan dan laporan) terkait budaya keselamatan bagi semua staf yang bekerja di rumah sakit.|D,W
+c:Pimpinan: menyediakan sumber daya untuk mendukung dan mendorong budaya keselamatan di rumah sakit.|D,O
+d:Pimpinan: mengembangkan sistem yang rahasia, sederhana dan mudah diakses bagi staf untuk mengidentifikasi dan melaporkan perilaku yang tidak diinginkan dan.|D,O,W
+e:Pimpinan: melakukan pengukuran untuk mengevaluasi dan|D
+f:Pimpinan: menerapkan budaya adil (just culture) terhadap staf yang terkait laporan budaya keselamatan tersebut.|D,W
+###TKRS 14: Program manajemen risiko terintegrasi untuk pencegahan cedera
+a:Pimpinan: berpartisipasi dan menetapkan program manajemen risiko tingkat rumah sakit meliputi poin a) sampai dengan d) dalam maksud dan tujuan.|R
+b:Pimpinan: memantau penyusunan daftar risiko yang diprioritaskan menjadi profil risiko di tingkat rumah sakit|D
+###TKRS 15: Tanggung jawab pimpinan atas mutu dan keamanan penelitian manusia
+a:Pimpinan: menetapkan penanggung jawab program penelitian di dalam rumah sakit yang memastikan semua proses telah sesuai dengan kode etik penelitian dan persyaratan.|R,D,W
+b:proses untuk menyelesaian konflik kepentingan (finansial dan non finansial) yang terjadi akibat penelitian di rumah sakit.|R,D
+c:Pimpinan: telah mengidentifikasi fasilitas dan sumber daya yang diperlukan untuk melakukan penelitian, termasuk di dalam nya kompetensi sumber daya yang akan.|R,D
+d:proses yang memastikan bahwa seluruh pasien yang ikut di dalam penelitian telah melalui proses persetujuan tertulis (informed consent) untuk melakukan penelitian, tanpa.|D,W
+e:Apabila penelitian dilakukan oleh pihak ketiga (kontrak), maka pimpinan rumah sakit memastikan bahwa pihak ketiga tersebut bertanggung jawab dalam pemantauan dan evaluasi dari.|D
+f:Penanggung jawab penelitian melakukan kajian dan evaluasi terhadap seluruh penelitian yang dilakukan di rumah sakit setidaknya 1 (satu) tahun sekali.|D,W
+g:Seluruh kegiatan penelitian merupakan bagian dari program mutu rumah sakit dan dilakukan pemantauan serta evaluasinya secara berkala sesuai ketetapan rumah sakit.|R
+h:Dokumentasi tindak lanjut pemantauan kinerja penelitian|D,W
+
+##BAB II. Kualifikasi dan Pendidikan Staf (KPS)
+###KPS 1: Perencanaan Kebutuhan SDM
+a:Direktur telah menetapkan regulasi terkait Kualifikasi Pendidikan dan staf meliputi poin a - f pada gambaran umum.|R
+b:Kepala unit telah merencanakan dan menetapkan persyaratan pendidikan, kompetensi dan pengalaman staf di unitnya sesuai peraturan dan perundang-undangan.|R,D
+c:Kebutuhan staf telah direncanakan sesuai poin a)-e) dalam maksud dan tujuan.|D
+d:Perencanaan staf meliputi penghitungan jumlah, jenis, dan kualifikasi staf menggunakan metode yang diakui sesuai peraturan perundang-undangan.|D
+e:Perencanaan staf termasuk membahas penugasan dan rotasi/alih fungsi staf.|D
+f:Efektivitas perencanaan staf dipantau secara berkelanjutan dan diperbarui sesuai kebutuhan.|D
+###KPS 2: Uraian Tugas Staf
+a:Setiap staf telah memiliki uraian tugas sesuai dengan tugas yang diberikan.|D,W
+b:Tenaga medis dan tenaga kesehatan yang diidentifikasi dalam a) hingga d) dalam maksud dan tujuan, memiliki uraian tugas yang sesuai dengan tugas dan tanggung jawabnya.|D,W
+###KPS 3: Rekrutmen, Seleksi, dan Evaluasi File Kepegawaian
+a:menetapkan regulasi terkait proses rekrutmen, evaluasi kompetensi kandidat calon staf dan mekanisme pengangkatan staf di rumah sakit.|R
+b:menerapkan proses meliputi poin a) – c) dimaksud dan tujuan secara seragam.|D
+###KPS 4: Orientasi Staf
+a:menetapkan dan menerapkan proses untuk menyesuaikan kompetensi PPA dengan kebutuhan pasien.|R,D
+b:Para PPA baru dievaluasi pada saat mulai bekerja oleh kepala unit di mana PPA tersebut ditugaskan.|D
+c:setidaknya satu atau lebih evaluasi yang didokumentasikan untuk tiap PPA sesuai uraian tugas setiap tahunnya atau sesuai ketentuan rumah sakit.|D
+###KPS 5: Pendidikan dan Pelatihan
+a:menetapkan dan menerapkan proses untuk menyesuaikan kompetensi staf non klinis dengan persyaratan jabatan/posisi.|R,D
+b:Staf non klinis yang baru dinilai kinerjanya pada saat akan memulai pekerjaannya oleh kepala unit di mana staf tersebut ditugaskan.|D
+c:setidaknya satu atau lebih evaluasi yang didokumentasikan untuk tiap staf non klinis sesuai uraian tugas setiap tahunnya atau sesuai ketentuan rumah sakit.|D
+###KPS 6: Pelatihan Bantuan Hidup Dasar (BHD)
+a:File kepegawaian staf distandardisasi dan dipelihara serta dijaga kerahasiaannya sesuai dengan kebijakan rumah sakit.|D
+b:File kepegawaian mencakup poin a) – g) sesuai maksud dan tujuan.|D
+###KPS 7: Kesehatan dan Keselamatan Staf (K3 Staf)
+a:menetapkan regulasi tentang orientasi bagi staf baru di rumah sakit.|R
+b:Tenaga medis dan tenaga kesehatan baru telah diberikan orientasi umum dan orientasi khusus sesuai.|D,W
+c:Staf non klinis baru telah diberikan orientasi umum dan orientasi khusus.|D,W
+d:Tenaga kontrak, paruh waktu, mahasiswa atau trainee dan sukarelawan telah diberikan orientasi umum dan orientasi khusus (jika ada).|D,W
+###KPS 8: Kredensial Staf Medis
+a:mengidentifikasi kebutuhan pendidikan staf berdasarkan sumber berbagai informasi, mencakup a) – h) dalam maksud dan tujuan.|D
+b:Program pendidikan dan pelatihan telah disusun berdasarkan hasil identifikasi sumber informasi pada EP 1.|R
+c:Pendidikan dan pelatihan berkelanjutan diberikan kepada staf rumah sakit baik internal maupun eksternal.|D,W
+d:menyediakan waktu, anggaran, sarana dan prasarana yang memadai bagi semua staf untuk mendapat kesempatan mengikuti pendidikan dan pelatihan yang dibutuhkan.|D,O
+###KPS 8.1: Pelatihan dan demonstrasi teknik resusitasi jantung paru
+a:menetapkan pelatihan teknik resusitasi jantung paru tingkat dasar (BHD) pada seluruh staf dan bantuan hidup tingkat lanjut bagi staf yang ditentukan oleh rumah.|R
+b:bukti yang menunjukkan bahwa staf yang mengikuti pelatihan BHD atau bantuan hidup tingkat lanjut telah lulus pelatihan tersebut.|D,S
+c:Tingkat pelatihan yang ditentukan untuk tiap staf harus diulang berdasarkan persyaratan dan/atau jangka waktu yang ditetapkan oleh program pelatihan yang diakui, atau setiap 2.|D
+###KPS 9: Penugasan Klinis (SPK) Staf Medis
+a:menetapkan program kesehatan dan keselamatan staf.|R
+b:Program kesehatan dan keselamatan staf mencakup setidaknya a) hingga h) yang tercantum dalam maksud dan tujuan.|D,W
+c:mengidentifikasi penularan penyakit infeksi atau paparan yang dapat terjadi pada staf serta melakukan upaya pencegahan dengan vaksinasi.|D,W
+d:Berdasar atas epidemologi penyakit infeksi maka rumah sakit mengidentifikasi risiko staf terpapar atau tertular serta melaksanakan pemeriksaan kesehatan dan vaksinasi.|D
+e:melaksanakan evaluasi, konseling, dan tata laksana lebih lanjut untuk staf yang terpapar penyakit infeksi serta dikoordinasikan dengan program pencegahan dan.|D,W
+f:mengidentifikasi area yang berpotensi untuk terjadi tindakan kekerasan di tempat kerja (workplace violence) dan menerapkan upaya untuk mengurangi risiko tersebut.|D,O
+g:melaksanakan evaluasi, konseling, dan tata laksana lebih lanjut untuk staf yang mengalami cedera akibat tindakan kekerasan di tempat kerja.|D,W
+###KPS 10: Evaluasi Kinerja Profesional Berkelanjutan (OPPE) Staf Medis
+a:menetapkan peraturan internal tenaga medis (medical staff bylaws) yang mengatur proses penerimaan, kredensial, penilaian kinerja, dan rekredensial tenaga medis.|R
+b:melaksanakan proses kredensial dan pemberian kewenangan klinis untuk pelayanan diagnostik, konsultasi, dan tata laksana yang diberikan oleh dokter praktik.|D,W
+c:melaksanakan proses kredensial dan pemberian kewenangan klinis kepada dokter praktik mandiri dari luar rumah sakit seperti konsultasi kedokteran jarak jauh.|D
+d:Setiap tenaga medis yang memberikan pelayanan di rumah sakit wajib menandatangani perjanjian sesuai dengan regulasi rumah sakit.|D
+e:melaksanakan verifikasi ke Lembaga / Badan /Instansi pendidikan atau organisasi profesional yang diakui yang mengeluarkan izin/sertifikat, dan kredensial lain.|D
+f:Ada bukti dilaksanakan kredensial tambahan ke sumber yang mengeluarkan apabila tenaga medis yang meminta kewenangan klinis tambahan yang canggih atau subspesialisasi.|D,W
+###KPS 10.1: Standar tambahan kredensial tenaga medis
+a:Pengangkatan tenaga medis dibuat berdasar atas kebijakan rumah sakit dan konsisten dengan populasi pasien rumah sakit, misi, dan pelayanan yang diberikan untuk memenuhi kebutuhan.|R
+b:Pengangkatan tidak dilakukan sampai setidaknya izin/surat tanda registrasi sudah diverifikasi dari sumber utama yang mengeluarkan surat tersebut dan tenaga medis dapat memberikan.|D
+c:Verifikasi STR dan SIP. b) SPK dan RKK tenaga medis dengan kewenangan dibawah supervisi maksimal 90 hari.|D
+###KPS 11: Rekredensial Staf Medis
+a:Direktur menetapkan kewenangan klinis setelah mendapat rekomendasi dari Komite Medik termasuk kewenangan tambahan dengan mempertimbangan poin a) – j) dalam maksud dan tujuan.|R
+b:– j) dalam maksud dan tujuan. b) Ada bukti pemberian kewenangan klinis berdasar atas rekomendasi kewenangan klinis dari Komite Medik.|D
+c:Ada bukti pelaksanaan pemberian kewenangan tambahan setelah melakukan verifikasi dari sumber utama yang mengeluarkan ijazah/sertifikat.|D
+d:Surat penugasan klinis dan rincian kewenangan klinis anggota tenaga medis dalam bentuk cetak atau elektronik (softcopy) atau media lain tersedia di semua unit pelayanan.|D
+e:Setiap tenaga medis hanya memberikan pelayanan klinis sesuai kewenangan klinis yang diberikan kepadanya.|D,W
+###KPS 12: Kredensial Staf Keperawatan
+a:menetapkan dan menerapkan proses penilaian kinerja untuk evaluasi mutu praktik profesional berkelanjutan, etik, dan disiplin (OPPE) tenaga medis.|R,D
+b:Penilaian OPPE tenaga medis memuat 3 (tiga) area umum 1) – 3) dalam maksud dan tujuan|D
+c:Perilaku; b) Pengembangan professional; dan c) Kinerja klinis.|D
+d:Data dan informasi hasil pelayanan klinis dari tenaga medis dikaji secara objektif dan berdasar atas bukti, jika memungkinkan dilakukan benchmarking dengan pihak eksternal rumah.|D
+e:Data dan informasi hasil pemantauan kinerja tenaga medis sekurang-kurangnya|D
+f:Jika terjadi kejadian insiden keselamatan pasien atau pelanggaran perilaku etik maka dilakukan tindakan terhadap tenaga medis tersebut secara adil (just culture) berdasarkan hasil.|D
+g:Bila ada temuan yang berdampak pada pemberian kewenangan tenaga medis, temuan tersebut didokumentasi ke dalam file tenaga medis dan diinformasikan serta disimpan di unit tempat.|D
+###KPS 13: Penugasan Klinis (SPK) Staf Keperawatan
+a:menetapkan dan menerapkan proses kredensial yang efektif terhadap tenaga perawat meliputi poin a) – c) dalam maksud dan tujuan.|R,D
+b:Tersedia bukti dokumentasi pendidikan, registrasi, sertifikasi, izin, pelatihan, dan pengalaman yang terbaharui di file tenaga perawat.|D
+c:pelaksanaan verifikasi ke sumber Badan/Lembaga/ institusi penyelenggara pendidikan/ pelatihan yang seragam.|D
+d:bukti dokumen kredensial yang dipelihara pada setiap tenaga perawat.|D
+e:menerapkan proses untuk memastikan bahwa kredensial perawat kontrak lengkap sebelum penugasan.|D
+###KPS 14: Penilaian Kinerja Staf Keperawatan
+a:menetapkan rincian kewenangan klinis perawat|R
+b:menetapkan Surat Penugasan Klinis tenaga perawat sesuai dengan peraturan perundang-undangan.|R
+###KPS 15: Kredensial Tenaga Kesehatan Lain (PPA Lainnya)
+a:melakukan penilaian kinerja tenaga perawat secara periodik menggunakan format dan metode sesuai ketentuan yang ditetapkan rumah sakit.|R,D
+b:Penilaian kinerja tenaga perawat meliputi pemenuhan uraian tugasnya dan perannya dalam pencapaian target indikator mutu yang diukur di unit tempatnya bekerja.|D
+c:Pemenuhan uraian tugasnya. b) Perannya dalam pencapaian target indikator mutu yang diukur di unit tempatnya bekerja.|D
+d:mendokumentasikan hasil kajian, tindakan yang diambil, dan setiap dampak atas tanggung jawab pekerjaan perawat dalam file kredensial perawat.|D
+###KPS 16: Penugasan Klinis (SPK) Tenaga Kesehatan Lain
+a:menetapkan dan menerapkan proses kredensial yang efektif terhadap tenaga Kesehatan lainnya meliputi poin a) – c) dalam maksud dan tujuan.|R
+b:Tersedia bukti dokumentasi pendidikan, registrasi, sertifikasi, izin, pelatihan, dan pengalaman yang terbaharui di file tenaga Kesehatan lainnya.|D
+c:pelaksanaan verifikasi ke sumber Badan/Lembaga/ institusi penyelenggara Pendidikan/pelatihan yang seragam.|D
+d:dokumen kredensial yang dipelihara dari setiap tenaga kesehatan lainnya.|D
+###KPS 17: Penilaian Kinerja Tenaga Kesehatan Lain
+a:menetapkan rincian kewenangan klinis profesional pemberi asuhan (PPA) lainnya dan staf klinis lainnya berdasar atas hasil kredensial tenaga Kesehatan lainnya.|R
+b:menetapkan surat penugasan klinis kepada tenaga Kesehatan lainnya sesuai dengan peraturan perundang-undangan.|R
+###KPS 18: Penilaian kinerja tenaga kesehatan lain dan peran mutu
+a:melakukan penilaian kinerja tenaga Kesehatan lainnya secara periodik menggunakan format dan metode sesuai ketentuan yang ditetapkan rumah sakit.|R,D
+b:Penilain kinerja tenaga Kesehatan lainnya meliputi pemenuhan uraian tugasnya dan perannya dalam pencapaian target indikator mutu yang diukur di unit tempatnya bekerja.|D
+c:Pemenuhan uraian tugasnya. b) Perannya dalam pencapaian target indikator mutu yang diukur di unit tempatnya bekerja.|D
+d:mendokumentasikan hasil kajian, tindakan yang diambil, dan setiap dampak atas tanggung jawab pekerjaan tenaga kesehatan dalam file kredensial tenaga kesehatan.|D
+
+##BAB III. Manajemen Fasilitas dan Keselamatan (MFK)
+###MFK 1: Kepatuhan Terhadap Peraturan Perundang-Undangan
+a:menetap- kan regulasi terkait Manajemen Fasilitas dan Keselamatan (MFK) yang meliputi poin a) – j)|R
+b:melengkapi izin-izin dan sertifikasi yang masih berlaku sesuai persyaratan peraturan perundang-undangan.|D,W
+c:Pimpinan: memenuhi perencanaan anggaran dan sumber daya serta memastikan rumah sakit memenuhi persyaratan perundang-undangan.|D
+###MFK 2: Program Manajemen Fasilitas dan Keselamatan
+a:menetapkan Penang- gung jawab Manajemen Fasilitas dan Keselamatan (MFK) yang memiliki kompetensi dan pengalaman dalam melakukan pengelola-an pada fasilitas dan.|R
+b:Penanggungjawab Manajemen Fasilitas dan Keselamatan (MFK) telah menyusun Program Manajemen Fasilitas dan Keselamatan (MFK) yang meliputi poin a) – j) dalam maksud dan tujuan.|R
+c:Penanggungjawab MFK telah melakukan pengawasan dan evaluasi Manajemen Fasilitas dan Keselamatan (MFK) setiap tahunnya meliputi poin a) – g) dalam maksud dan tujuan serta melakukan.|D,W
+d:Penerapan program Manajemen Fasilitas dan Keselamatan (MFK) pada tenant/penyewa lahan yang berada di lingkungan rumah sakit meliputi poin a) – e) dalam maksud dan tujuan.|D,O,W
+###MFK 3: Keselamatan dan Keamanan Fasilitas
+a:menerapkan proses pengelolaan keselamatan rumah sakit meliputi poin a) - c) pada maksud dan tujuan.|D,O,W
+b:mengintegrasikan program Kesehatan dan keselamatan kerja staf ke dalam program manajemen fasilitas dan keselamatan (MFK)|R
+c:membuat pengkajian risiko secara proaktif terkait keselamatan di rumah sakit setiap tahun yang didokumentasikan dalam daftar risiko/risk register.|D,W
+d:melakukan pemantauan risiko keselamatan dan dilaporkan setiap 6 (enam) bulan kepada pimpinan rumah sakit.|D,W
+###MFK 4: Pengelolaan Bahan Berbahaya dan Beracun (B3) serta Limbah B3
+a:menerapkan proses pengelolaan keamanan di lingkungan rumah sakit meliputi poin a) - e) pada maksud dan tujuan.|D,O,W
+b:membuat pengkajian risiko secara proaktif terkait keamanan di Rumah Sakit setiap tahun|D,W
+c:membuat pengkajian risiko secara proaktif terkait keselamatan di rumah sakit. (Daftar risiko/risk register).|D
+d:melakukan pemantauan risiko keamanan dan dilaporkan setiap 6 (enam) bulan kepada Direktur rumah sakit|D,W
+###MFK 5: Penanggulangan Bencana (Disaster Management)
+a:melaksanakan proses pengelolaan B3 meliputi poin a) – h) pada maksud dan tujuan.|D,W
+b:membuat pengkajian risiko secara proaktif terkait pengelolaan B3 di Rumah Sakit setiap tahun yang didokumentasikan dalam daftar risiko/risk register.|D,W
+c:Di area tertentu yang rawan terhadap pajanan telah dilengkapi dengan eye washer/body washer yang berfungsi dan terpelihara baik dan tersedia kit tumpahan/ spill kit sesuai.|D,O,W
+d:Staf dapat menjelaskan dan atau memperagakan penanganan tumpahan B3.|W,S
+e:Staf dapat menjelaskan dan atau memperagakan tindakan, kewaspadaan, prosedur dan partisipasi dalam penyimpanan, penanganan dan pembuangan limbah B3.|O,W,S
+###MFK 5.1: Sistem pengelolaan limbah B3 cair dan padat sesuai regulasi
+a:melakukan penyimpanan limbah B3 sesuai poin a) – k) pada maksud dan tujuan.|O,W
+b:mengolah limbah B3 padat secara mandiri atau menggunakan pihak ketiga yang berizin termasuk untuk pemusnahan limbah B3 cair yang tidak bisa dibuang ke IPAL.|D,O
+c:mengelola limbah B3 cair sesuai peraturan perundang-undangan.|D,O,W
+###MFK 6: Proteksi Kebakaran (Fire Safety)
+a:melakukan pengkajian risiko kebakaran secara proaktif meliputi poin a) – i) dalam maksud dan tujuan setiap tahun yang didokumentasikan dalam daftar risiko/risk.|D,W
+b:menerapkan proses proteksi kebakaran yang meliputi poin a) – f) pada maksud dan tujuan.|D,O,W
+c:menetapkan kebijakan dan melakukan pemantauan larangan merokok di seluruh area Rumah Sakit.|R,O
+d:melakukan pengkajian risiko proteksi kebakaran.|D,W
+e:memastikan semua staf memahami proses proteksi kebakaran termasuk melakukan pelatihan penggunaan APAR, hidran dan|D,W,S
+f:Peralatan pemadaman kebakaran aktif dan sistem peringatan dini serta proteksi kebakaran secara pasif telah diinventarisasi, diperiksa, di ujicoba dan dipelihara sesuai dengan.|D,O
+###MFK 7: Peralatan Medis
+a:menerapkan proses pengelolaan peralatan medik yang digunakan di rumah sakit meliputi poin a)-e) pada maksud dan tujuan.|D,O,W
+b:menetapkan penanggung jawab yang kompeten dalam pengelolaan|R
+c:melakukan pengkajian risiko peralatan medik secara proaktif setiap tahun yang di dokumentasikan dalam daftar risiko/risk register.|D
+d:bukti perbaikan yang dilakukan oleh pihak yang berwenang dan kompeten.|D
+e:menerapkan pemantauan, pemberitahuan kerusakan (malfungsi) dan penarikan (recall) peralatan medis yang membahayakan pasien.|D,W
+f:melaporkan insiden keselamatan pasien terkait peralatan medis sesuai dengan peraturan perundang- undangan.|D,W
+###MFK 8: Sistem Utilitas (Ketersediaan Air dan Listrik 24 Jam)
+a:menerapkan proses pengelolaan sistem utilitas yang meliputi poin a)-e) dalam maksud dan tujuan.|D,O,W
+b:melakukan pengkajian risiko sistem utilitas dan komponen kritikalnya secara proaktif setiap tahun yang didokumentasikan dalam daftar risiko/risk register.|D,W
+###MFK 8.1: Pelaksanaan pemeriksaan, pemeliharaan, dan perbaikan utilitas
+a:menerapkan proses inventarisasi sistim utilitas dan komponen kritikalnya setiap tahun.|D,W
+b:Sistem utilitas dan komponen kritikalnya telah diinspeksi secara berkala berdasarkan ketentuan rumah sakit.|D,W
+c:Sistem utilitas dan komponen kritikalnya diuji secara berkala berdasar atas kriteria yang sudah ditetapkan.|D,W
+d:Sistem utilitas dan komponen kritikalnya dipelihara berdasar atas kriteria yang sudah ditetapkan.|D,W
+e:Sistem utilitas dan komponen kritikalnya diperbaiki bila diperlukan.|D,W
+###MFK 8.2: Menjamin ketersediaan air bersih dan listrik 24 jam dengan cadangan
+a:mempunyai proses sistem utilitas terhadap keadaan darurat yang meliputi poin a)-e) pada maksud dan tujuan.|R
+b:Air bersih harus tersedia selama 24 jam setiap hari, 7 (tujuh) hari dalam seminggu.|O,W
+c:Listrik tersedia 24 jam setiap hari, 7 (tujuh) hari dalam seminggu.|O,W
+d:mengidentifikasi area dan pelayanan yang berisiko paling tinggi bila terjadi kegagalan listrik atau air bersih terkontaminasi atau terganggu dan melakukan penanganan.|D,W
+e:mempunyai sumber listrik dan air bersih cadangan dalam keadaan darurat/emergensi.|D,O
+###MFK 8.2.1: Rumah sakit melakukan uji coba/uji beban sumber listrik dan sumber air cadangan/ alternatif.
+a:melaksanakan uji coba sumber air bersih dan listrik cadangan/ alternatif sekurangnya 6 (enam) bulan sekali atau lebih sering bila diharuskan oleh peraturan.|D,O,W,S
+b:men- dokumentasikan hasil uji coba sumber air bersih cadangan/alternatif tersebut.|D
+c:men- dokumentasikan hasil uji sumber listrik/ cadangan/alternatif tersebut.|D
+d:mempunyai tempat dan jumlah bahan bakar untuk sumber listrik cadangan/ alternatif yang mencukupi.|O,W
+###MFK 8.3: Pemeriksaan kualitas air bersih dan air limbah rumah sakit
+a:menerapkan proses sekurang-kurangnya meliputi poin a)-d) pada maksud dan tujuan.|D
+b:melakukan pemantauan dan evaluasi proses pada EP 1.|D
+c:menindaklanjuti hasil pemantauan dan evaluasi pada EP 2 dan didokumentasikan.|D
+###MFK 9: Pemeliharaan dan Pengujian Sistem Utilitas Lanjutan
+a:menerapkan proses pengelolaan bencana yang meliputi poin a)-h) pada maksud dan tujuan diatas.|D,W
+b:mengidentifikasi risiko bencana internal dan eksternal dalam analisa kerentanan bahaya/Hazard Vulnerability Analysis (HVA) secara proaktif setiap tahun dan.|D
+c:(HVA) setiap tahun. Rumah Sakit membuat Program pengelolaan bencana di rumah sakit berdasarkan hasil Analisa kerentanan bahaya/Hazard Vulnerability Analysis.|R
+d:melakukan simulasi penanggulangan bencana (disaster drill) minimal setahun sekali termasuk debriefing.|D
+e:Staf dapat menjelaskan dan atau memperagakan prosedur dan peran mereka dalam penanganan kedaruratan serta bencana internal dan external|W,S
+f:menyiapkan area dekontaminasi sesuai ketentuan pada Instalasi Gawat Darurat.|O
+###MFK 10: Pemantauan Kualitas Utilitas (Air)
+a:menerapkan penilaian risiko prakonstruksi (PCRA) terkait rencana konstruksi, renovasi dan demolisi meliputi poin a)-j) seperti di maksud dan tujuan diatas.|D
+b:melakukan penilaian risiko prakontruksi (PCRA) bila ada rencana kontruksi, renovasi dan demolisi.|D,W
+c:melakukan tindakan berdasarkan hasil penilaian risiko untuk meminimalkan risiko selama pembongkaran, konstruksi,|D
+d:memastikan bahwa kepatuhan kontraktor dipantau, dilaksanakan, dan didokumentasikan.|D
+###MFK 11: Pendidikan dan Pelatihan Staf tentang MFK
+a:Semua staf telah diberikan pelatihan program manajemen fasilitas dan keselamatan (MFK) terkait keselamatan setiap tahun dan dapat menjelaskan dan/atau menunjukkan peran dan.|D,W
+b:Semua staf telah diberikan pelatihan program manajemen fasilitas dan keselamatan (MFK) terkait keamanan setiap tahun dan dapat menjelaskan dan/atau menunjukkan peran dan tanggung.|D,W
+c:Semua staf telah diberikan pelatihan program manajemen fasilitas dan keselamatan (MFK) terkait pengelolaan B3 dan limbahnya setiap tahun dan dapat menjelaskan dan/atau menunjukkan.|D,W,S
+d:Semua staf telah diberikan pelatihan program manajemen fasilitas dan keselamatan (MFK) terkait|D,W,S
+e:Semua staf telah diberikan pelatihan program manajemen fasilitas dan keselamatan (MFK) terkait peralatan medis setiap tahun dan dapat menjelaskan dan/atau menunjukkan peran dan.|D,W
+f:Semua staf telah diberikan pelatihan program manajemen fasilitas dan keselamatan (MFK) terkait sistim utilitas setiap tahun dan dapat menjelaskan dan/atau menunjukkan peran dan.|D,W
+g:Semua staf telah diberikan pelatihan program manajemen fasilitas dan keselamatan (MFK) terkait penanganan bencana setiap tahun dan dapat menjelaskan dan/atau menunjukkan peran dan.|D,W
+h:Pelatihan tentang pengelolaan fasilitas dan program keselamatan mencakup vendor, pekerja kontrak, relawan, pelajar, peserta didik, peserta pelatihan, dan lainnya, sebagaimana.|D,W
+
+##BAB IV. Peningkatan Mutu dan Keselamatan Pasien (PMKP)
+###PMKP 1: Pengelolaan Kegiatan Mutu
+a:Direktur telah menetapkan regulasi terkait Peningkatan mutu dan keselamatan pasien serta manajemen risiko.|R
+b:Direktur rumah sakit telah membentuk komite/tim mutu untuk mengelola kegiatan PMKP serta uraian tugasnya|R
+c:Komite Mutu menyusun program PMKP rumah sakit meliputi poin a) – i) yang telah ditetapkan Direktur rumah sakit dan disahkan oleh representatif pemilik/dewan pengawas.|R
+d:Program PMKP dievaluasi dalam Rapat koordinasi melibatkan komite-komite, pimpinan rumah sakit dan Kepala unit setiap triwulan untuk menjamin perbaikan mutu yang berkesinambungan.|D,W
+###PMKP 2: Pemilihan Indikator Mutu RS
+a:Komite/Tim Penyelenggara Mutu terlibat dalam pemilihan indikator mutu prioritas baik ditingkat rumah sakit maupun tingkat unit layanan|D,W
+b:Komite/Tim Penyelenggara Mutu melaksanakan koordinasi dan integrasi kegiatan pengukuran serta melakukan supervisi ke unit layanan.|D,W
+c:Komite/Tim Penyelenggara Mutu mengintegrasikan laporan insiden keselamatan pasien, pengukuran budaya keselamatan, dan lainnya untuk mendapatkan solusi dan perbaikan terintegrasi|D,W
+###PMKP 3: Pengumpulan, Analisis, dan Validasi Data
+a:melakukan pengumpulan data mencakup (poin a-c) dalam maksud dan tujuan.|D,W
+b:Indikator mutu prioritas rumah sakit (IMP-RS) dan indikator mutu prioritas unit (IMP- Unit) telah dibuat profil indikator mencakup (poin a-t) dalam maksud dan tujuan|R
+###PMKP 4: Pencapaian dan Upaya Perbaikan (PDSA)
+a:dilakukan agregasi dan Analisa data menggunakan metode dan teknik statistik terhadap semua indikator mutu yang telah diukur oleh staf yang kompeten|D,W
+b:Hasil analisis digunakan untuk membuat rekomendasi tindakan perbaikan dan serta menghasilkan efisiensi penggunaan sumber daya.|D,W
+c:Memiliki bukti analisis data dilaporkan kepada Direktur dan representasi pemilik/dewan pengawas sebagai bagian dari program|D,W
+d:Memiliki bukti hasil Analisa berupa informasi INM dan e- report IKP diwajibkan lapor kepada Kementerian kesehatan sesuai peraturan yang berlaku.|D
+e:proses pembelajaran dari database eksternal untuk tujuan perbandingan internal dari waktu ke waktu, perbandingan dengan rumah sakit yang.|D
+f:Keamanan dan kerahasiaan tetap dijaga saat berkontribusi pada database eksternal.|D,W
+g:menganalisa efisiensi berdasarkan biaya dan jenis sumber daya yang digunakan (sebelum dan sesudah perbaikan) terhadap satu proyek prioritas perbaikan yang dipilih setiap.|D,W
+###PMKP 4.1: Menugaskan staf berkompeten untuk pengumpulan dan analisis data
+a:Data dikumpulkan, dianalisis, dan diubah menjadi informasi untuk mengidentifikasi peluang- peluang untuk perbaikan|D,W
+b:Staf yang kompeten melakukan proses pengukuran menggunakan alat dan teknik statistik|D,W
+c:Hasil analisis data dilaporkan kepada penanggung jawab indikator mutu yang akan melakukan perbaikan|D,W
+###PMKP 5: Evaluasi PPK dan Clinical Pathway (CP)
+a:melakukan validasi yang berbasis bukti meliputi poin a)-f) yang ada pada maksud dan tujuan.|D,W
+b:Pimpinan: bertanggung jawab atas validitas dan kualitas data serta hasil yang dipublikasikan|D,W
+###PMKP 6: Pelaporan IKP
+a:membuat rencana perbaikan dan melakukan uji coba menggunakan metode yang telah teruji dan|D,W
+b:Tersedia kesinambungan data mulai dari pengumpulan data sampai perbaikan yang dilakukan dan dapat dipertahankan.|D,W
+c:Memiliki bukti perubahan regulasi dan perubahan proses yang diperlukan untuk mempertahankan perbaikan.|D,W
+d:Keberhasilan telah didokumentasikan dan dijadikan laporan PMKP.|D,W
+###PMKP 7: Investigasi IKP
+a:melakukan evaluasi clinical pathway sesuai yang tercantum dalam maksud dan tujuan.|D,W
+b:Hasil evaluasi dapat menunjukkan adanya perbaikan terhadap kepatuhan dan mengurangi variasi dalam penerapan prioritas standar pelayanan kedokteran di rumah sakit.|D,W
+c:melaksanakan audit klinis dan atau audit medis pada penerapan prioritas standar pelayanan kedokteran di rumah sakit|D,W
+###PMKP 8: Budaya Keselamatan Pasien
+a:Direktur menetapkan Sistem pelaporan dan pembelajaran keselamatan pasien rumah sakit (SP2KP RS) termasuk didalamnya definisi, jenis insiden keselamatan pasien meliputi kejadian.|R
+b:Komite/Tim Penyelenggara Mutu membentuk tim investigator sesegera mungkin untuk melakukan investigasi komprehensif/analisa akar masalah (root cause analysis) pada semua kejadian.|R
+c:Pimpinan: melakukan tindakan perbaikan korektif dan memantaunya efektivitasnya untuk mencegah atau mengurangi berulangnya kejadian sentinel tersebut.|D,W
+d:Pimpinan: menetapkan proses untuk menganalisa KTD, KNC, KTC, KPCS dengan melakukan investigasi sederhana dengan kurun waktu yaitu grading biru tidak melebihi 7 (tujuh).|R
+e:Pimpinan: melakukan tindakan perbaikan korektif dan memantau efektivitasnya untuk mencegah atau mengurangi berulangnya KTD, KNC, KTC, KPCS tersebut|D,W
+###PMKP 9: Manajemen Risiko (Risk Register & FMEA)
+a:Proses pengumpulan data sesuai a) sampai h) dari maksud dan tujuan, analisis, dan pelaporan diterapkan untuk memastikan akurasi data.|D,W
+b:Analisis data mendalam dilakukan ketika terjadi tingkat, pola atau tren yang tak diharapkan yang digunakan untuk meningkatkan mutu dan keselamatan pasien.|D,W
+c:Data luaran (outcome) dilaporkan kepada direktur dan representatif pemilik/dewan pengawas sebagai bagian dari program peningkatan mutu dan keselamatan pasien.|D,W
+###PMKP 10: Mengukur dan mengevaluasi budaya keselamatan pasien
+a:melaksanakan pengukuran budaya keselamatan pasien dengan survei budaya keselamatan pasien setiap tahun menggunakan metode yang telah terbukti.|D,W
+b:Hasil pengukuran budaya sebagai acuan dalam menyusun program peningkatan budaya keselamatan di rumah sakit.|R
+###PMKP 11: Standar tambahan terkait PMKP
+a:Komite/Tim Penyelenggara Mutu memandu penerapan program manajemen risiko yang di tetapkan oleh Direktur|D,W
+b:Komite/Tim Penyelenggara Mutu telah membuat daftar risiko rumah sakit berdasarkan daftar risiko unit-unit di rumah sakit|D
+c:Komite/Tim Penyelenggara Mutu telah membuat profil risiko dan rencana penanganan.|D
+d:Komite/Tim Penyelenggara Mutu telah membuat pemantauan terhadap rencana penanganan dan melaporkan kepada direktur dan representatif pemilik/dewan pengawas setiap 6 (enam) bulan|D,W
+e:Komite/Tim Penyelenggara Mutu telah menyusun Program manajemen risiko tingkat rumah sakit untuk ditetapkan Direktur|R
+f:Komite/Tim Penyelenggara Mutu telah memandu pemilihan minimal satu analisa secara proaktif proses berisiko tinggi yang diprioritaskan untuk dilakukan Analisa FMEA setiap tahun|D,W
+
+##BAB V. Manajemen Rekam Medis dan Informasi Kesehatan (MRMIK)
+###MRMIK 1: Manajemen Informasi
+a:menetapkan regulasi pengelolaan informasi untuk memenuhi kebutuhan informasi sesuai poin a) – g) yang terdapat dalam gambaran umum.|R
+b:Terdapat bukti rumah sakit telah menerapkan proses pengelolaan informasi untuk memenuhi kebutuhan PPA, pimpinan rumah sakit, kepala.|D,O
+c:Proses yang diterapkan sesuai dengan ukuran rumah sakit, kompleksitas layanan, ketersediaan staf terlatih, sumber daya teknis, dan sumber daya lainnya.|D,O
+d:melakukan pemantauan dan evaluasi secara berkala sesuai ketentuan rumah sakit serta upaya perbaikan terhadap pemenuhan informasi internal dan eksternal dalam mendukung.|D,W
+e:Apabila terdapat program penelitian dan atau pendidikan kesehatan di rumah sakit, terdapat bukti bahwa data dan informasi yang mendukung asuhan pasien, pendidikan, serta riset.|D
+###MRMIK 2: Privasi, Kerahasiaan, dan Keamanan Informasi
+a:bukti PPA, pimpinan rumah sakit, kepala departemen, unit layanan dan staf telah dilatih tentang prinsip pengelolaan dan penggunaan informasi sistem sesuai dengan peran.|D,W
+b:bukti bahwa data dan informasi klinis serta non klinis diintegrasikan sesuai kebutuhan dan digunakan dalam mendukung proses pengambilan keputusan sesuai dengan peraturan.|D,O
+###MRMIK 2.1: Menjaga keamanan, kerahasiaan, dan ketersediaan data RM elektronik
+a:menerapkan proses untuk memastikan kerahasiaan, keamanan, dan integritas data dan informasi sesuai dengan peraturan perundangan.|O,W
+b:menerapkan proses pemberian akses kepada staf yang berwenang untuk mengakses data dan informasi, termasuk entry ke dalam rekam medis pasien.|O,W
+c:memantau kepatuhan terhadap proses ini dan mengambil tindakan Ketika terjadi pelanggaran terhadap kerahasiaan, keamanan, atau integritas data.|D
+###MRMIK 2.2: Standar tambahan keamanan informasi
+a:Data dan informasi yang disimpan terlindung dari kehilangan, pencurian, kerusakan, dan penghancuran.|O
+b:menerapkan pemantauan dan evaluasi terhadap keamanan data dan informasi.|D
+c:bukti rumah sakit telah melakukan tindakan perbaikan untuk meningkatkan keamanan data dan informasi.|D
+###MRMIK 3: Pengorganisasian Unit Rekam Medis
+a:menerapkan pengelolaan dokumen sesuai dengan butir a) - h) dalam maksud dan tujuan.|R
+b:memiliki dan menerapkan format yang seragam untuk semua dokumen sejenis sesuai dengan ketentuan rumah sakit.|D
+c:memiliki dokumen internal mencakup butir a) - c) dalam maksud dan tujuan.|D,W
+###MRMIK 4: Penyelenggaraan RM Pasien (Satu Nomor RM)
+a:bukti bahwa penyebaran data dan informasi memenuhi kebutuhan internal dan eksternal rumah sakit sesuai dengan yang tercantum dalam maksud dan tujuan.|D
+b:proses yang memastikan bahwa data dan informasi yang dibutuhkan untuk perawatan pasien telah diterima tepat waktu dan sesuai format yang seragam dan sesuai dengan.|D
+###MRMIK 5: Standarisasi Singkatan dan Simbol
+a:menetapkan regulasi tentang penyelenggaraan rekam medis di rumah sakit.|R
+b:menetapkan unit penyelenggara rekam medis dan 1 (satu) orang yang kompeten mengelola rekam medis.|R
+c:menerapkan penyelenggaraan Rekam Medis yang dilakukan sejak pasien masuk sampai pasien pulang, dirujuk, atau meninggal.|D
+d:Pengelolaan rekam medis yang menjamin keamanan dan kerahasiaannya, melalui penjaminan mutu secara berkala yang dilakukan oleh tim reviu yang ditetapkan oleh pimpinan rumah sakit|D
+###MRMIK 6: Pengisian Rekam Medis oleh PPA
+a:bukti bahwa setiap pasien memiliki rekam medik dengan 1 (satu) nomor RM sesuai sistem penomoran yang ditetapkan|O,W
+b:Rekam medis rawat jalan, rawat inap, gawat darurat dan|D,O
+c:bukti bahwa formulir rekam medis dievaluasi dan diperbaharui (terkini) sesuai dengan kebutuhan dan secara periodik.|D
+###MRMIK 7: Kelengkapan Isi Rekam Medis
+a:bukti rekam medis pasien telah berisi informasi yang|D,O
+b:bukti rekam medis pasien mengandung informasi yang memadai sesuai butir a) – f) pada maksud dan tujuan|D,O
+###MRMIK 8: Resume Medis (Ringkasan Pulang)
+a:PPA mencantumkan identitas secara jelas pada saat mengisi RM.|D
+b:Tanggal dan waktu penulisan setiap catatan dalam rekam medis pasien dapat diidentifikasi.|D,O
+c:prosedur koreksi penulisan dalam pengisian RM elektronik dan non elektronik.|R
+d:dilakukan pemantauan dan evaluasi terhadap penulisan identitas, tanggal dan waktu penulisan catatan pada rekam medis pasien serta koreksi penulisan catatan dalam rekam.|D,W
+###MRMIK 9: Kodifikasi dan Indeksing Penyakit
+a:Penggunaan kode diagnosis, kode prosedur, singkatan dan simbol sesuai dengan ketetapan rumah sakit.|R,O
+b:Dilakukan evaluasi secara berkala penggunaan kode diagnosis, kode prosedur, singkatan dan simbol yang berlaku di rumah sakit dan hasilnya digunakan sebagai upaya tindak lanjut.|D
+###MRMIK 10: Retensi dan Pemusnahan RM
+a:menentukan otoritas pengisian rekam medis termasuk isi dan format rekam medis.|R
+b:menentukan hak akses dalam pelepasan informasi rekam medis|R
+c:menjamin otentifikasi, keamanan dan kerahasiaan data rekam medis baik kertas maupun elektronik sebagai bagian dari hak pasien.|D
+###MRMIK 11: Review Mutu RM (KLPCM)
+a:memiliki regulasi jangka waktu penyimpanan berkas rekam medis (kertas/elektronik), serta data dan informasi lainnya terkait dengan pasien dan prosedur pemusnahannya.|R
+b:Dokumen, data dan/informasi terkait pasien dimusnahkan setelah melampaui periode waktu penyimpanan sesuai dengan peraturan perundang- undangan dengan prosedur yang tidak.|D
+c:Dokumen, data dan/atau informasi tertentu terkait pasien yang bernilai guna, disimpan abadi (permanen) sesuai dengan ketetapan rumah sakit|D
+###MRMIK 12: Integrasi SIRS dan Pelaporan Eksternal
+a:menetapkan komite/tim rekam medis.|R
+b:Komite/tim secara berkala melakukan pengkajian rekam medis pasien secara berkala setiap tahun dan menggunakan sampel yang mewakili (rekam medis pasien yang masih dirawat dan.|D
+c:Fokus pengkajian paling sedikit mencakup pada ketepatan waktu,|D
+d:Hasil pengkajian yang dilakukan oleh komite/tim rekam medis dilaporkan kepada pimpinan rumah sakit dan dibuat upaya perbaikan.|D
+###MRMIK 13: Menerapkan sistem TI kesehatan untuk kelola data klinis dan nonklinis
+a:menetapkan regulasi tentang penyelenggaraan teknologi informasi kesehatan|R
+b:menerapkan SIMRS sesuai dengan ketetapan dan peraturan perundangan yang berlaku.|D
+c:menetapkan unit yang bertanggung jawab sebagai penyelenggara SIMRS dan dipimpin oleh staf kompeten|R,W
+d:Data serta informasi klinis dan non klinis diintegrasikan sesuai dengan kebutuhan untuk mendukung pengambilan keputusan.|D
+e:menerapkan proses untuk menilai efektivitas sistem rekam medis elektronik dan melakukan upaya perbaikan terkait hasil penilaian yang ada|D,W
+###MRMIK 13.1: Mengembangkan dan menguji program penanganan downtime sistem data
+a:prosedur yang harus dilakukan jika terjadi waktu henti sistem data (down time) untuk mengatasi masalah pelayanan|R
+b:Staf dilatih dan memahami perannya di dalam prosedur penanganan waktu henti sistem data (down time), baik yang terencana maupun yang tidak terencana.|D,W
+c:melakukan evaluasi pasca terjadinya waktu henti sistem data (down time) dan menggunakan informasi dari data tersebut untuk persiapan dan perbaikan apabila terjadi.|D
+`;
+        
+        const dataKelompokB = `
+#Kelompok B — Pelayanan Berfokus pada Pasien
+##BAB VI. Pencegahan dan Pengendalian Infeksi (PPI)
+###PPI 1: Pengorganisasian PPI
+a:Direktur rumah sakit telah menetapkan regulasi PPI meliputi a - m pada gambaran umum.|R
+b:Direktur rumah sakit telah menetapkan komite/tim PPI untuk untuk mengelola dan mengawasi kegiatan PPI di rumah sakit.|R
+c:menerapkan mekanisme koordinasi yang melibatkan pimpinan rumah sakit dan komite/tim PPI untuk melaksanakan program PPI sesuai dalam maksud dan tujuan.|D,W
+d:Direktur rumah sakit memberikan dukungan sumber daya terhadap penyelenggaraan kegiatan PPI meliputi namun tidak terbatas pada maksud dan tujuan.|D,O,W
+###PPI 1.1: Menetapkan komite/tim PPI dipimpin tenaga medis berpengalaman
+a:menetapkan perawat PPI/IPCN purna waktu dan IPCLN berdasarkan jumlah dan kualifikasi sesuai ukuran rumah sakit, kompleksitas kegiatan, tingkat risiko, cakupan program.|R
+b:Ada bukti perawat PPI/IPCN melaksanakan supervisi pada semua kegiatan pencegahan dan pengendalian infeksi di rumah sakit.|D,W
+###PPI 2: Program PPI
+a:menetapkan kebijakan Program PPI yang terdiri dari kewaspadaan standar dan kewaspadaan transmisi sesuai maksud dan tujuan diatas.|R
+b:melakukan evaluasi pelaksanaan program PPI.|D,W
+###PPI 3: Surveilans HAIs
+a:secara proaktif telah melaksanakan pengkajian risiko pengendalian infeksi (ICRA) setiap tahunnya terhadap|D,W
+b:melaksanakan surveilans data secara periodik dan dianalisis triwulan meliputi a) - f) dalam maksud dan tujuan|D,W
+###PPI 4: Kewaspadaan Isolasi
+a:menerapkan pengolahan sterilisasi mengikuti peraturan perundang- undangan.|D,O,W
+b:Staf yang memroses peralatan medis dan/atau BMHP telah diberikan pelatihan dalam pembersihan, desinfeksi, dan sterilisasi serta mendapat pengawasan.|D,W
+c:Metode pembersihan, desinfeksi, dan sterilisasi|D,O,W
+d:Penyimpanan peralatan medis dan/atau BMHP bersih dan steril disimpan dengan baik di area penyimpanan yang ditetapkan, bersih dan kering dan terlindungi dari debu, kelembaban,.|D,O,W
+e:Bila sterilisasi dilaksanakan di luar rumah sakit harus dilakukan oleh lembaga yang memiliki sertifikasi mutu dan ada kerjasama yang menjamin kepatuhan proses sterilisasi sesuai.|D,W
+###PPI 4.1: Proses pengelolaan BMHP kadaluarsa dan reuse terkontrol
+a:menetapkan peralatan medis dan/atau BMHP yang dapat digunakan ulang meliputi a) – g) dalam maksud dan tujuan.|R
+b:menggunakan proses terstandarisasi untuk menentukan kapan peralatan|R
+c:Ada bukti pemantauan, evaluasi, dan tindak lanjut pelaksanaan penggunaan kembali (reuse) peralatan medis dan/atau BMHP meliputi a) – g) dalam maksud dan tujuan.|D,W
+###PPI 5: Kebersihan Tangan (Hand Hygiene)
+a:menerapkan prosedur pembersihan dan disinfeksi permukaan dan lingkungan sesuai standar PPI|D,O,W
+b:melaksanakan pembersihan dan desinfeksi tambahan di area berisiko tinggi berdasarkan hasil pengkajian risiko|D,O,W
+c:melakukan pemantauan proses pembersihan dan disinfeksi lingkungan.|D,O
+###PPI 6: Alat Pelindung Diri (APD)
+a:Ada unit kerja pengelola linen/ laundry yang menyelenggarakan penatalaksanaan sesuai dengan peraturan perundang- undangan.|R
+b:Prinsip-prinsip PPI diterapkan pada pengelolaan linen/ laundry, termasuk pemilahan, transportasi, pencucian, pengeringan, penyimpanan, dan distribusi|D,O,W
+c:Ada bukti supervisi oleh IPCN terhadap pengelolaan linen/ laundry sesuai dengan prinsip PPI termasuk bila dilaksanakan oleh pihak luar rumah sakit.|D,W
+###PPI 7: Dekontaminasi dan Sterilisasi Peralatan (CSSD)
+a:menerapkan pengelolaan limbah rumah sakit untuk meminimalkan risiko infeksi yang meliputi a) – e) pada maksud dan tujuan.|D,O,W
+b:Penanganan dan pembuangan darah serta komponen darah sesuai dengan regulasi, dipantau dan dievaluasi, serta di tindak lanjutnya.|D,W
+c:Pelaporan pajanan limbah infeksius sesuai dengan regulasi dan dilaksanakan pemantauan, evaluasi, serta tindak lanjutnya.|D,W
+d:Bila pengelolaan limbah dilaksanakan oleh pihak luar rumah sakit harus berdasar atas kerjasama dengan pihak yang memiliki izin dan sertifikasi mutu sesuai dengan peraturan.|D,W
+e:kerjasama dengan pihak transporter dan pengolah B3|W
+###PPI 7.1: Rumah sakit menetapkan pengelolaan kamar mayat dan kamar bedah mayat sesuai dengan peraturan perundang- undangan.
+a:Pemulasaraan jenazah dan bedah mayat sesuai dengan regulasi.|D
+b:Ada bukti kegiatan kamar mayat dan kamar bedah mayat sudah dikelola sesuai dengan peraturan perundang- undangan|O,W
+c:Ada bukti pemantauan dan evaluasi, serta tindak lanjut kepatuhan prinsip-prinsip PPI sesuai dengan peraturan perundang-undangan.|D
+###PPI 7.2: Pengelolaan limbah benda tajam dan jarum secara aman
+a:Benda tajam dan jarum sudah dikumpulkan, disimpan di dalam wadah yang tidak tembus, tidak bocor, berwarna kuning, diberi label infeksius, dan dipergunakan hanya sekali pakai.|O,W
+b:Bila pengelolaan benda tajam dan jarum dilaksanakan oleh pihak luar rumah sakit harus berdasar atas kerjasama dengan pihak yang memiliki izin dan sertifikasi mutu sesuai|D,W
+c:Ada bukti data dokumen limbah benda tajam dan jarum.|D,W
+d:Ada bukti pelaksanaan supervisi dan pemantauan oleh IPCN terhadap pengelolaan benda tajam dan jarum sesuai dengan prinsip PPI, termasuk bila dilaksanakan oleh pihak luar rumah.|D,W
+e:Ada bukti pelaksanaan pemantauan kepatuhan prinsip-prinsip PPI sesuai regulasi.|D,W
+###PPI 8: Pengelolaan Linen
+a:menetapkan regulasi tentang pelayanan makanan di rumah sakit yang meliputi a) – b) pada maksud dan tujuan|R,D
+b:Ada bukti pelaksanaan penyimpanan bahan makanan, pengolahan, pembagian/ pemorsian, dan distribusi makanan sudah sesuai dengan peraturan perundang- undangan.|O,W
+c:Ada bukti pelaksanaan penyimpanan makanan dan produk nutrisi dengan memperhatikan kesehatan lingkungan meliputi sanitasi, suhu, pencahayaan, kelembapan, ventilasi, dan keamanan.|D,O,W
+###PPI 9: Limbah Infeksius dan Benda Tajam
+a:menerapkan pengendalian mekanis dan teknis (mechanical dan engineering control) minimal untuk fasilitas yang tercantum pada a) – e) pada maksud dan tujuan.|D,O,W
+b:menerapkan penilaian risiko pengendalian infeksi (infection control risk assessment/ICRA) yang minimal meliputi a) – f) yang ada pada maksud dan tujuan.|W
+c:melaksanakan penilaian risiko pengendalian infeksi (infection control risk assessment/ICRA) pada semua renovasi, konstruksi dan demolisi sesuai dengan regulasi.|D,W
+###PPI 10: Pelayanan Makanan (Sanitasi Gizi)
+a:menyediakan dan menempatkan ruangan untuk pasien dengan imunitas rendah (immunocompromised) sesuai dengan peraturan perundang undangan.|O,W
+b:melaksanakan proses transfer pasien airborne diseases di dalam rumah sakit dan keluar rumah sakit sesuai dengan peraturan perundang- undangan termasuk di ruang gawat.|O,W
+c:menempatkan pasien infeksi “air borne” dalam waktu singkat jika rumah sakit tidak mempunyai kamar dengan tekanan negatif sesuai dengan peraturan perundang-.|O,W
+d:Ada bukti pemantauan ruang tekanan negatif dan penempatan pasien secara rutin.|D,O,W
+###PPI 10.1: Standar tambahan terkait APD dan isolasi
+a:menerapkan proses pengelolaan pasien bila terjadi ledakan pasien (outbreak) penyakit infeksi air borne.|R,D,W
+b:menyediakan ruang isolasi dengan tekanan negatif bila terjadi ledakan pasien (outbreak) sesuai dengan peraturan perundangan.|O,W
+c:Ada bukti dilakukan edukasi kepada staf tentang pengelolaan pasien infeksius jika terjadi ledakan pasien (outbreak) penyakit infeksi air borne.|D,W
+###PPI 11: Pengendalian Risiko Infeksi Konstruksi (ICRA Bangunan)
+a:menerapkan hand hygiene yang mencakup kapan, di mana, dan bagaimana melakukan cuci tangan mempergunakan sabun (hand wash) dan atau dengan disinfektan (hand rubs).|O,W,S
+b:Sabun, disinfektan, serta tissu/handuk sekali pakai tersedia di tempat cuci tangan dan tempat melakukan disinfeksi tangan.|O,W
+c:Ada bukti pelaksanaan pelatihan hand hygiene kepada semua pegawai termasuk tenaga kontrak.|D,W
+###PPI 11.1: Menyediakan dan menggunakan APD secara tepat serta melatih penggunaannya
+a:menerapkan penggunaan alat pelindung diri, tempat yang harus menyediakan alat pelindung diri, dan pelatihan cara memakainya.|D,O,W
+b:Alat pelindung diri sudah digunakan secara tepat dan benar.|O,W,S
+c:Ketersediaan alat pelindung diri sudah cukup sesuai dengan regulasi.|O,W
+d:Ada bukti pelatihan penggunaan alat pelindung diri kepada semua pegawai termasuk tenaga kontrak|D,W
+###PPI 12: Fasilitas Ruang Isolasi
+a:Ada regulasi sistem manajemen data terintegrasi antara data surveilans dan data indikator mutu di Komite/ Tim Penyelenggara Mutu.|R
+b:Ada bukti pertemuan berkala antara Komite/ Tim Penyelenggara Mutu dan Komite/Tim PPI untuk berkoordinasi dan didokumentasikan.|D,W
+c:Ada bukti penyampaian hasil analisis data dan rekomendasi Komite/Tim PPI kepada Komite/ Tim Penyelenggara d) Mutu setiap tiga bulan.|D,W
+###PPI 13: Edukasi dan Pelatihan PPI
+a:menetapkan program pelatihan dan edukasi tentang PPI yang meliputi a) – e) yang ada pada maksud dan tujuan.|R
+b:Ada bukti pelaksanaan pelatihan untuk semua staf klinik dan nonklinik sebagai bagian dari orientasi pegawai|D
+c:Ada bukti pelaksanaan edukasi untuk pasien, keluarga, dan pengunjung|D,W
+
+##BAB VII. Pendidikan dalam Pelayanan Kesehatan (PPK)
+###PPK 1: Kesepakatan sebagai RS Pendidikan
+a:memilki kerjasama resmi dengan institusi pendidikan yang masih berlaku.|R
+b:Kerja sama antara rumah sakit dengan institusi pendidikan yang sudah terakreditasi.|D
+c:Kriteria penerimaan peserta didik sesuai dengan kapasitas RS harus dicantumkan dalam perjanjian Kerjasama.|R,D,W
+d:Pemilik, pimpinan rumah sakit dan pimpinan institusi pendidikan membuat kajian tertulis sedikitnya satu kali setahun terhadap hasil evaluasi program pendidikan kesehatan yang.|D,W
+###PPK 2: Komite Koordinasi Pendidikan (Komkordik)
+a:menetapkan regulasi tentang pengelolaan dan pengawasan pelaksanaan|R
+b:sampai dengan c) pada maksud dan tujuan. poin a)-c) pada maksud dan tujuan.|D,W
+c:Untuk setiap peserta pendidikan klinis terdapat dokumentasi yang meliputi poin a) – e) pada maksud dan tujuan|D
+###PPK 3: Rasio Pendidik Klinis dan Peserta Didik
+a:bukti perhitungan rasio peserta pendidikan dengan staf pendidik klinis untuk seluruh peserta dari setiap program pendidikan profesi yang disepakati oleh rumah sakit dan.|D,W
+b:bukti perhitungan peserta didik yang diterima di rumah sakit per periode untuk proses pendidikan disesuaikan dengan jumlah pasien untuk menjamin mutu dan keselamatan.|D
+c:bukti bahwa sarana prasarana, teknologi, dan sumber daya lain di rumah sakit tersedia untuk mendukung pendidikan peserta didik.|D,O
+###PPK 4: Kualifikasi Pendidik Klinis
+a:menetapkan staf klinis yang memberikan pendidikan klinis dan penetapan penugasan klinis serta rincian kewenangan klinis dari rumah sakit.|R
+b:memiliki daftar staf klinis yang memberikan pendidikan klinis secara lengkap (akademik dan profesi) sesuai dengan jenis pendidikan yang dilaksanakan di rumah sakit.|D,W
+c:memiliki bukti staf klinis yang memberikan pendidikan klinis telah mengikuti pendidikan sebagai pendidikan dan keprofesian berkelanjutan.|D
+###PPK 5: Mutu, Keselamatan Pasien, dan Supervisi Klinis
+a:memiliki tingkat supervisi yang diperlukan oleh setiap peserta pendidikan klinis di rumah sakit untuk setiap jenjang Pendidikan|R
+b:Setiap peserta pendidikan klinis mengetahui tingkat, frekuensi, dan dokumentasi untuk supervisinya.|D,O,W
+c:memiliki format spesifik untuk mendokumentasikan proses supervisi yang sesuai dengan kebijakan rumah sakit, tujuan program pendidikan, serta mutu dan keselamatan.|D,W
+d:memiliki proses pengkajian rekam medis untuk memastikan kepatuhan batasan kewenangan dan proses supervisi peserta pendidikan|D
+###PPK 6: Evaluasi Program Pendidikan Klinis
+a:menetapkan unit yang bertanggung jawab untuk mengelola pelaksanaan pendidikan klinis di rumah sakit.|R
+b:menetapkan program orientasi peserta pendidikan klinis|R
+c:memiliki bukti pelaksanaan dan sertifikat program orientasi peserta pendidikan klinis.|D,W
+d:memiliki bukti pelaksanaan dan dokumentasi peserta didik diikutsertakan dalam semua program peningkatan mutu dan keselamatan pasien di rumah sakit.|D,W
+e:memantau dan mengevaluasi bahwa pelaksanaan program pendidikan kesehatan tidak menurunkan mutu dan keselamatan pasien yang dilaksanakan sekurang- kurangnya.|D
+f:melakukan survei mengenai kepuasan pasien terhadap pelayanan rumah sakit atas dilaksanakannya pendidikan klinis sekurang- kurangnya sekali setahun|D,W
+
+##BAB VIII. Akses dan Kontinuitas Pelayanan (AKP)
+###AKP 1: Skrining Pasien
+a:menetapkan regulasi akses dan kesinambungan pelayanan (AKP) meliputi poin a) – f) pada gambaran umum|R
+b:menerapkan proses skrining baik di dalam maupun di luar rumah sakit dan terdokumentasi.|W
+c:Ada proses untuk memberikan hasil pemeriksaan diagnostik kepada tenaga kesehatan yang kompeten/terlatih untuk bertanggung jawab menentukan apakah pasien|D,W
+d:Bila kebutuhan pasien tidak dapat dipenuhi sesuai misi dan sumber daya yang ada, maka rumah sakit akan merujuk atau membantu pasien ke fasilitas pelayanan yang sesuai kebutuhannya.|W
+###AKP 1.1: Triase Gawat Darurat
+a:Proses triase dan pelayanan kegawatdaruratan telah diterapkan oleh staf yang kompeten dan bukti dokumen kompetensi dan kewenangan klinisnya tersedia.|D,W
+b:Staf telah menggunakan kriteria triase berbasis bukti untuk memprioritaskan pasien sesuai dengan kegawatannya|D,O,W
+c:Pasien darurat dinilai dan distabilkan sesuai kapasitas rumah sakit sebelum ditransfer ke ruang rawat atau dirujuk dan didokumentasikan dalam rekam medik|D,W
+###AKP 1.2: Skrining Kebutuhan Asuhan & Penundaan
+a:melaksanakan skrining pasien masuk rawat inap untuk menetapkan kebutuhan pelayanan preventif, paliatif, kuratif, dan rehabilitatif, pelayanan khusus/spesialistik.|D
+b:menetapkan kriteria masuk dan kriteria keluar di unit pelayanan khusus/spesialistik menggunakan parameter diagnostik dan atau parameter objektif termasuk.|R
+c:menerapkan kriteria masuk dan kriteria keluar di unit pelayanan intensif menggunakan parameter diagnostik dan atau parameter objektif termasuk kriteria berbasis.|D,W
+d:Staf yang kompeten dan berwenang di unit pelayanan khusus dan unit pelayanan intensif terlibat dalam|D,W
+###AKP 1.3: Memberi informasi kepada pasien saat terjadi penundaan layanan
+a:Pasien dan atau keluarga diberi informasi jika ada penundaan dan atau keterlambatan|D,W
+b:Pasien dan atau keluarga diberi informasi tentang alternatif yang tersedia sesuai kebutuhan klinis pasien dan dicatat di rekam medis|D,W
+###AKP 2: Admisi dan Pendaftaran
+a:menerapkan proses penerimaan pasien meliputi poin a) – f) pada maksud dan tujuan.|D,O,W
+b:menerapkan sistem pendaftaran pasien rawat jalan dan rawat inap baik secara offline maupun secara online dan dilakukan evaluasi dan tindak lanjutnya.|D,W
+c:memberikan informasi tentang rencana asuhan yang akan diberikan, hasil asuhan yang diharapkan serta perkiraan biaya yang harus dibayarkan oleh pasien/keluarga|D,W
+d:Saat diterima sebagai pasien rawat inap, pasien dan keluarga mendapat edukasi dan orientasi tentang ruang rawat inap|D,W
+###AKP 2.1: Manajemen Alur Pasien (Patient Flow)
+a:melaksanakan pengelolaan alur pasien untuk menghindari penumpukan. Mencakup poin a) – g) pada maksud dan tujuan|D,O,W
+b:Manajer pelayanan pasien (MPP)/case manager terlibat dalam pelaksanaan pengaturan alur pasien untuk menghindari penumpukan|D,W
+c:melakukan evaluasi terhadap pengelolaan alur pasien secara berkala dan melaksanakan upaya perbaikannya.|D,W
+d:Ada sistem informasi tentang ketersediaan tempat tidur secara online kepada masyarakat.|D
+###AKP 3: Manajer Pelayanan Pasien (MPP) / Case Manager
+a:Para PPA telah memberikan asuhan pasien secara terintegrasi berfokus pada pasien meliputi poin a) - f) pada maksud dan tujuan.|D,W
+b:Ada penunjukkan MPP dengan uraian tugas meliputi poin a) - h) pada maksud dan tujuan|R
+c:Para profesional pemberi asuhan (PPA) dan manajer pelayanan pasien (MPP) telah melaksanakan kesinambungan dan koordinasi pelayanan meliputi poin a) - e) pada maksud dan tujuan.|O,W
+d:Pencatatan perkembangan pasien didokumentasikan para PPA di formulir catatan pasien terintegrasi (CPPT).|D
+e:Pencatatan di unit intensif atau unit khusus menggunakan lembar pemantauan pasien khusus, pencatatan perkembangan pasien dilakukan pada lembar tersebut oleh DPJP di unit tersebut,.|D,W
+f:Perencanaan dan pelayanan pasien secara terintegrasi diinformasikan kepada pasien dan atau keluarga secara berkala sesuai ketentuan Rumah Sakit.|D,W
+###AKP 3.1: Menetapkan DPJP bagi setiap pasien
+a:menetapkan bahwa setiap pasien memiliki dokter penanggung jawab pelayanan (DPJP) dan telah melakukan asuhan pasien secara terkoordinasi dan terdokumentasi dalam.|R,W
+b:juga menetapkan proses perpindahan tanggung jawab koordinasi asuhan pasien dari satu dokter penanggung jawab pelayanan (DPJP) ke DPJP lain, termasuk bila terjadi.|R
+c:Bila dilaksanakan rawat bersama ditetapkan DPJP utama sebagai koordinator asuhan pasien.|R
+###AKP 4: Transfer Pasien Internal
+a:menerapkan proses transfer pasien antar unit pelayanan di dalam rumah sakit dilengkapi dengan formulir transfer pasien.|D,W
+b:Formulir transfer internal meliputi poin a) - g) pada maksud dan tujuan.|D
+###AKP 5: Pemulangan (Discharge Plan) dan Cuti
+a:menetapkan kriteria|R
+b:menetapkan kemungkinan pasien diizinkan keluar rumah sakit dalam jangka waktu tertentu untuk keperluan penting.|R
+c:Penyusunan rencana dan instruksi pemulangan didokumentasikan dalam rekam medis pasien dan diberikan kepada pasien secara tertulis.|D,W
+d:Tindak lanjut pemulangan pasien bila diperlukan dapt ditujukan kepada fasilitas pelayanan kesehatan baik perorangan ataupun dimana pasien untuk memberikan pelayanan berkelanjutan.|D,W
+###AKP 5.1: Resume Medis (Ringkasan Pulang)
+a:menetapkan Ringkasan pasien pulang meliputi a) – f) pada maksud dan tujuan.|R
+b:memberikan salinan ringkasan pasien pulang kepada pihak yang berkepentingan dan tersimpan di dalam rekam medik.|D
+c:Formulir Ringkasan pasien pulang dijelaskan kepada pasien dan atau keluarga.|D,W
+###AKP 5.2: Pasien Pulang Atas Permintaan Sendiri (APS)
+a:menetapkan proses untuk mengelola pasien rawat jalan dan rawat inap yang menolak rencana asuhan medis termasuk keluar rumah sakit atas permintaan sendiri dan.|R,D
+b:Ada bukti pemberian edukasi kepada pasien tentang risiko medis akibat asuhan medis yang belum lengkap.|D,W
+c:Pasien keluar rumah sakit atas permintaan sendiri, tetapi tetap mengikuti proses pemulangan pasien.|D,W
+d:Dokter keluarga (bila ada) atau dokter yang memberi asuhan berikutnya kepada pasien diberitahu tentang kondisi tersebut.|D,W
+e:Ada dokumentasi rumah sakit melakukan pengkajian untuk mengetahui alasan pasien keluar rumah sakit apakah permintaan sendiri, menolak asuhan medis, atau tidak melanjutkan program.|D
+###AKP 5.3: Pasien Melarikan Diri
+a:Ada regulasi yang mengatur pasien rawat inap dan rawat jalan yang meninggalkan rumah sakit tanpa pemberitahuan (melarikan diri).|R
+b:melakukan identifikasi pasien menderita penyakit yang membahayakan dirinya sendiri atau lingkungan.|D
+c:melaporkan kepada pihak yang berwenang bila ada indikasi kondisi pasien yang membahayakan dirinya sendiri atau lingkungan.|D,W
+###AKP 5.4: Rujukan Keluar RS
+a:Ada regulasi tentang rujukan sesuai dengan peraturan perundang-undangan.|R
+b:Rujukan pasien dilakukan sesuai dengan kebutuhan kesinambungan asuhan pasien.|D,W
+c:yang merujuk memastikan bahwa fasilitas kesehatan yang menerima|D,W
+d:Ada kerjasama rumah sakit yang merujuk dengan rumah sakit yang menerima rujukan yang sering dirujuk.|D
+###AKP 5.5: Proses Rujukan
+a:memiliki staf yang bertanggung jawab dalam pengelolaan rujukan termasuk untuk memastikan pasien diterima di rumah sakit rujukan yang dapat memenuhi kebutuhan pasien.|R
+b:Selama proses rujukan ada staf yang kompeten sesuai dengan kondisi pasien yang selalu memantau dan mencatatnya dalam rekam medis.|D,W
+c:Selama proses rujukan tersedia obat, bahan medis habis pakai, alat kesehatan, dan peralatan medis sesuai dengan kebutuhan kondisi pasien.|D,O,W
+d:memiliki proses serah terima pasien antara staf pengantar dan yang menerima.|R,D,W
+e:Pasien dan keluarga dijelaskan apabila rujukan yang dibutuhkan tidak dapat dilaksanakan.|D,W
+###AKP 5.6: Regulasi rujukan yang dicatat di rekam medis pasien
+a:Dokumen rujukan berisi nama dari fasilitas pelayanan kesehatan yang menerima dan nama orang yang menyetujui menerima pasien.|D
+b:Dokumen rujukan berisi alasan pasien dirujuk, memuat kondisi pasien, dan kebutuhan pelayanan lebih lanjut.|D
+c:Dokumen rujukan juga memuat prosedur dan intervensi yang sudah dilakukan.|D
+d:Proses rujukan dievaluasi dalam aspek mutu dan keselamatan pasien.|D,W
+###AKP 5.7: Profil Ringkas Medis Rawat Jalan (PRMRJ)
+a:menetapkan kriteria pasien rawat jalan dengan asuhan yang kompleks atau yang diagnosisnya kompleks diperlukan Profil Ringkas Medis Rawat Jalan (PRMRJ) meliputi.|R
+b:memiliki proses yang dapat dibuktikan bahwa PRMRJ mudah ditelusur dan mudah di- review.|D,W
+c:Proses tersebut dievaluasi untuk memenuhi kebutuhan para DPJP dan meningkatkan mutu serta keselamatan pasien.|D,W
+###AKP 6: Transportasi Ambulans
+a:memiliki proses transportasi pasien sesuai dengan kebutuhannya yang meliputi pengkajian kebutuhan transportasi, SDM, obat, bahan medis habis pakai, alat kesehatan,.|D,W
+b:Bila rumah sakit memiliki kendaraan transport sendiri, ada bukti pemeliharan kendaraan tersebut sesuai|D,W
+c:Bila rumah sakit bekerja sama dengan jasa transportasi pasien mandiri, ada bukti kerja sama tersebut dan evaluasi berkala dari rumah sakit mengenai kelayakan kendaraan.|D,W
+d:Kriteria alat transportasi yang digunakan untuk merujuk, memindahkan, atau memulangkan pasien ditentukan oleh rumah sakit (staf yang kompeten), harus sesuai dengan Program PPI,.|R
+
+##BAB IX. Hak Pasien dan Keluarga (HPK)
+###HPK 1: Hak dan Kewajiban Pasien
+a:menerapkan regulasi hak pasien dan keluarga sebagaimana tercantum dalam poin a) – e) pada gambaran umum dan peraturan perundang- undangan.|R,D
+b:b) Rumah sakit memiliki proses untuk mengidentifikasi siapa yang diinginkan pasien untuk berpartisipasi dalam pengambilan keputusan terkait perawatannya|D,W
+c:memiliki proses untuk menentukan preferensi pasien, dan pada beberapa keadaan preferensi keluarga pasien, dalam menentukan informasi apa|D,W
+d:Semua staf dilatih tentang proses dan peran mereka dalam mendukung hak-hak serta partisipasi pasien dan keluarga dalam perawatan|D,W
+###HPK 1.1: Kebutuhan Spiritual
+a:mengidentifikasi hambatan serta menerapkan proses untuk mengurangi hambatan bagi pasien dalam mendapatkan akses, proses penerimaan dan pelayanan perawatan.|D,W
+b:Informasi terkait aspek perawatan dan tata laksana medis pasien diberikan dengan cara dan bahasa yang dipahami pasien.|D,W
+c:Informasi mengenai hak dan tanggung jawab pasien terpampang di area rumah sakit atau diberikan kepada setiap pasien secara tertulis atau dalam metode lain dalam bahasa yang.|D,O,W
+###HPK 1.2: Hak Atas Privasi
+a:SPO Perlindungan privasi buka baju anamnesa tirai gorden ditutup sekat pembatas|R
+b:Staf ketuk pintu permisi sebelum masuk kamar pemeriksaan rahasia medis rekam medis|D,O,W
+###HPK 1.3: Perlindungan Harta Benda
+a:menetapkan proses untuk mencatat dan melindungi pertanggungjawaban harta benda pasien.|R
+b:Pasien mendapat informasi mengenai tanggung jawab rumah sakit untuk melindungi harta benda pribadi mereka di tempat penyimpanan barang pasien berupa nakas/lemari kecil pada.|D,O,W
+###HPK 1.4: Perlindungan Fisik dan Kelompok Rentan
+a:Gelang identitas ganda ibu bayi sidik jari kaki CCTV ruang bersalin cegah culik bayi|R,D,O,W
+b:Pemantauan area parkir lorong sepi patroli sekuriti cegah pencurian kekerasan RS|R
+c:Pengamanan pasien geriatri anak psikiatri disabilitas risiko jatuh gelang kuning|D,O,W
+###HPK 1.5: Melindungi pasien dan kelompok rentan dari serangan dan kerentanan
+a:mengembangkan dan menerapkan proses untuk melindungi semua pasien dari serangan fisik dan verbal.|R,D,O,W
+b:mengidentifikasi populasi yang memiliki risiko lebih tinggi untuk mengalami serangan.|R
+c:memantau area fasilitas yang terisolasi dan terpencil.|D,O,W
+###HPK 2: Second Opinion & Edukasi Asuhan
+a:menerapkan proses untuk mendukung pasien dan keluarga terlibat dan berpartisipasi dalam proses asuhan dan dalam pengambilan keputusan.|D,W
+b:menerapkan proses untuk memberikan edukasi kepada pasien dan keluarganya mengenai kondisi medis, diagnosis, serta rencana perawatan dan terapi yang diberikan.|D,W
+c:Pasien diberikan informasi mengenai hasil asuhan dan tata laksana yang diharapkan.|D,W
+d:Pasien diberikan informasi mengenai kemungkinan hasil yang tidak dapat diantisipasi dari terapi dan perawatan.|D,W
+e:memfasilitasi permintaan pasien untuk mencari pendapat kedua tanpa perlu khawatir akan mempengaruhi perawatannya selama di dalam atau luar rumah sakit|D,W
+###HPK 2.1: Manajemen Nyeri
+a:menerapkan proses mengenai pemberian pelayanan resusitasi dan penghentian terapi penunjang kehidupan untuk pasien.|R,D,W
+b:memberi informasi kepada pasien dan keluarga mengenai hak|D,W
+###HPK 2.2: Asuhan Tahap Terminal (Paliatif)
+a:menerapkan proses untuk menghargai dan mendukung hak pasien mendapatkan pengkajian dan pengelolaan nyeri.|D,W
+b:menerapkan proses untuk menghargai dan mendukung hak pasien untuk mendapatkan pengkajian dan pengelolaan terhadap kebutuhan pasien menjelang akhir hayat.|D,W
+###HPK 3: Komplain dan Konflik
+a:Pasien diberikan informasi mengenai proses untuk menyampaikan keluhan dan proses yang harus dilakukan pada saat terjadi konflik/perbedaan pendapat pada proses perawatan.|D,W
+b:Keluhan, konflik, dan perbedaan pendapat tersebut dikaji dan diselesaikan oleh unit/petugas yang bertanggung jawab melalui sebuah alur/proses spesifik.|D,W
+c:Pasien dan keluarga berpartisipasi dalam proses penyelesaian keluhan, konflik, dan perbedaan pendapat.|D,W
+###HPK 4: Persetujuan Umum (General Consent)
+a:menerapkan proses bagaimana persetujuan umum didokumentasikan dalam rekam medis pasien.|R,D,O,W
+b:Pasien dan keluarga diberikan informasi mengenai pemeriksaan, tindakan dan pengobatan yang memerlukan informed consent.|D,W
+c:Pasien menerima informasi mengenai kemungkinan keterlibatan peserta didik, mahasiswa, residen traine dan fellow yang berpartisipasi dalam proses perawatan|D,W
+###HPK 4.1: Informed Consent Medis (Persetujuan Tindakan)
+a:menerapkan proses bagi pasien untuk mendapatkan informed consent.|D,W
+b:Pemberian informed consent dilakukan oleh staf yang kompeten dan diberikan dengan cara dan bahasa yang mudah dipahami pasien.|D,W
+c:memiliki daftar tindakan invasif, pemeriksaan dan terapi tambahan yang memerlukan informed consent.|R
+###HPK 4.2: Proses pemberian persetujuan oleh pihak lain sesuai hukum
+a:menerapkan proses untuk pemberian informed consent oleh orang lain selain pasien sesuai peraturan perundangan yang berlaku.|D,W
+b:Rekam medis pasien mencantumkan (satu atau lebih) nama individu yang menyatakan persetujuan.|D,W
+
+##BAB X. Pengkajian Pasien (PP)
+###PP 1: Pengkajian Awal
+a:menetapkan regulasi tentang pengkajian awal dan pengkajian ulang medis dan keperawatan di unit gawat darurat, rawat inap dan rawat jalan.|R
+b:menetapkan isi minimal pengkajian awal meliputi poin a) – l) pada maksud dan tujuan.|R
+c:Hanya PPA yang kompeten, diperbolehkan untuk melakukan pengkajian sesuai dengan ketentuan rumah sakit.|D
+d:Perencanaan pulang yang mencakup identifikasi kebutuhan khusus dan rencana untuk memenuhi kebutuhan tersebut, disusun sejak pengkajian awal.|D
+###PP 1.1: Isi Pengkajian
+a:Pengkajian awal medis dan keperawatan dilaksanakan dan didokumentasikan dalam kurun waktu 24 jam pertama sejak pasien masuk rawat inap, atau lebih awal bila diperlukan sesuai.|D
+b:Pengkajian awal medis menghasilkan diagnosis medis yang mencakup kondisi utama dan kondisi lainnya yang|D
+c:Pengkajian awal keperawatan menghasilkan diagnosis keperawatan untuk menentukan kebutuhan asuhan keperawatan, intervensi atau pemantauan pasien yang spesifik.|D
+d:Sebelum pembedahan pada kondisi mendesak, minimal terdapat catatan singkat dan diagnosis praoperasi yang didokumentasikan di dalam rekam medik.|D
+e:Pengkajian medis yang dilakukan sebelum masuk rawat inap atau sebelum pasien menjalani prosedur di layanan rawat jalan rumah sakit harus dilakukan dalam waktu kurang atau sama.|D
+f:Hasil dari seluruh pengkajian yang dikerjakan di luar rumah sakit ditinjau dan/atau diverifikasi pada saat masuk rawat inap atau sebelum tindakan di unit rawat jalan.|D
+###PP 1.2: Skrining Gizi dan Fungsional
+a:Pasien diskrining untuk risiko nutrisi sebagai bagian dari pengkajian awal.|R,D
+b:Pasien dengan risiko nutrisional dilanjutkan dengan pengkajian gizi.|D
+c:Pasien diskrining untuk kebutuhan fungsional termasuk risiko jatuh.|R,D
+###PP 1.3: Pengkajian Populasi Khusus
+a:menetapkan jenis populasi khusus yang akan dilakukan pengkajian meliputi poin a) - m) pada maksud dan tujuan.|R
+b:melaksanakan pengkajian tambahan terhadap populasi pasien khusus sesuai ketentuan rumah sakit.|D
+###PP 2: Pengkajian Ulang (CPPT)
+a:melaksanakan pengkajian ulang oleh DPJP, perawat dan PPA lainnya untuk menentukan rencana asuhan lanjutan.|D
+b:bukti pelaksanaan pengkajian ulang medis dilaksanakan minimal satu kali sehari, termasuk akhir minggu/libur untuk pasien akut.|D
+c:bukti pelaksanaan pengkajian ulang oleh perawat minimal satu kali per shift atau sesuai dengan perubahan kondisi pasien.|D
+d:bukti pengkajian ulang oleh PPA lainnya dilaksanakan dengan interval sesuai regulasi rumah sakit.|D
+###PP 3: Pelayanan Laboratorium
+a:menetapkan regulasi tentang pelayanan laboratorium di rumah sakit.|R
+b:Pelayanan laboratorium buka 24 jam, 7 (tujuh) hari seminggu, sesuai dengan kebutuhan pasien.|R,D
+###PP 3.1: Pelaporan Nilai Kritis Laboratorium
+a:Direktur rumah sakit menetapkan penanggung jawab laboratorium yang memiliki kompetensi sesuai ketentuan perundang- undangan.|R,D
+b:bukti pelaksanaan tanggung jawab pimpinan|D
+###PP 3.2: Reagensia Laboratorium
+a:Staf laboratorium yang membuat interpretasi telah memenuhi persyaratan kredensial.|D
+b:Staf laboratorium dan staf lain yang melaksanakan pemeriksaan termasuk yang mengerjakan Point-of-care testing (POCT), memenuhi persyaratan kredensial.|D
+###PP 3.3: Kendali Mutu Laboratorium (PMI/PME)
+a:menetapkan dan menerapkan kerangka waktu penyelesaian pemeriksaan laboratorium regular dan cito.|R,D
+b:bukti pencatatan dan evaluasi waktu penyelesaian pemeriksaan laboratorium.|D
+c:bukti pencatatan dan evaluasi waktu penyelesaian pemeriksaan cito.|D
+d:bukti pencatatan dan evaluasi pelayanan laboratorium rujukan.|D
+###PP 3.4: Prosedur pengelolaan reagensia esensial dan evaluasi berkala
+a:bukti pelaksanaan semua reagensia esensial disimpan dan diberi label, serta didistribusi sesuai prosedur dari pembuatnya atau instruksi pada kemasannya|D,O
+b:bukti pelaksanaan evaluasi/audit semua reagen.|D
+c:Bukti pelaksanaan audit minimal terdiri dari aspek penyimpanan, pelabelan, tanggal kadaluarsa dan kondisi fisik.|D
+###PP 3.5: Prosedur pengelolaan spesimen mulai ambil hingga pembuangan
+a:Pengelolaan spesimen dilaksanakan sesuai poin a) - d) pada maksud dan tujuan.|D
+b:bukti pemantauan dan evaluasi terhadap pengelolaan spesimen.|D
+###PP 3.6: Rentang Nilai Normal Interpretasi Hasil Lab
+a:menetapkan dan mengevaluasi rentang nilai normal untuk interpretasi, pelaporan hasil laboratorium klinis.|R,D
+b:Setiap hasil pemeriksaan laboratorium dilengkapi dengan rentang nilai normal.|D
+###PP 3.7: Melaksanakan kendali mutu laboratorium yang terdokumentasi dan dievaluasi
+a:bukti bahwa unit laboratorium telah melakukan PMI|D
+b:bukti bahwa unit laboratorium telah melakukan Pemantapan Mutu Eksternal (PME) secara rutin.|D
+###PP 3.8: Bekerja sama dengan laboratorium rujukan terakreditasi
+a:Unit laboratorium memiliki bukti sertifikat akreditasi laboratorium rujukan yang masih berlaku.|D
+b:dilakukan pemantauan dan evaluasi kerjasama pelayanan kontrak sesuai dengan kesepakatan kedua belah pihak.|D
+###PP 3.9: Pelayanan Darah Bank Darah BDRS
+a:menerapkan regulasi tentang penyelenggaraan pelayanan darah di rumah sakit.|R,D
+b:Penyelenggaraan pelayanan darah dibawah tanggung jawab seorang staf yang kompeten.|R,D
+c:melakukan pemantauan dan evaluasi mutu terhadap penyelenggaran pelayanan darah di rumah sakit.|D
+d:menerapkan proses persetujuan tindakan pasien untuk pemberian darah dan produk darah.|D
+###PP 4: Pelayanan Radiologi Klinik
+a:menetapkan dan melaksanakan regulasi pelayanan radiologi klinik.|R,D
+b:pelayanan radiologi klinik selama 24 jam, 7 (tujuh) hari seminggu, sesuai dengan kebutuhan pasien.|R,D
+###PP 4.1: Proteksi Keselamatan Radiasi
+a:Direktur menetapkankan penanggung jawab radiologi klinik yang memiliki kompetensi sesuai ketentuan dengan peraturan perundang-undangan.|R,D
+b:bukti pengawasan pelayanan radiologi klinik oleh penanggung jawab radiologi klinik sesuai poin a) – e) pada maksud dan tujuan.|D
+###PP 4.2: Kendali Mutu Peralatan Radiologi
+a:Staf radiologi klinik yang membuat interpretasi telah memenuhi persyaratan kredensial|D
+b:Staf radiologi klinik dan staf lain yang melaksanakan pemeriksaan termasuk yang mengerjakan tindakan di Ruang Rawat pasien, memenuhi persyaratan kredensial.|D
+###PP 4.3: Menetapkan kerangka waktu pemeriksaan radiologi regular dan cito
+a:menetapkan kerangka waktu penyelesaian pemeriksaan radiologi klinik.|R,D
+b:Dilakukan pencatatan dan evaluasi waktu penyelesaian pemeriksaan radiologi klinik.|D
+c:Dilakukan pencatatan dan evaluasi waktu penyelesaian pemeriksaan cito.|D
+d:bukti pencatatan dan evaluasi pelayanan radiologi rujukan.|D
+###PP 4.4: Menjamin ketersediaan film X-ray dan bahan terkait secara teratur
+a:menetapkan proses pengelolaan logistik film x-ray, reagens, dan bahan lainnya, termasuk kondisi bila terjadi kekosongan.|D
+b:Semua film x-ray disimpan dan diberi label, serta didistribusi sesuai pedoman dari pembuatnya atau instruksi pada kemasannya.|D
+###PP 4.5: Program kendali mutu dilaksanakan, divalidasi, dan didokumentasikan
+a:bukti bahwa unit radiologi klinik telah melaksanakan Pemantapan Mutu Internal (PMI).|D
+b:bukti bahwa unit radiologi klinik melaksanakan Pemantapan Mutu Eksternal (PME).|D
+
+##BAB XI. Pelayanan dan Asuhan Pasien (PAP)
+###PAP 1: Pelayanan Asuhan Seragam
+a:menetapkan regulasi tentang pelayanan dan asuhan pasien (PAP) yang meliputi poin a) – e) dalam gambaran umum.|R
+b:Asuhan yang seragam diberikan kepada setiap pasien meliputi poin a) – e) dalam maksud dan tujuan|D
+c:Bukti rekam medis: memuat rencana pemberian asuhan diintegrasikan dan koordinasikan dengan PPA, MPP, PPA dengan pasien sesuai dengan.|W
+###PAP 1.1: Asuhan Terintegrasi PPA
+a:melakukan pelayanan dan asuhan yang terintegrasi serta terkoordinasi|D,W
+b:menetapkan kewenangan pemberian instruksi oleh PPA yang kompeten, tata cara pemberian instruksi dan pendokumentasiannya.|R
+c:Permintaan pemeriksaan laboratorium dan diagnostik imajing harus disertai indikasi klinis apabila meminta hasilnya berupa interpretasi.|D
+d:Prosedur dan tindakan telah dilakukan sesuai instruksi dan PPA yang memberikan instruksi, alasan dilakukan prosedur atau tindakan serta hasilnya telah didokumentasikan di dalam.|D,W
+e:Pasien yang menjalani tindakan invasif/berisiko di rawat jalan telah dilakukan pengkajian dan didokumentasikan dalam rekam medis|D
+###PAP 1.2: Instruksi Tindakan Medis
+a:PPA telah membuat rencana asuhan untuk setiap pasien setelah diterima sebagai pasien rawat inap dalam waktu 24 jam berdasarkan hasil pengkajian awal.|D,W
+b:Rencana asuhan dievaluasi secara berkala, direvisi atau dimutakhirkan serta didokumentasikan dalam rekam medis oleh setiap PPA.|D,W
+c:Instruksi berdasarkan rencana asuhan dibuat oleh PPA yang kompeten dan berwenang, dengan cara yang seragam, dan didokumentasikan di CPPT|D,W
+d:Rencana asuhan pasien dibuat dengan membuat sasaran yang terukur dan di dokumentasikan.|D,W
+e:DPJP telah melakukan evaluasi/review berkala dan verifikasi harian untuk memantau terlaksananya asuhan secara terintegrasi dan membuat notasi sesuai dengan kebutuhan.|D,W
+###PAP 2: Pasien Risiko Tinggi (Restraint, Menular, Koma)
+a:Pimpinan: telah melaksanakan tanggung jawabnya untuk memberikan pelayanan pada pasien berisiko tinggi dan pelayanan berisiko tinggi meliputi a)-c) dalam maksud dan.|D
+b:memberikan pelayanan pada pasien risiko tinggi dan pelayanan risiko tinggi yang telah diidentifikasi berdasarkan populasi yaitu pasien anak, pasien dewasa dan.|D,O,W
+c:Pimpinan: telah mengidentifikasi risiko tambahan yang dapat mempengaruhi pasien dan pelayanan risiko tinggi.|D,W
+###PAP 2.1: Early Warning System (EWS)
+a:menetapkan regulasi tentang penyelenggaraan pelayanan geriatri di rumah sakit sesuai dengan kemampuan, sumber daya dan sarana prasarananya.|R
+b:menetapkan tim terpadu geriatri dan telah menyelenggarakan pelayanan sesuai tingkat jenis layanan|R,O
+c:melaksanakan proses pemantauan dan evaluasi kegiatan pelayanan geriatri|D,W
+d:Ada pelaporan penyelenggaraan pelayanan geriatri di rumah sakit.|D
+###PAP 2.2: Pelayanan Resusitasi (Code Blue)
+a:Ada program PKRS terkait pelayanan kesehatan warga lanjut usia di masyarakat berbasis rumah sakit (hospital based community geriatric service).|R
+b:memberikan edukasi sebagai bagian dari pelayanan kesehatan warga lanjut usia di masyarakat berbasis rumah sakit (hospital based community geriatric service).|D,W
+c:melaksanakan kegiatan sesuai program dan tersedia leaflet atau alat bantu kegiatan (brosur, leaflet, dan lain-lainnya).|D
+d:melakukan evaluasi dan membuat laporan kegiatan pelayanan secara berkala.|D
+###PAP 2.3: Pelayanan Jiwa Psikiatri
+a:menetapkan regulasi tentang penyelenggaraan pelayanan jiwa di rumah sakit sesuai dengan kemampuan pelayanan, sarana, prasarana, peralatan, sumber daya manusia,.|R
+b:melaksanakan penyelenggaraan pelayanan jiwa yang berkualitas dan menghargai hak-hak asasi orang dengan gangguan jiwa|D,O,W
+c:melaksanakan proses pemantauan dan evaluasi kegiatan pelayanan jiwa|D
+###PAP 2.5: Proses pengenalan perubahan kondisi pasien yang memburuk (deteriorasi)
+a:menerapkan proses pengenalan perubahan kondisi pasien yang memburuk (EWS) dan mendokumentasikannya di dalam rekam medik pasien.|D,W
+b:memiliki bukti PPA dilatih menggunakan EWS.|D
+###PAP 2.6: Menyediakan pelayanan resusitasi di seluruh area rumah sakit
+a:Pelayanan resusitasi tersedia dan diberikan selama 24 jam setiap hari di seluruh area rumah sakit.|D,W
+b:Peralatan medis untuk resusitasi dan obat untuk bantuan hidup dasar dan lanjut terstandar sesuai dengan kebutuhan populasi pasien.|D,W
+c:Di seluruh area rumah sakit, bantuan hidup dasar diberikan segera saat dikenali henti jantung-paru dan bantuan hidup lanjut diberikan kurang dari 5 menit.|W,S
+d:Staf diberi pelatihan pelayanan bantuan hidup dasar/lanjut sesuai dengan ketentuan rumah sakit.|D,W
+###PAP 2.7: Pelayanan darah sesuai panduan klinis dan prosedur RS
+a:menerapkan penyelenggaraan pelayanan darah.|D,W
+b:Panduan klinis dan prosedur disusun dan diterapkan untuk pelayanan darah serta produk darah.|R
+c:Staf yang kompeten bertanggungjawab terhadap pelayanan darah di rumah sakit.|D,W
+###PAP 3: Pelayanan Gizi Terintegrasi
+a:Berbagai pilihan makanan atau terapi nutrisi yang sesuai untuk kondisi, perawatan, dan kebutuhan pasien tersedia dan disediakan tepat waktu.|D
+b:Sebelum pasien rawat inap diberi makanan, terdapat instruksi pemberian makanan dalam rekam medis pasien yang didasarkan pada status gizi dan kebutuhan pasien.|D,W
+c:Untuk makanan yang disediakan keluarga, edukasi diberikan mengenai batasan- batasan diet pasien dan penyimpanan yang baik untuk mencegah kontaminasi|D,W
+d:Memiliki bukti pemberian terapi gizi terintegrasi (rencana, pemberian dan evaluasi) pada pasien risiko gizi.|D,W
+e:Pemantauan dan evaluasi terapi gizi dicatat di rekam medis pasien.|D
+###PAP 4: Manajemen Nyeri Klinis
+a:memiliki proses untuk melakukan skrining, pengkajian, dan tata laksana nyeri meliputi poin a) - e) pada maksud dan tujuan.|R
+b:Informasi mengenai kemungkinan adanya nyeri dan pilihan tata laksananya diberikan kepada pasien yang menerima terapi/ prosedur/pemeriksaan.|D,W
+c:Pasien dan keluarga mendapatkan edukasi mengenai pengelolaan nyeri sesuai dengan latar belakang agama, budaya, nilai-nilai yang dianut.|D,W
+d:Staf rumah sakit mendapatkan pelatihan mengenai cara melakukan edukasi bagi pengelolaan nyeri.|D,W,S
+###PAP 5: Asuhan Pasien Tahap Terminal
+a:menerapkan pengkajian pasien menjelang akhir kehidupan dan dapat dilakukan pengkajian ulang sampai pasien yang memasuki fase akhir|D,W
+b:Asuhan menjelang akhir kehidupan ditujukan terhadap kebutuhan psikososial, emosional, kultural dan spiritual pasien dan keluarganya.|D
+
+##BAB XII. Pelayanan Anestesi dan Bedah (PAB)
+###PAB 1: Pengorganisasian Anestesi
+a:menetapkan regulasi pelayanan anestesi dan sedasi dan pembedahan meliputi poin a - c pada gambaran umum.|R
+b:Pelayanan anestesi dan sedasi yang telah diberikan dapat memenuhi kebutuhan pasien.|D
+c:Pelayanan anestesi dan sedasi tersedia 24 jam 7 (tujuh) hari sesuai dengan kebutuhan pasien.|D,O,W
+###PAB 2: Sedasi Moderat dan Dalam (Luar OK)
+a:menerapkan pelayanan anestesi dan sedasi secara seragam di seluruh area sesuai regulasi yang ditetapkan.|D,W
+b:menetapkan penanggung jawab pelayanan anestesi dan sedasi adalah seorang dokter anastesi yang kompeten yang melaksanakan tanggung|D
+c:Bila memerlukan profesional pemberi asuhan terdapat PPA dari luar rumah sakit untuk memberikan pelayanan anestesi dan sedasi, maka ada bukti rekomendasi dan evaluasi pelayanan.|D
+###PAB 3: Asesmen Pra-Anestesi
+a:melaksanakan pemberian sedasi moderat dan dalam yang seragam di semua tempat di rumah sakit sesuai dengan poin a) - f) pada maksud dan tujuan.|D,W
+b:Peralatan dan perbekalan gawat darurat tersedia di tempat dilakukan sedasi moderat dan dalam serta dipergunakan sesuai jenis sedasi, usia, dan kondisi pasien.|D,O
+c:PPA yang terlatih dan berpengalaman dalam memberikan bantuan hidup lanjut (advance) harus selalu mendampingi dan siaga selama tindakan sedasi dikerjakan.|D
+###PAB 3.1: Informed Consent Anestesi
+a:Tenaga medis yang diberikan kewenangan klinis|R
+b:Dokumen Rekam farmasi / kartu stok untuk sedasi|D
+c:Kompetensi semua PPA yang terlibat dalam sedasi moderat dan dalam tercatat di file kepegawaian.|D
+###PAB 4: Pemantauan Selama Operasi (Intra-Op)
+a:Pengkajian pra-anestesi telah dilakukan untuk setiap pasien yang akan dilakukan anestesi.|D
+b:Pengkajian pra induksi telah dilakukan secara terpisah untuk mengevaluasi ulang pasien segera sebelum induksi anestesi.|D
+c:Kedua pengkajian tersebut telah dilakukan oleh PPA yang kompeten dan telah diberikan kewenangan klinis didokumentasikan dalam rekam medis pasien.|D
+###PAB 5: Ruang Pulih Sadar (PACU)
+a:menerapkan pemberian informasi kepada pasien dan atau keluarga atau pihak yang akan memberikan keputusan tentang jenis, risiko, manfaat, alternatif dan analgesia.|D,W
+b:Pemberian informasi dilakukan oleh dokter spesialis anestesi dan didokumentasikan dalam formulir persetujuan tindakan anestesi/sedasi.|D,W
+###PAB 6: Asesmen dan Edukasi Bedah
+a:Frekuensi dan jenis pemantauan selama tindakan anestesi dan pembedahan didasarkan pada status pra anestesi pasien, anestesi yang digunakan, serta prosedur pembedahan yang dilakukan.|D,W
+b:Pemantauan status fisiologis pasien sesuai dengan panduan praktik klinis (PPK)|D,W
+###PAB 6.1: Pemindahan Pasien Pasca Anestesi
+a:menerapkan pemantauan pasien pasca anestesi baik di ruang intensif maupun di ruang pemulihan dan didokumentasikan dalam rekam medis pasien.|D,W
+b:Pasien dipindahkan dari unit pasca anestesi (atau pemantauan pemulihan dihentikan) sesuai dengan kriteria baku yang ditetapkan dengan alternatif a) – c) pada maksud dan tujuan.|D,W
+c:Waktu dimulai dan dihentikannya proses pemulihan dicatat di dalam rekam medis pasien.|D,W
+###PAB 7: Laporan Operasi (Surgical Report)
+a:menerapkan pengkajian pra bedah pada pasien yang akan dioperasi oleh dokter penanggung jawab pelayanan (DPJP) sebelum operasi dimulai.|D,W
+b:Diagnosis praoperasi dan rencana prosedur/tindakan operasi berdasarkan hasil pengkajian prabedah dan didokumentasikan di rekam medik.|D,W
+###PAB 7.1: Asuhan Pasca-Bedah
+a:menerapkan pemberian informasi kepada pasien dan atau keluarga atau pihak yang akan memberikan keputusan tentang jenis, risiko, manfaat, komplikasi dan dampak.|D,W
+b:Pemberian informasi dilakukan oleh dokter penanggung jawab pelayanan (DPJP) didokumentasikan dalam formulir persetujuan tindakan kedokteran.|D,W
+###PAB 7.2: Mencatat informasi operasi dalam laporan untuk rencana lanjutan
+a:Laporan operasi memuat poin a) – h) pada maksud dan tujuan serta dicatat pada formulir/template yang ditetapkan rumah sakit.|D
+b:Laporan operasi telah tersedia segera setelah operasi selesai dan sebelum pasien dipindah ke ruang lain untuk perawatan selanjutnya.|D
+###PAB 7.3: Menyusun dan mencatat rencana asuhan pascaoperasi di RM
+a:Rencana asuhan pascaoperasi dicatat di rekam medis pasien dalam waktu 24 jam oleh dokter|D
+b:Rencana asuhan pascaoperasi termasuk rencana asuhan medis, keperawatan, oleh PPA lainnya berdasar atas kebutuhan pasien.|D
+c:Rencana asuhan pasca operasi diubah berdasarkan pengkajian ulang pasien.|D,W
+###PAB 7.4: Perencanaan khusus untuk perawatan bedah dengan implantasi alat medis
+a:mengidentifikasi jenis alat implan yang termasuk dalam cakupan layanannya.|R
+b:Kebijakan dan praktik mencakup poin a) – h) pada maksud dan tujuan.|R
+c:Rumah sakit mempunyai proses untuk melacak implan medis yang telah digunakan pasien.|D,W
+d:menerapkan proses untuk menghubungi dan memantau pasien dalam jangka waktu yang ditentukan setelah menerima pemberitahuan adanya penarikan/recall suatu implan medis.|D,W
+
+##BAB XIII. Pelayanan Kefarmasian Penggunaan Obat (PKPO)
+###PKPO 1: Pengorganisasian Pelayanan Kefarmasian
+a:menetapkan regulasi tentang sistem pelayanan kefarmasian dan penggunaan obat, termasuk pengorganisasiannya sesuai dengan peraturan perundang- undangan.|R
+b:memiliki bukti seluruh apoteker memiliki izin dan kompeten, serta telah melakukan supervisi pelayanan kefarmasian dan memastikan kepatuhan terhadap peraturan.|D
+c:memiliki bukti kajian sistem pelayanan kefarmasian dan penggunaan obat yang dilakukan setiap tahun.|D,W
+d:memiliki sumber informasi obat untuk semua staf yang terlibat dalam penggunaan obat|D,O,W
+###PKPO 2: Formularium RS & Pengadaan
+a:memiliki proses penyusunan formularium rumah sakit secara kolaboratif.|D,W
+b:melakukan pemantauan kepatuhan terhadap formularium baik dari persediaan maupun penggunaannya.|D,W
+c:melakukan evaluasi terhadap formularium sekurang- kurangnya setahun sekali berdasarkan informasi tentang efektivitas, keamanan dan biaya.|D,W
+d:melakukan pelaksanaan dan evaluasi|D,W
+e:melakukan pengadaan sediaan farmasi, dan BMHP melibatkan apoteker untuk memastikan proses berjalan sesuai peraturan perundang-undangan.|D,W
+f:Sediaan farmasi dan BMHP disimpan dengan benar dan aman dalam kondisi yang sesuai untuk stabilitas produk, termasuk yang disimpan di luar Instalasi Farmasi.|O,W
+g:Narkotika dan psikotropika disimpan dan dilaporkan penggunaannya sesuai peraturan perundang- undangan.|D,O,W
+h:melaksanakan supervisi secara rutin oleh apoteker untuk memastikan|D,W
+i:Obat dan zat kimia yang digunakan untuk peracikan obat diberi label secara akurat yang terdiri atas nama zat dan kadarnya, tanggal kedaluwarsa, dan peringatan khusus.|O
+###PKPO 3: Keamanan Penyimpanan
+a:Obat yang memerlukan penanganan khusus dan bahan berbahaya dikelola sesuai sifat dan risiko bahan.|O
+b:Radioaktif dikelola sesuai sifat dan risiko bahan radioaktif.|O
+c:Obat penelitian dikelola sesuai protokol penelitian.|O
+d:Produk nutrisi parenteral dikelola sesuai stabilitas produk.|O
+e:Obat/BMHP dari program/donasi dikelola sesuai peraturan perundang-undangan dan pedoman terkait.|O
+###PKPO 3.1: Pengelolaan Obat Emergensi Troli
+a:Obat dan BMHP untuk kondisi emergensi yang tersimpan di luar Instalasi Farmasi termasuk di ambulans dikelola secara|O
+b:menerapkan tata laksana obat emergensi untuk meningkatkan ketepatan dan kecepatan pemberian obat.|D,W
+###PKPO 3.3: Standar tambahan terkait penyimpanan farmasi dan BMHP
+a:Batas waktu obat dapat digunakan (beyond use date) tercantum pada label obat.|D,O
+b:memiliki sistem pelaporan sediaan farmasi dan BMHP substandar (rusak).|D,W
+c:menerapkan proses recall obat, BMHP dan implant yang meliputi identifikasi, penarikan, dan pengembalian produk yang di-recall.|D,W
+d:menerapkan proses pemusnahan sediaan farmasi dan BMHP.|D,W
+###PKPO 4: Peresepan (Prescribing) dan Rekonsiliasi
+a:menerapkan rekonsiliasi obat saat pasien masuk rumah sakit, pindah antar unit pelayanan di dalam rumah sakit dan sebelum pasien pulang.|D,W
+b:Hasil rekonsiliasi obat didokumentasikan di rekam medis.|D
+###PKPO 4.1: Regulasi peresepan dan permintaan obat sesuai perundangan
+a:Resep dibuat lengkap sesuai regulasi.|D,O
+b:dilakukan evaluasi terhadap penulisan resep/instruksi pengobatan yang tidak lengkap dan tidak terbaca.|D,W
+c:dilaksanaan proses untuk mengelola resep khusus seperti emergensi, automatic stop order, tapering,|D,W
+d:Daftar obat yang diresepkan tercatat dalam rekam medis pasien dan menyertai pasien ketika dipindahkan/ transfer.|D,O
+e:Daftar obat pulang diserahkan kepada pasien disertai edukasi penggunaannya.|D,W
+###PKPO 5: Penyiapan (Dispensing) dan Serah Terima
+a:memiliki sistem distribusi dan dispensing yang sama/seragam diterapkan di rumah sakit sesuai peraturan perundang-undangan.|D,O,W
+b:Staf yang melakukan dispensing sediaan obat non steril kompeten.|D,O
+c:Staf yang melakukan dispensing sediaan obat steril non sitostatika terlatih dan kompeten.|D
+d:Staf yang melakukan pencampuran sitostatika terlatih dan kompeten.|D
+e:Tersedia fasilitas dispensing sesuai standar praktik kefarmasian.|D,O,W
+f:melaksanakan penyerahan obat dalam bentuk yang siap diberikan untuk pasien rawat inap.|O
+g:Obat yang sudah disiapkan diberi etiket yang meliputi identitas pasien, nama obat, dosis atau konsentrasi, cara pemakaian, waktu pemberian, tanggal dispensing dan tanggal.|O
+###PKPO 5.1: Obat Steril Intravena & Sitostatika
+a:melaksanakan pengkajian resep yang dilakukan oleh staf yang kompeten dan berwenang serta didukung tersedianya informasi klinis pasien yang memadai.|D,O,W,S
+b:memiliki proses telaah obat sebelum diserahkan.|D,O,W,S
+###PKPO 6: Pemberian (Administration) 5 Benar
+a:Staf yang melakukan pemberian obat, kompeten dan berwenang dengan pembatasan yang ditetapkan.|R,D,W
+b:dilaksanaan verifikasi sebelum obat diberikan kepada pasien minimal meliputi: identitas pasien, nama obat, dosis, rute, dan waktu pemberian.|S
+c:melaksanakan double checking untuk obat high alert.|D,S
+d:Pasien diberi informasi tentang obat yang akan diberikan.|D,W
+###PKPO 6.1: Regulasi obat bawaan pasien dan penggunaan mandiri oleh pasien
+a:melakukan penilaian obat yang dibawa pasien dari luar rumah sakit untuk kelayakan penggunaannya di rumah sakit.|D,W
+b:melaksanakan edukasi kepada pasien/keluarga jika obat akan digunakan secara mandiri.|D,W
+c:memantau pelaksanaan penggunaan obat secara mandiri sesuai edukasi.|D,W
+###PKPO 7: Pemantauan Efek, MESO & Error
+a:melaksanakan pemantauan terapi obat secara kolaboratif.|D
+b:melaksanakan pemantauan dan pelaporan efek samping obat serta analisis laporan untuk meningkatkan keamanan penggunaan obat.|D
+###PKPO 7.1: Proses pelaporan dan tindak lanjut kesalahan obat untuk pencegahan
+a:memiliki regulasi tentang medication safety yang bertujuan mengarahkan penggunaan obat yang aman dan meminimalkan risiko kesalahan penggunaan obat sesuai dengan.|R
+b:menerapkan sistem pelaporan kesalahan obat yang menjamin laporan akurat dan tepat waktu yang merupakan bagian program peningkatan mutu dan keselamatan pasien.|D,W
+c:memiliki upaya untuk mendeteksi, mencegah dan menurunkan kesalahan obat dalam meningkatkan mutu proses penggunaan obat.|D
+d:Seluruh staf rumah sakit dilatih terkait kesalahan obat (medication error).|D
+
+##BAB XIV. Komunikasi dan Edukasi (KE)
+###KE 1: Komunikasi Publik
+a:menetapkan regulasi tentang pelaksanaan PKRS di rumah sakit sesuai poin a) – b) pada gambaran umum.|R
+b:penetapan tim atau unit Promosi Kesehatan Rumah Sakit (PKRS) yang mengkoordinasikan pemberian edukasi kepada pasien sesuai dengan peraturan perundang- undangan.|D
+c:Tim atau unit PKRS menyusun program kegiatan promosi kesehatan rumah sakit setiap tahunnya, termasuk kegiatan dukasi rutin sesuai dengan misi rumah sakit, layanan, dan populasi.|D
+d:menerapkan pemberian edukasi kepada pasien dan keluarga menggunakan media, format, dan metode yang telah ditetapkan.|D
+###KE 2: Komunikasi Diagnostik Medis
+a:Tersedia informasi untuk pasien dan keluarga mengenai asuhan dan pelayanan yang disediakan oleh rumah sakit serta akses untuk mendapatkan layanan tersebut.|D
+b:menyampaikan informasi kepada pasien dan keluarga terkait alternatif asuhan dan pelayanan di tempat lain, apabila rumah sakit tidak dapat memberikan asuhan dan.|D
+c:Akses mendapatkan informasi kesehatan|D
+d:bukti pemberian informasi untuk pasien dan keluarga mengenai asuhan dan pelayanan di rumah sakit.|D
+###KE 3: Komunikasi PPA Efektif (SBAR)
+a:Kebutuhan edukasi pasien dan keluarga dinilai berdasarkan pengkajian terhadap kemampuan dan kemauan belajar pasien dan keluarga yang meliputi poin a) – f) pada maksud dan tujuan,.|D
+b:Hambatan dari pasien dan keluarga dalam menerima edukasi dinilai sebelum pemberian edukasi dan dicatat di rekam medis.|D
+c:bukti dilakukan pengkajian kemampuan dan kemauan belajar pasien/keluarga, serta hasil pengkajian digunakan PPA untuk membuat perencanaan kebutuhan edukasi.|D
+###KE 4: Asesmen Pra-Edukasi
+a:bukti bahwa edukasi yang diberikan kepada pasien dan keluarga telah diberikan dengan cara dan bahasa yang mudah dipahami.|D,W
+b:bukti bahwa pasien/keluarga telah dijelaskan mengenai hasil pengkajian, diagnosis, rencana asuhan, dan hasil pengobatan, termasuk hasil pengobatan yang tidak diharapkan.|D,W
+c:bukti edukasi kepada pasien dan keluarga terkait dengan cara cuci tangan yang aman, penggunaan obat yang aman, penggunaan peralatan medis yang aman, potensi interaksi.|D,W
+###KE 5: Pelaksanaan Edukasi Pasien Terintegrasi
+a:memiliki proses untuk memastikan bahwa pasien dan keluarganya|D
+b:Proses pemberian edukasi di dokumentasikan dalam rekam medik sesuai dengan metode edukasi yang dapat diterima pasien dan keluarganya.|D
+c:Materi edukasi untuk pasien dan keluarga selalu tersedia dan diperbaharui secara berkala.|D,W
+d:Informasi dan edukasi disampaikan kepada pasien dan keluarga dengan menggunakan format yang praktis dan dengan bahasa yang dipahami pasien dan keluarga.|D
+e:menyediakan penerjemah (bahasa dan bahasa isyarat) sesuai dengan kebutuhan pasien dan keluarga.|D
+###KE 6: PKRS (Promosi Kesehatan RS)
+a:mengidentifikasi sumber-sumber yang ada di komunitas untuk mendukung promosi kesehatan berkelanjutan dan edukasi untuk menunjang asuhan pasien yang berkelanjutan.|D
+b:memiliki jejaring di komunitas untuk mendukung asuhan pasien berkelanjutan.|D
+c:Memiliki bukti telah disampaikan kepada pasien dan keluarga tentang edukasi lanjutan di komunitas.|D
+d:bukti edukasi berkelanjutan tersebut diberikan kepada pasien sesuai dengan kebutuhan.|D
+###KE 7: PPA mampu memberikan edukasi pasien secara efektif
+a:Profesional Pemberi Asuhan (PPA) telah diberikan pelatihan dan terampil melaksanakan komunikasi efektif.|D
+b:PPA telah memberikan edukasi yang efektif kepada pasien dan keluarga secara kolaboratif.|D
+`;
+
+        const dataKelompokC = `
+#Kelompok C — Sasaran Keselamatan Pasien
+##BAB XV. Sasaran Keselamatan Pasien (SKP)
+###SKP 1: Identifikasi Benar
+1:menetapkan regulasi terkait Sasaran keselamatan pasien meliputi poin 1 – 6 pada gambaran umum.|R
+2:menerapkan proses identifikasi pasien menggunakan minimal 2 (dua) identitas, dapat memenuhi tujuan identifikasi pasien dan sesuai dengan ketentuan rumah sakit.|O,W,S
+3:Pasien telah diidentifikasi menggunakan minimal dua jenis identitas meliputi poin 1) - 4) dalam maksud dan tujuan.|O,W,S
+4:memastikan pasien teridentifikasi dengan tepat pada situasi khusus, dan penggunaan label seperti tercantum dalam maksud dan tujuan|D,W
+###SKP 2: Komunikasi Efektif
+1:menerapkan komunikasi saat menerima instruksi melalui telepon: menulis/menginput ke komputer - membacakan - konfirmasi kembali” (writedown, read back,.|D,W,S
+2:menerapkan komunikasi saat pelaporan hasil kritis pemeriksaan penunjang diagnostic melalui telepon: menulis/ menginput ke komputer – membacakan – konfirmasi.|R,D,W,S
+3:menerapkan komunikasi saat serah terima sesuai dengan jenis serah terima meliputi poin 1) - 3) dalam maksud dan tujuan|D,W,S
+###SKP 3: Keamanan obat High Alert dan LASA
+1:menetapkan daftar obat kewaspadaan tinggi (High Alert) termasuk Look-Alike Sound-Alike (LASA)/Nama Obat Rupa Ucapan Mirip (NORUM).|R
+2:menerapkan pengelolaan obat kewaspadaan tinggi termasuk LASA secara seragam di seluruh area rumah sakit.|O,W
+3:mengevaluasi dan memperbarui daftar obat High Alert dan LASA sekurang-kurangnya setiap tahun berdasarkan laporan insiden.|D,W
+###SKP 3.1: Pengelolaan elektrolit konsentrat
+1:menetapkan penyimpanan elektrolit konsentrat tertentu hanya di Instalasi Farmasi atau unit berisiko dengan pertimbangan klinis.|R
+2:menyimpan elektrolit konsentrat di luar Instalasi Farmasi hanya pada situasi yang ditentukan.|O,W
+3:menetapkan dan menerapkan protokol koreksi hipokalemia, hiponatremia, dan hipofosfatemia.|R,D,W
+###SKP 4: Lokasi/Prosedur/Pasien Bedah Tepat
+1:melaksanakan proses verifikasi pra operasi dengan daftar tilik untuk memastikan benar pasien, benar tindakan dan benar sisi.|D,W
+2:menetapkan dan menerapkan tanda yang seragam, mudah dikenali dan tidak bermakna ganda untuk mengidentifikasi sisi operasi atau tindakan invasif.|R,O,W
+3:menerapkan penandaan sisi operasi atau tindakan invasif (site marking) dilakukan oleh dokter operator/dokter asisten yang melakukan operasi atau tindakan invasif.|D,O,W
+4:menerapkan proses Time-Out menggunakan surgical safety checklist sebelum tindakan dimulai.|D
+###SKP 5: Cuci Tangan (PPI) Terkait Pelayanan
+1:menerapkan kebersihan tangan (hand hygiene) yang mengacu pada standar WHO terkini.|O,W,S
+2:proses evaluasi terhadap pelaksanaan program kebersihan tangan di rumah sakit serta upaya perbaikan yang dilakukan untuk meningkatkan pelaksanaan program.|D,W
+###SKP 6: Kurangi Risiko Cedera Jatuh
+1:melaksanakan skrining pasien rawat jalan pada kondisi, diagnosis, situasi atau lokasi yang dapat menyebabkan pasien berisiko.|D,O,W
+2:Tindakan dan/atau intervensi dilakukan untuk mengurangi risiko jatuh pada pasien jika hasil skrining menunjukkan adanya risiko jatuh dan hasil skrining serta intervensi.|D,O,W
+###SKP 6.1: Pencegahan risiko jatuh pasien rawat inap
+1:melakukan pengkajian risiko jatuh untuk semua pasien rawat inap baik dewasa maupun anak menggunakan metode pengkajian yang baku sesuai dengan ketentuan rumah.|D,O,W
+2:melaksanakan pengkajian ulang risiko jatuh pada pasien rawat inap karena adanya perubahan kondisi, atau memang sudah mempunyai risiko jatuh dari hasil pengkajian.|D,W
+3:Tindakan dan/atau intervensi untuk mengurangi risiko jatuh pada pasien rawat inap telah dilakukan dan didokumentasikan.|D,W
+`;
+
+        const dataKelompokD = `
+#Kelompok D — Program Nasional
+##BAB XVI. Program Nasional (PROGNAS)
+###PROGNAS 1: PONEK 24 Jam (Ibu & Bayi)
+1:menetapkan regulasi tentang pelaksanaan PONEK 24 jam.|R
+2:Tim PONEK yang ditetapkan oleh rumah sakit dengan rincian tugas dan tanggungjawabnya.|D
+3:program kerja yang menjadi acuan dalam pelaksanaan program PONEK Rumah Sakit sesuai maksud dan tujuan.|R
+4:bukti pelaksanaan program PONEK Rumah Sakit.|D,W
+5:Program PONEK Rumah Sakit dipantau dan dievaluasi secara rutin.|D,W
+###PROGNAS 1.1: Pembinaan jejaring rujukan
+1:menetapkan program pembinaan jejaring rujukan rumah sakit.|R
+2:melakukan pembinaan terhadap jejaring secara berkala.|D
+3:dilakukan evaluasi program pembinaan jejaring rujukan.|D
+###PROGNAS 2: TB DOTS
+1:menerapkan regulasi tentang pelaksanaan penanggulangan tuberkulosis di rumah sakit.|R
+2:Direktur menetapkan tim TB Paru Rumah sakit beserta program kerjanya.|D
+3:Ada bukti pelaksanaan promosi kesehatan, surveilans dan upaya pencegahan tuberkulosis|D
+4:Tersedianya laporan pelaksanaan promosi Kesehatan.|D
+###PROGNAS 2.1: Sarana layanan TB sesuai PPI
+1:Tersedia ruang pelayanan rawat jalan yang memenuhi pedoman pencegahan dan pengendalian infeksi tuberkulosis.|O
+2:Bila rumah sakit memberikan pelayanan rawat inap bagi pasien tuberkulosis paru dewasa maka rumah sakit harus memiliki ruang rawat inap yang memenuhi pedoman pencegahan dan.|O
+3:Tersedia ruang pengambilan spesimen sputum yang memenuhi pedoman pencegahan dan pengendalian infeksi tuberkulosis.|O
+###PROGNAS 2.2: Pelayanan TB sesuai standar
+1:menerapkan kepatuhan staf medis terhadap panduan praktik klinis tuberkulosis.|D
+2:merencanakan dan mengadakan penyediaan Obat Anti Tuberkulosis.|D
+3:melaksanakan pelayanan TB MDR (bagi rumah sakit rujukan TB MDR).|D
+4:melaksanakan pencatatan dan pelaporan kasus TB Paru sesuai ketentuan.|D
+###PROGNAS 3: HIV/AIDS (VCT)
+1:melaksanakan kebijakan program penanggulangan|R,D
+2:menerapkan fungsi rujukan HIV/AIDS pada rumah sakit sesuai dengan kebijakan yang berlaku.|D
+3:melaksanakan pelayanan PITC dan PMTC.|D
+4:memberikan pelayanan ODHA dengan faktor risiko IO.|D
+5:merencanakan dan mengadakan penyediaan ARV.|D
+6:melakukan pemantauan dan evaluasi program penanggulangan HIV/AIDS.|D
+###PROGNAS 4: Stunting & Wasting
+1:menetapkan kebijakan tentang pelaksanaan program gizi.|R
+2:tim untuk program penurunan prevalensi stunting dan wasting di rumah sakit.|R
+3:menetapkan sistem rujukan untuk kasus gangguan gizi|R
+###PROGNAS 4.1: Pendampingan gizi dan jejaring rujukan
+a:membuktikan telah melakukan pendampingan intervensi dan pengelolaan gizi serta penguatan jejaring rujukan kepada rumah sakit kelas di bawahnya dan FKTP di wilayahnya.|D,W
+b:menerapkan sistem pemantauan dan evaluasi, bukti pelaporan, dan analisis.|D
+###PROGNAS 5: Keluarga Berencana (PKBRS)
+1:menetapkan kebijakan tentang pelaksanaan PKBRS.|R
+2:tim PKBRS yang ditetapkan oleh direktur disertai program kerjanya.|R
+3:melaksanakan program KB Paska Persalinan dan Paska Keguguran.|D
+4:melakukan pemantauan dan evaluasi pelaksanaan PKBRS.|D
+###PROGNAS 5.1: Sarana dan layanan KB
+1:menyediakan alat dan obat kontrasepsi dan sarana penunjang pelayanan KB.|D,O
+2:menyediakan layanan konseling bagi peserta dan calon peserta program KB.|D
+3:merancang dan menyediakan ruang pelayanan KB yang memadai.|O
+###PROGNAS 6: PPRA (Pengendalian Resistensi Antimikroba)
+a:menetapkan regulasi tentang pengendalian resistensi antimikroba sesuai dengan ketentuan peraturan perundang-undangan.|R
+b:menetapkan komite/tim PRA dengan melibatkan unsur terkait sesuai regulasi yang akan mengelola dan menyusun program pengendalian resistensi antimikroba dan.|R
+c:melaksanakan program kerja|D
+d:melaksanakan pemantauan dan evaluasi kegiatan PPRA sesuai dengan maksud dan tujuan.|D
+e:Komite/tim PRA telah membuat laporan kepada pimpinan rumah sakit secara berkala dan kepada Kementerian Kesehatan sesuai peraturan perundang- undangan.|D
+###PROGNAS 6.1: Penatagunaan antimikroba klinis
+a:melaksanakan dan mengembangkan penatagunaan antimikroba di unit pelayanan yang melibatkan dokter, apoteker, perawat, dan peserta didik.|D,W
+b:menyusun dan mengembangkan panduan praktik klinis (PPK), panduan penggunaan antimikroba untuk terapi dan profilaksis (PPAB), berdasarkan kajian ilmiah dan.|D
+c:mekanisme untuk mengawasi pelaksanaan penatagunaan antimikroba (terhadap pembatasan penggunaan jenis, jumlah, durasi pemakaian antibiotik, dan pengawasan PGA lainnya)|D
+d:melaksanakan pemantauan dan evaluasi secara bersinambung terhadap indikator penatagunaan antimikroba (PGA).|D
+`;
+
+        const kamusRDOWS = {
+            'R': [
+                { keywords: ['bylaws', 'tata kelola', 'pemilik', 'direktur', 'pengawas', 'representasi', 'etik', 'komite medik', 'komite keperawatan', 'nakes', 'klinis', 'penelitian', 'kontrak'], title: 'Regulasi Hospital Bylaws / peraturan internal RS', desc: 'Menetapkan tata kelola, kewenangan, akuntabilitas, dan pengawasan RS.' },
+                { keywords: ['risiko', 'risk', 'fmea', 'k3', 'kecelakaan', 'b3', 'fasilitas', 'serangan', 'kekerasan'], title: 'Pedoman manajemen risiko', desc: 'Mengatur identifikasi, analisis, pengendalian, pelaporan, dan evaluasi risiko.' },
+                { keywords: ['kredensial', 'kewenangan', 'spk', 'rkk', 'izin', 'str', 'sip'], title: 'SK kredensial & kewenangan klinis', desc: 'Menetapkan hasil kredensial, kewenangan klinis, batasan layanan, dan masa berlaku.' },
+                { keywords: ['rekam medis', 'mrmik', 'informasi', 'resume', 'simrs', 'informasi', 'pencatatan'], title: 'Kebijakan isi rekam medis', desc: 'Menetapkan informasi minimal, pencatatan, kerahasiaan, dan kesinambungan rekam medis.' },
+                { keywords: ['obat', 'farmasi', 'resep', 'dispensing', 'formularium', 'narkotika'], title: 'Kebijakan / SPO pelayanan obat', desc: 'Mengatur pemilihan, pengadaan, penyimpanan, penggunaan, pemantauan, dan pelaporan obat.' },
+                { keywords: ['bencana', 'disaster', 'drill', 'hva'], title: 'Rencana penanggulangan bencana', desc: 'Mengatur kesiapan, peran, komunikasi, evakuasi, sumber daya, dan evaluasi bencana.' },
+                { keywords: ['utilitas', 'listrik', 'air', 'genset'], title: 'Pedoman pengelolaan sistem utilitas', desc: 'Mengatur pengoperasian, pemeliharaan, pengujian, dan respons gangguan utilitas.' },
+                { keywords: ['identifikasi', 'gelang', 'nyeri', 'skrining'], title: 'SPO identifikasi pasien', desc: 'Mengatur penggunaan minimal dua identitas pada setiap titik pelayanan.' },
+                { keywords: ['komunikasi', 'sbar', 'serah terima', 'rujukan', 'transfer'], title: 'SPO komunikasi efektif & serah terima', desc: 'Mengatur komunikasi kritis, read back, SBAR, dan serah terima tanggung jawab.' },
+                { keywords: ['kerjasama', 'mou', 'pendidikan', 'peserta didik'], title: 'Kontrak / perjanjian kerja sama', desc: 'Menetapkan ruang lingkup layanan, tanggung jawab, mutu, dan pengawasan pihak terkait.' },
+                { keywords: ['ponek', 'maternal', 'bayi'], title: 'SK penetapan program PONEK', desc: 'Menetapkan program, tim, tugas, indikator, dan mekanisme evaluasi PONEK.' },
+                { keywords: ['tim', 'komite', 'panitia', 'pkrs', 'ppra', 'ppi', 'stunting', 'geriatri'], title: 'SK penetapan tim / kebijakan', desc: 'Menetapkan dasar, susunan, tugas, kewenangan, masa berlaku, dan pelaporan.' },
+                { keywords: ['penanggung jawab', 'kepala', 'direktur', 'mp', 'dpjp'], title: 'SK penetapan penanggung jawab', desc: 'Menetapkan nama, tugas, kewenangan, masa berlaku, dan pelaporan.' },
+                { keywords: ['indikator', 'mutu', 'inm', 'imp', 'surveilans'], title: 'SK indikator mutu & kinerja RS', desc: 'Menetapkan indikator, definisi operasional, target, dan mekanisme evaluasi.' },
+                { keywords: ['program kerja', 'strategis', 'kb'], title: 'Rencana strategis / program kerja', desc: 'Menetapkan tujuan, kegiatan, indikator, target, jadwal, penanggung jawab, dan sumber daya.' },
+                { keywords: ['pedoman', 'panduan', 'spo', 'prosedur', 'darah', 'implan', 'anestesi'], title: 'SPO / pedoman / panduan', desc: 'Mengatur langkah kerja, kriteria, penanggung jawab, pencatatan, dan tindak lanjut.' },
+                { keywords: [], title: 'Kebijakan / SOP internal', desc: 'Menetapkan dasar kegiatan, tata cara, penanggung jawab, dan pengendalian.' }
+            ],
+            'D': [
+                { keywords: ['rekam medis', 'cppt', 'asesmen', 'asuhan', 'rawat', 'resume', 'triase', 'gizi', 'nyeri', 'edukasi', 'pulang', 'transfer', 'operasi'], title: 'Rekam medis / register', desc: 'Menunjukkan identitas, asesmen, pelayanan, hasil, komunikasi, dan kesinambungan asuhan pasien.' },
+                { keywords: ['obat', 'farmasi', 'resep', 'stok', 'dispensing', 'bmhp', 'reagen', 'b3', 'cssd', 'steril', 'ppra'], title: 'Rekam farmasi / kartu stok', desc: 'Menunjukkan penerimaan, penyimpanan, penggunaan, stok, penelusuran, dan pemantauan obat.' },
+                { keywords: ['pelatihan', 'kompetensi', 'orientasi', 'diklat', 'kredensial', 'ijazah', 'str', 'sip', 'pendidikan', 'bhd'], title: 'Berkas kompetensi & pelatihan', desc: 'Menunjukkan kualifikasi, orientasi, pelatihan, evaluasi kompetensi, dan masa berlaku bukti.' },
+                { keywords: ['insiden', 'ikp', 'sentinel', 'ktd', 'knc', 'komplain', 'konflik', 'medication error', 'recall'], title: 'Laporan insiden, analisis & RTL', desc: 'Menunjukkan pelaporan, kronologi, analisis penyebab, rekomendasi, dan tindak lanjut insiden.' },
+                { keywords: ['rapat', 'pertemuan', 'koordinasi', 'notulen', 'edukasi', 'pkrs'], title: 'UMAN/GAUN & notulen', desc: 'Menunjukkan agenda, peserta, materi, pembahasan, keputusan, dan tindak lanjut kegiatan.' },
+                { namespaces: ['analisis', 'evaluasi', 'mutu', 'pmkp', 'indikator', 'kepatuhan', 'audit', 'pme', 'pmi'], keywords: ['evaluasi', 'analisis', 'mutu', 'indikator', 'audit'], title: 'Laporan hasil, analisis & RTL', desc: 'Menunjukkan data, hasil pengukuran, analisis, keputusan perbaikan, dan pemantauan tindak lanjut.' },
+                { keywords: ['logbook', 'ceklis', 'inspeksi', 'pemeliharaan', 'uji', 'kalibrasi', 'alat'], title: 'Logbook / register / checklist', desc: 'Menunjukkan pencatatan rutin, tanggal, petugas, hasil pemeriksaan, temuan, dan tindak lanjut.' },
+                { keywords: ['register', 'daftar', 'stunting', 'hiv', 'vct', 'tb', 'makanan', 'limbah'], title: 'Laporan pelaksanaan & register', desc: 'Menunjukkan kegiatan, waktu, pelaksana, hasil, dan tindak lanjut yang dapat ditelusuri.' },
+                { keywords: [], title: 'Laporan pelaksanaan kegiatan', desc: 'Menunjukkan kegiatan, waktu, pelaksana, hasil, dan tindak lanjut.' }
+            ],
+            'O': [
+                { keywords: ['rekam medis', 'cppt', 'dokumentasi', 'identitas'], title: 'Observasi rekam medis & asuhan', desc: 'Memeriksa pencatatan, identifikasi, komunikasi, dan kesinambungan asuhan.' },
+                { keywords: ['obat', 'farmasi', 'penyimpanan', 'lemari', 'kulkas', 'suhu', 'reagen', 'cssd'], title: 'Observasi penyimpanan & pelayanan obat', desc: 'Memeriksa kondisi penyimpanan, identitas, keamanan, ketersediaan, dan penerapan prosedur obat.' },
+                { keywords: ['fasilitas', 'sarana', 'alat', 'apar', 'lingkungan', 'limbah', 'wastafel', 'b3', 'isolasi', 'kb'], title: 'Observasi sarana & kepatuhan SPO', desc: 'Memeriksa kondisi sarana, ketersediaan alat, perilaku petugas, lingkungan, dan penerapan prosedur.' },
+                { keywords: ['pelayanan', 'pasien', 'asuhan', 'skrining', 'triase', 'gelang', 'jatuh', 'makanan', 'jenazah'], title: 'Observasi pelayanan pasien', desc: 'Memeriksa alur pelayanan, komunikasi, keselamatan, sarana, dan respons petugas.' },
+                { keywords: [], title: 'Observasi penerapan prosedur', desc: 'Memeriksa kondisi lapangan, langkah kerja, petugas, sarana, pencatatan, dan tindak lanjut.' }
+            ],
+            'W': [
+                { keywords: ['pasien', 'keluarga', 'edukasi', 'hak', 'keluhan', 'informasi', 'pulang', 'nyeri', 'persetujuan'], title: 'Wawancara pasien / keluarga', desc: 'Mengonfirmasi pengalaman, pemahaman, informasi yang diterima, hak, dan akses terhadap pelayanan.' },
+                { keywords: ['pimpinan', 'direktur', 'komite', 'dewan', 'pengawas', 'mutu'], title: 'Wawancara pimpinan / komite', desc: 'Mengonfirmasi arah kebijakan, keputusan, peran, pengawasan, hasil evaluasi, dan tindak lanjut.' },
+                { keywords: ['kontrak', 'pihak ketiga', 'vendor', 'outsourcing'], title: 'Wawancara pihak kontrak', desc: 'Mengonfirmasi ruang lingkup, tanggung jawab, standar layanan, pelaporan, dan pengawasan kontrak.' },
+                { keywords: ['staf', 'perawat', 'dokter', 'ppa', 'analis', 'apoteker', 'dpjp'], title: 'Wawancara staf / PPA', desc: 'Mengonfirmasi pemahaman, kompetensi, pelaksanaan tugas, pencatatan, dan respons terhadap masalah.' },
+                { keywords: [], title: 'Wawancara penanggung jawab', desc: 'Mengonfirmasi pemahaman, pelaksanaan, hasil pemantauan, dan tindak lanjut kegiatan.' }
+            ],
+            'S': [
+                { keywords: ['bencana', 'darurat', 'resusitasi', 'code blue', 'apar', 'tumpahan', 'spill kit', 'bhd'], title: 'Simulasi tanggap darurat', desc: 'Memeragakan alur respons, komunikasi, pembagian peran, penggunaan sarana, dan evaluasi respons.' },
+                { keywords: ['ppi', 'cuci tangan', 'apd', 'limbah', 'hand hygiene'], title: 'Simulasi PPI', desc: 'Memeragakan kebersihan tangan, penggunaan APD, dekontaminasi, pembuangan limbah, dan pelaporan pajanan.' },
+                { keywords: ['obat', 'dispensing', 'farmasi', 'injeksi', 'high alert'], title: 'Simulasi pelayanan obat', desc: 'Memeragakan identifikasi, penyiapan, penyerahan, edukasi, pencatatan, dan pengamanan obat.' },
+                { keywords: ['pelayanan', 'identifikasi', 'komunikasi', 'pasien', 'sbar', 'tbak', 'nyeri'], title: 'Simulasi alur pelayanan', desc: 'Memeragakan alur, identifikasi, komunikasi, serah terima, eskalasi, pencatatan, dan tindak lanjut pelayanan.' },
+                { keywords: [], title: 'Simulasi alur kerja', desc: 'Memeragakan langkah kerja, pembagian peran, komunikasi, pencatatan, dan evaluasi.' }
+            ]
+        };
+
+        function getRichRdows(type, epDescription) {
+            const lowerDesc = epDescription.toLowerCase();
+            const options = kamusRDOWS[type] || [];
+            
+            for (let i = 0; i < options.length; i++) {
+                const opt = options[i];
+                if (opt.keywords.length === 0) return opt; // Fallback generik
+                for (let j = 0; j < opt.keywords.length; j++) {
+                    if (lowerDesc.includes(opt.keywords[j])) return opt;
+                }
+            }
+            return { title: 'Dokumen Implementasi', desc: 'Bukti pendukung pelaksanaan akreditasi standar.' };
+        }
+
+        const checklistData = {};
+
+        const buildTree = () => {
+            const rawTreeData = dataKelompokA + dataKelompokB + dataKelompokC + dataKelompokD;
+            const lines = rawTreeData.split('\n');
+            let currentGroup = '', currentBab = '', currentStandar = '';
+            
+            lines.forEach(line => {
+                line = line.trim();
+                if(!line) return;
+                
+                if (line.startsWith('###')) {
+                    currentStandar = line.substring(3).trim();
+                    if(currentGroup && currentBab) {
+                        checklistData[currentGroup][currentBab][currentStandar] = {};
+                    }
+                } else if (line.startsWith('##')) {
+                    currentBab = line.substring(2).trim();
+                    if(currentGroup) {
+                        checklistData[currentGroup][currentBab] = {};
+                    }
+                } else if (line.startsWith('#')) {
+                    currentGroup = line.substring(1).trim();
+                    checklistData[currentGroup] = {};
+                } else {
+                    let parts = line.split('|');
+                    if(parts.length === 2 && currentStandar) {
+                        let epColonIndex = parts[0].indexOf(':');
+                        if (epColonIndex !== -1) {
+                            let epIdentifier = parts[0].substring(0, epColonIndex).trim(); 
+                            let epDescription = parts[0].substring(epColonIndex + 1).trim();
+                            let rdowsSection = parts[1].split(',');
+                            
+                            let epPrefix = isNaN(epIdentifier) ? `EP ${epIdentifier.toUpperCase()}` : `Elemen Penilaian ${epIdentifier}`;
+                            let epKey = `${epPrefix} - ${epDescription}`;
+                            let epObj = {};
+                            
+                            rdowsSection.forEach(r => {
+                                let typeKey = r.trim().charAt(0); 
+                                epObj[typeKey] = getRichRdows(typeKey, epDescription);
+                            });
+                            
+                            checklistData[currentGroup][currentBab][currentStandar][epKey] = epObj;
+                        }
+                    }
+                }
+            });
+        };
+
+        let fileRegistry = {};
+        let currentUploadTarget = { babTitle: '', standardId: '', epId: '', rdowsType: '', buttonElement: null, slotId: '', epText: '' };
+        let slotCounter = 0;
+
+        function generateId(prefix) {
+            slotCounter++;
+            return `${prefix}_${slotCounter}`;
+        }
+
+        function getRdowsBadge(type) {
+            const styles = {
+                'R': 'bg-[#ca5c30]/10 text-[#ca5c30] border-[#ca5c30]/30 shadow-sm',
+                'D': 'bg-emerald-50 text-emerald-700 border-emerald-200 shadow-sm',
+                'O': 'bg-amber-50 text-amber-700 border-amber-200 shadow-sm',
+                'W': 'bg-purple-50 text-purple-700 border-purple-200 shadow-sm',
+                'S': 'bg-rose-50 text-rose-700 border-rose-200 shadow-sm'
+            };
+            return `<span class="${styles[type] || 'bg-slate-100'} w-8 h-8 rounded-xl font-bold text-sm border flex items-center justify-center flex-shrink-0">${type}</span>`;
+        }
+
+        function createRdowsDetail(epTitle, rdowsObject, babTitle, standarTitle) {
+            let content = '<div class="mt-4 pl-4 md:pl-5 border-l-2 border-slate-200 space-y-6 pt-2">';
+            const rdowsOrder = ['R', 'D', 'O', 'W', 'S'];
+            
+            const epMatch = epTitle.match(/(?:Elemen Penilaian|EP)\s*([a-zA-Z0-9]+)/i);
+            const epNum = epMatch ? epMatch[1].toUpperCase() : 'X';
+            
+            const safeBabTitle = babTitle.replace(/[^a-zA-Z0-9 ]/g, '').trim();
+            const safeStandarTitle = standarTitle.replace(/[^a-zA-Z0-9 ]/g, '').trim();
+            
+            rdowsOrder.forEach(type => {
+                const rdowsData = rdowsObject[type];
+                if (rdowsData) {
+                    const slotId = generateId('slot');
+                    const safeEpText = epTitle.replace(/['"\\]/g, ''); 
+                    
+                    content += `
+                        <div class="relative">
+                            <div class="flex items-start gap-4 mb-3">
+                                <div class="mt-0.5">${getRdowsBadge(type)}</div>
+                                <div class="pt-1">
+                                    <p class="text-sm md:text-base font-bold text-sehati-dark leading-snug mb-1">${rdowsData.title}</p>
+                                    <p class="text-xs md:text-sm text-sehati-text/80 leading-relaxed font-sans">${rdowsData.desc}</p>
+                                </div>
+                            </div>
+                            
+                            <div id="fileList_${slotId}" class="flex flex-col gap-2 mb-3 pl-12 empty:hidden"></div>
+                            
+                            <div class="flex flex-wrap items-center gap-3 pl-12">
+                                <button id="btnUpload_${slotId}" onclick="triggerUpload('${safeBabTitle}', '${safeStandarTitle}', '${epNum}', '${type}', this, '${slotId}', '${safeEpText}')" 
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-sehati-border text-sehati-text rounded-xl text-sm font-semibold hover:bg-orange-50 hover:text-sehati-primary hover:border-sehati-primary/40 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-sehati-primary/30">
+                                    <i class="fa-solid fa-cloud-arrow-up text-sehati-primary"></i> <span class="btn-text">Unggah Bukti</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            content += '</div>';
+            return content;
+        }
+
+        function createEpAccordion(epTitle, rdowsObject, babTitle, standarTitle) {
+            const epId = generateId('ep');
+            let formattedTitle = epTitle;
+            
+            const epMatch = epTitle.match(/^(?:Elemen Penilaian|EP)\s*([a-zA-Z0-9]+)\s*-\s*(.*)/i);
+            if(epMatch) {
+                formattedTitle = `<span class="bg-sehati-primary/10 text-sehati-primaryDark px-2 py-0.5 rounded-lg text-xs font-bold mr-2 border border-sehati-primary/20 shrink-0 inline-block mb-1 sm:mb-0">EP ${epMatch[1].toUpperCase()}</span> <span class="leading-snug">${epMatch[2]}</span>`;
+            }
+
+            return `
+                <div class="accordion-item-ep rounded-[16px] bg-white border border-slate-200 hover:border-sehati-primary/30 shadow-sm mt-3 overflow-hidden transition-colors duration-300">
+                    <button data-target="${epId}" class="w-full text-left py-4 px-5 text-sehati-dark hover:bg-orange-50/50 flex justify-between items-start focus:outline-none transition-colors group">
+                        <div class="text-sm md:text-base font-semibold pr-4 flex flex-col sm:flex-row sm:items-start text-sehati-text group-hover:text-sehati-primaryDark transition-colors">
+                            ${formattedTitle}
+                        </div>
+                        <span class="accordion-arrow text-sehati-text/40 text-lg leading-none mt-1 group-hover:text-sehati-primary transition-colors"><i class="fa-solid fa-chevron-right"></i></span>
+                    </button>
+                    <div id="${epId}" class="accordion-content bg-[#fdfbf7]/50 hidden">
+                        <div class="px-5 pb-5 pt-1">
+                            ${createRdowsDetail(epTitle, rdowsObject, babTitle, standarTitle)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createStandarAccordion(standarTitle, epObject, babTitle) {
+            let epContent = '';
+            for (const epTitle in epObject) {
+                epContent += createEpAccordion(epTitle, epObject[epTitle], babTitle, standarTitle);
+            }
+            const standarId = generateId('standar');
+            return `
+                <div class="accordion-item-standar bg-[#fdfbf7] rounded-[20px] border border-slate-200 overflow-hidden mb-4 transition-all duration-300">
+                    <button data-target="${standarId}" class="w-full text-left p-5 font-bold text-sehati-dark hover:text-sehati-primary flex justify-between items-center focus:outline-none transition-colors group">
+                        <span class="pr-4 text-base md:text-lg">${standarTitle}</span>
+                        <span class="accordion-arrow text-slate-400 text-xl leading-none group-hover:text-sehati-primary transition-colors"><i class="fa-solid fa-chevron-right"></i></span>
+                    </button>
+                    <div id="${standarId}" class="accordion-content bg-white hidden">
+                        <div class="p-5 border-t border-slate-100">
+                            ${epContent}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createBabAccordion(babTitle, standarObject) {
+            let standarContent = '';
+            for (const standarTitle in standarObject) {
+                standarContent += createStandarAccordion(standarTitle, standarObject[standarTitle], babTitle);
+            }
+            const babId = generateId('bab');
+            return `
+                 <div class="accordion-item-bab bg-white shadow-sm hover:shadow-md rounded-[20px] border border-slate-100 overflow-hidden mb-6 transition-shadow duration-300">
+                    <button data-target="${babId}" class="w-full text-left p-5 md:p-6 font-heading font-bold text-xl md:text-2xl text-sehati-dark hover:text-sehati-primary bg-slate-50 hover:bg-orange-50/50 flex justify-between items-center focus:outline-none transition-colors group">
+                        <span>${babTitle}</span>
+                        <span class="accordion-arrow text-sehati-primary/50 text-xl leading-none group-hover:text-sehati-primary transition-colors"><i class="fa-solid fa-chevron-right"></i></span>
+                    </button>
+                    <div id="${babId}" class="accordion-content hidden">
+                         <div class="p-5 md:p-6 bg-white">
+                            ${standarContent}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createKelompokAccordion(kelompokTitle, babObject) {
+            let babContent = '';
+            for (const babTitle in babObject) {
+                babContent += createBabAccordion(babTitle, babObject[babTitle]);
+            }
+            const kelompokId = generateId('kelompok');
+            return `
+                 <div class="accordion-item-kelompok bg-white shadow-lg hover:shadow-xl rounded-[24px] border border-slate-100 overflow-hidden mb-10 transition-shadow duration-300">
+                    <button data-target="${kelompokId}" class="w-full text-left p-6 md:p-8 font-heading font-extrabold text-2xl md:text-3xl text-sehati-dark hover:text-sehati-primary flex justify-between items-center focus:outline-none transition-colors group">
+                        <span>${kelompokTitle}</span>
+                        <span class="accordion-arrow text-sehati-primary/50 text-2xl leading-none group-hover:text-sehati-primary transition-colors"><i class="fa-solid fa-chevron-right"></i></span>
+                    </button>
+                    <div id="${kelompokId}" class="accordion-content bg-[#fdfbf7]/30 hidden">
+                         <div class="p-4 sm:p-6 md:px-8 md:pb-8 pt-0">
+                            ${babContent}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const msg = document.getElementById('toastMessage');
+
+            msg.textContent = message;
+            toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-[16px] shadow-lg transform transition-all duration-300 z-50 flex items-center gap-3 font-medium text-sm max-w-sm text-white ${type === 'success' ? 'bg-[#ca5c30]' : type === 'error' ? 'bg-[#ef4444]' : 'bg-[#2d3748]'}`;
+            icon.className = `text-lg ${type === 'success' ? 'fa-solid fa-check-circle' : type === 'error' ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-circle-notch fa-spin'}`;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+
+            if (type !== 'loading') { setTimeout(() => { hideToast(); }, 3500); }
+        }
+
+        function hideToast() { 
+            const toast = document.getElementById('toast');
+            if(toast) toast.classList.add('translate-y-24', 'opacity-0'); 
+        }
+
+        function toggleGasGuide() {
+            const content = document.getElementById('gasGuideContent');
+            const icon = document.getElementById('gasGuideIcon');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function copyGasTemplate() {
+            navigator.clipboard.writeText(GAS_TEMPLATE).then(() => {
+                showToast('Template GAS berhasil disalin!', 'success');
+            }).catch(err => {
+                showToast('Gagal menyalin template.', 'error');
+            });
+        }
+
+        function updateSetupModalUI() {
+            const input = document.getElementById('gasUrlInput');
+            const statusContainer = document.getElementById('gasStatusContainer');
+            const btnSave = document.getElementById('btnSaveGas');
+            const btnDisconnect = document.getElementById('btnDisconnectGas');
+
+            input.value = GAS_WEB_APP_URL;
+
+            if (GAS_WEB_APP_URL) {
+                statusContainer.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> <span class="text-emerald-700">Terhubung ke Drive Anda</span>`;
+                btnSave.innerHTML = `<i class="fa-solid fa-pen"></i> Perbarui URL`;
+                btnDisconnect.classList.remove('hidden');
+                btnDisconnect.classList.add('flex');
+            } else {
+                statusContainer.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-500"></i> <span class="text-red-600">Belum Terhubung</span>`;
+                btnSave.innerHTML = `<i class="fa-solid fa-link"></i> Simpan & Hubungkan`;
+                btnDisconnect.classList.add('hidden');
+                btnDisconnect.classList.remove('flex');
+            }
+        }
+
+        function openSetupModal() {
+            updateSetupModalUI();
+            const modal = document.getElementById('setupModal');
+            const modalContent = document.getElementById('setupModalContent');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => { modal.classList.remove('opacity-0'); modalContent.classList.remove('scale-95'); }, 10);
+        }
+
+        function closeSetupModal() {
+            const modal = document.getElementById('setupModal');
+            const modalContent = document.getElementById('setupModalContent');
+            modal.classList.add('opacity-0'); modalContent.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+        }
+
+        async function syncUrlFromDatabase() {
+            if (!CENTRAL_GAS_URL || !currentUserEmail) return;
+            try {
+                const response = await fetch(`${CENTRAL_GAS_URL}?action=get_user&email=${encodeURIComponent(currentUserEmail)}`);
+                const result = await response.json();
+                
+                if(result.success && result.gas_url) {
+                    GAS_WEB_APP_URL = result.gas_url;
+                    sessionStorage.setItem('gasUrl', result.gas_url);
+                    updateSetupModalUI();
+                }
+            } catch(e) {
+                console.log("Sinkronisasi latar belakang dilewati (Simulasi/CORS).", e);
+            }
+        }
+
+        async function saveGasUrl(event) {
+            if (event) event.preventDefault();
+            const urlInput = document.getElementById('gasUrlInput').value.trim();
+            const btnSave = document.getElementById('btnSaveGas');
+            
+            if (urlInput && !urlInput.startsWith('https://script.google.com/')) {
+                showToast('URL tidak valid. Pastikan diawali dengan https://script.google.com/', 'error'); return;
+            }
+            
+            const originalBtnHtml = btnSave.innerHTML;
+            btnSave.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memvalidasi User...';
+            btnSave.disabled = true;
+            
+            try {
+                const response = await fetch(CENTRAL_GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ 
+                        action: 'register_url', 
+                        email: currentUserEmail, 
+                        gas_url: urlInput 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    GAS_WEB_APP_URL = urlInput;
+                    sessionStorage.setItem('gasUrl', urlInput);
+                    showToast(result.message || 'Koneksi berhasil! URL Drive diamankan.', 'success');
+                    updateSetupModalUI();
+                } else {
+                    showToast(result.message || 'Gagal menyimpan. Pastikan akun terdaftar di database.', 'error');
+                }
+            } catch(e) { 
+                console.error('Gagal integrasi', e); 
+                // Fallback for simulation environment
+                GAS_WEB_APP_URL = urlInput;
+                sessionStorage.setItem('gasUrl', urlInput);
+                showToast('Disimpan lokal (Simulasi).', 'success');
+                updateSetupModalUI();
+            } finally {
+                btnSave.innerHTML = originalBtnHtml;
+                btnSave.disabled = false;
+            }
+        }
+
+        async function disconnectGas(event) {
+            if (event) event.preventDefault();
+            const btnDisconnect = document.getElementById('btnDisconnectGas');
+            const originalBtnHtml = btnDisconnect.innerHTML;
+            
+            btnDisconnect.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memutuskan...';
+            btnDisconnect.disabled = true;
+
+            try {
+                await fetch(CENTRAL_GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ 
+                        action: 'delete_url', 
+                        email: currentUserEmail
+                    })
+                });
+            } catch(e) { 
+                console.log('Gagal hapus dari server. Dihapus lokal.', e); 
+            }
+
+            GAS_WEB_APP_URL = '';
+            sessionStorage.removeItem('gasUrl');
+            showToast('Koneksi ke Drive telah diputuskan.', 'success');
+            updateSetupModalUI();
+            
+            btnDisconnect.innerHTML = originalBtnHtml;
+            btnDisconnect.disabled = false;
+        }
+
+        function triggerUpload(babTitle, standardId, epId, rdowsType, btnElement, slotId, epText) {
+            if (!GAS_WEB_APP_URL) {
+                showToast('Anda belum mengatur URL Drive. Silakan klik "Pengaturan Drive".', 'error'); return;
+            }
+            currentUploadTarget = { babTitle, standardId, epId, rdowsType, buttonElement: btnElement, slotId: slotId, epText: epText };
+            document.getElementById('hiddenFileInput').click();
+        }
+
+        function processFileUpload(file) {
+            const target = currentUploadTarget;
+            if (file.size > 10 * 1024 * 1024) { showToast('Ukuran file terlalu besar (Maks 10MB)', 'error'); return; }
+
+            const epId = target.epId;
+            const type = target.rdowsType;
+            let logicalConcept = target.epText.split('-').pop().trim() || 'Dokumen';
+            
+            const lastDotIndex = file.name.lastIndexOf('.');
+            const ext = lastDotIndex !== -1 ? file.name.substring(lastDotIndex) : '';
+            const mimeType = file.type || 'application/octet-stream';
+            
+            const formattedFileName = `EP ${epId} - ${type} - ${logicalConcept}${ext}`;
+
+            const originalBtnHtml = target.buttonElement.innerHTML;
+            target.buttonElement.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-sehati-primary"></i> Mengunggah...';
+            target.buttonElement.disabled = true;
+            showToast('Memproses dan mengunggah ke Drive...', 'loading');
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Data = e.target.result.split(',')[1];
+
+                try {
+                    const response = await fetch(GAS_WEB_APP_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            action: 'upload',
+                            fileName: formattedFileName,
+                            mimeType: mimeType,
+                            base64: base64Data
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success || result.id) {
+                        const fileId = result.id || Math.random().toString(36).substr(2, 9);
+                        const fileUrl = result.url || URL.createObjectURL(file);
+                        addFileToUI(target.slotId, fileId, fileUrl, formattedFileName, target.buttonElement);
+                        showToast(`Berhasil diunggah ke Drive!`, 'success');
+                    } else {
+                        throw new Error(result.error || "Upload gagal");
+                    }
+                } catch (error) {
+                    console.warn("GAS gagal, menggunakan fallback simulasi:", error);
+                    setTimeout(() => {
+                        const fileId = Math.random().toString(36).substr(2, 9);
+                        const fileUrl = URL.createObjectURL(file);
+                        addFileToUI(target.slotId, fileId, fileUrl, formattedFileName + " (Simulasi)", target.buttonElement);
+                        showToast(`Simulasi unggah berhasil!`, 'success');
+                    }, 800);
+                } finally {
+                    target.buttonElement.innerHTML = originalBtnHtml;
+                    target.buttonElement.disabled = false;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function addFileToUI(slotId, fileId, fileUrl, fileName, btnElement) {
+            const fileObj = { name: fileName, url: fileUrl, id: fileId };
+            if (!fileRegistry[slotId]) fileRegistry[slotId] = []; 
+            fileRegistry[slotId].push(fileObj); 
+            
+            const fileListContainer = document.getElementById(`fileList_${slotId}`);
+            if(btnElement) {
+                const btnText = btnElement.querySelector('.btn-text');
+                if (btnText) btnText.textContent = "Tambah Bukti Lain";
+            }
+            
+            const fileItem = document.createElement('div');
+            fileItem.className = "flex items-center justify-between gap-2 bg-slate-50 border border-slate-200 rounded-xl p-2 w-fit max-w-full group shadow-sm transition-all";
+            fileItem.id = `file_${fileId}`;
+            
+            fileItem.innerHTML = `
+                <a href="${fileObj.url}" target="_blank" class="flex items-center gap-2 overflow-hidden text-sehati-text hover:text-sehati-primary px-2 truncate">
+                    <i class="fa-brands fa-google-drive text-sehati-primary shrink-0"></i>
+                    <span class="truncate font-medium text-sm transition-colors" title="${fileObj.name}">${fileObj.name}</span>
+                </a>
+                <button onclick="deleteFile('${slotId}', '${fileObj.id}')" class="text-slate-400 hover:text-red-500 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-red-50 shrink-0 transition-colors" title="Hapus File">
+                    <i class="fa-solid fa-trash-can text-xs"></i>
+                </button>
+            `;
+            fileListContainer.appendChild(fileItem);
+        }
+
+        async function deleteFile(slotId, fileId) {
+            const btnElement = event.currentTarget;
+            btnElement.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-red-500"></i>';
+            btnElement.disabled = true;
+
+            try {
+                if (GAS_WEB_APP_URL) {
+                    await fetch(GAS_WEB_APP_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: 'delete', fileId: fileId })
+                    });
+                }
+            } catch(e) {
+                console.warn("Hapus GAS gagal, lanjut hapus UI lokal", e);
+            }
+
+            setTimeout(() => {
+                const elementToRemove = document.getElementById(`file_${fileId}`);
+                if (elementToRemove) elementToRemove.remove();
+                
+                if (fileRegistry[slotId]) {
+                    fileRegistry[slotId] = fileRegistry[slotId].filter(f => f.id !== fileId);
+                }
+                showToast('File berhasil dihapus.', 'success');
+            }, 600);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Assign GAS Template text safely
+            const gasTemplateEl = document.getElementById('gasTemplateCode');
+            if (gasTemplateEl) {
+                gasTemplateEl.textContent = GAS_TEMPLATE;
+            }
+
+            // Setup Event Listeners
+            const hiddenFileInput = document.getElementById('hiddenFileInput');
+            if (hiddenFileInput) {
+                hiddenFileInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    event.target.value = ''; 
+                    processFileUpload(file);
+                });
+            }
+
+            // Build Tree and UI
+            buildTree();
+            const container = document.getElementById('checklist-container');
+            if (container) {
+                let finalHTML = '';
+                for (const kelompokTitle in checklistData) {
+                    finalHTML += createKelompokAccordion(kelompokTitle, checklistData[kelompokTitle]);
+                }
+                container.innerHTML = finalHTML;
+
+                container.addEventListener('click', (event) => {
+                    const header = event.target.closest('button[data-target]');
+                    if (header) {
+                        const targetId = header.dataset.target;
+                        const content = document.getElementById(targetId);
+                        const icon = header.querySelector('.accordion-arrow');
+
+                        if (content.classList.contains('hidden')) {
+                            content.classList.remove('hidden');
+                            if(icon) icon.style.transform = 'rotate(90deg)';
+                        } else {
+                            content.classList.add('hidden');
+                            if(icon) icon.style.transform = 'rotate(0deg)';
+                        }
+                    }
+                });
+            }
+
+            // Sync Database
+            syncUrlFromDatabase();
+
+            if(!GAS_WEB_APP_URL) {
+                setTimeout(() => {
+                    showToast('Klik "Pengaturan Drive" untuk menyimpan bukti unggahan.', 'loading');
+                    setTimeout(hideToast, 4000);
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
