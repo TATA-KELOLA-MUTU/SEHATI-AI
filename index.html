@@ -353,8 +353,22 @@
     </div>
 
     <script>
-        // URL API Google Apps Script
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbxXURJA4zvBb_2uQ4kus0_YKND2YlfZ0Hj7Q_EmFouKxcwiQ06pxKuDw21jOSGoXdEQ/exec";
+        // Endpoint GAS pusat SEHATI-AI. URL ini harus sama dengan deployment /exec Code.gs pusat.
+        const CENTRAL_GAS_URL = "https://script.google.com/macros/s/AKfycbxXURJA4zvBb_2uQ4kus0_YKND2YlfZ0Hj7Q_EmFouKxcwiQ06pxKuDw21jOSGoXdEQ/exec";
+
+        // Content-Type text/plain menjaga POST tetap berupa simple request pada Web App GAS.
+        async function postCentralGas(payload) {
+            const response = await fetch(CENTRAL_GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server pusat merespons HTTP ${response.status}`);
+            }
+            return response.json();
+        }
 
         // Kontrol Modal Fasyankes (Floating Select)
         let activeFasyankesTarget = '';
@@ -498,26 +512,27 @@
             };
 
             try {
-                const response = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
-                const result = await response.json();
+                const result = await postCentralGas(payload);
                 
-                if (result.status === 'success') {
-                    const cleanEmail = payload.email.trim();
+                if (result.success === true && result.status === 'success' && result.sessionToken) {
+                    const cleanEmail = payload.email.trim().toLowerCase();
                     sessionStorage.setItem('isLoggedIn', 'true');
                     sessionStorage.setItem('unitKerja', result.unitKerja);
-                    sessionStorage.setItem('kategori', payload.fasyankes);
+                    sessionStorage.setItem('kategori', result.kategori || payload.fasyankes);
                     sessionStorage.setItem('userEmail', cleanEmail);
-                    localStorage.setItem('userEmail', cleanEmail); 
+                    sessionStorage.setItem('sessionToken', result.sessionToken);
+                    sessionStorage.setItem('centralGasUrl', CENTRAL_GAS_URL);
+                    localStorage.setItem('userEmail', cleanEmail);
 
                     if (result.driveUrl && result.driveUrl !== "") {
                         sessionStorage.setItem('gasUrl', result.driveUrl);
                     } else {
-                        sessionStorage.removeItem('gasUrl'); 
+                        sessionStorage.removeItem('gasUrl');
                     }
                     
                     window.location.href = 'dashboard.html';
                 } else {
-                    showAlert("Akses Ditolak: " + result.message, 'error');
+                    showAlert("Akses Ditolak: " + (result.message || 'Sesi login tidak dapat dibuat.'), 'error');
                 }
             } catch (err) {
                 showAlert("Kesalahan koneksi ke server. Silakan coba lagi.", 'error');
@@ -542,8 +557,7 @@
             };
 
             try {
-                const response = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
-                const result = await response.json();
+                const result = await postCentralGas(payload);
                 
                 if (result.status === 'success') {
                     document.getElementById('loginEmail').value = payload.email;
